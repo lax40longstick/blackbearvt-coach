@@ -1,0 +1,2990 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#7dd3d8">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Coach HQ">
+<link rel="manifest" href="./manifest.json">
+<link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
+<link rel="apple-touch-icon" href="./icons/icon-192.png">
+<title>Bear Den Coach HQ Workspace</title>
+<script src="./runtime-config.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;500;700&family=Oswald:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --panel: #141414;
+    --panel-hi: #1c1c1c;
+    --panel-hi2: #222;
+    --teal: #7dd3d8;
+    --teal-bright: #a7e8ec;
+    --teal-dim: #4fa6ac;
+    --teal-dark: #2a5a5e;
+    --teal-bg: rgba(125, 211, 216, 0.08);
+    --ice: #e8f4f8;
+    --text: #e8e8e8;
+    --text-dim: #888;
+    --text-mid: #bbb;
+    --border: #2a2a2a;
+    --border-hi: #3a3a3a;
+    --win: #4ad9a8;
+    --loss: #e87676;
+    --tie: #7dd3d8;
+    --skating: #7dd3d8;
+    --passing: #e87676;
+    --shooting: #f4cf57;
+    --battle: #a85ad9;
+    --goalie: #4ad9a8;
+    --pp1: #7dd3d8;
+    --pp2: #4fa6ac;
+    --pk1: #a85ad9;
+    --pk2: #6b3c8e;
+    --match: #e87676;
+    --safe-top: env(safe-area-inset-top, 0);
+    --safe-bottom: env(safe-area-inset-bottom, 0);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  html, body {
+    overscroll-behavior-y: contain;
+    height: 100%;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    background-image:
+      radial-gradient(circle at 20% 10%, rgba(125, 211, 216, 0.06) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(125, 211, 216, 0.03) 0%, transparent 50%);
+    padding-top: var(--safe-top);
+    padding-bottom: calc(72px + var(--safe-bottom));
+  }
+
+  button, input, select, textarea {
+    font-family: inherit;
+    color: var(--text);
+  }
+
+  input, select, textarea {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    padding: 10px 12px;
+    font-size: 16px;
+    border-radius: 4px;
+  }
+
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--teal); }
+  textarea { min-height: 70px; resize: vertical; line-height: 1.5; font-size: 14px; }
+
+  /* ============ TOP HEADER ============ */
+  .top-bar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .top-bar .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .top-bar .logo {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 2px solid var(--teal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px;
+    color: var(--teal);
+    letter-spacing: 1px;
+  }
+
+  .top-bar .title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 2px;
+    color: var(--teal);
+    line-height: 1;
+  }
+
+  .top-bar .subtitle {
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  .icon-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--teal);
+    width: 36px;
+    height: 36px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+
+  .icon-btn:active { background: var(--panel-hi); }
+
+  /* ============ BOTTOM NAV ============ */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 200;
+    background: var(--panel);
+    border-top: 1px solid var(--border);
+    padding-bottom: var(--safe-bottom);
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+  }
+
+  .bottom-nav button {
+    background: transparent;
+    border: none;
+    padding: 10px 4px 8px;
+    color: var(--text-dim);
+    font-family: inherit;
+    font-size: 9px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    transition: color 0.15s;
+    min-height: 56px;
+  }
+
+  .bottom-nav button:active { background: var(--panel-hi); }
+  .bottom-nav button.active { color: var(--teal); }
+
+  .bottom-nav .nav-icon {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    line-height: 1;
+  }
+
+  /* ============ PAGES ============ */
+  .page {
+    display: none;
+    padding: 16px;
+    min-height: calc(100vh - 140px);
+  }
+
+  .page.active { display: block; }
+
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px;
+    margin-bottom: 14px;
+  }
+
+  .panel-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: 13px;
+    letter-spacing: 2.5px;
+    color: var(--teal);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .panel-title .count {
+    font-family: 'JetBrains Mono';
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+  }
+
+  /* ============ BUTTONS ============ */
+  .btn {
+    background: transparent;
+    border: 1px solid var(--teal-dim);
+    color: var(--teal);
+    padding: 10px 16px;
+    font-family: inherit;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 4px;
+    white-space: nowrap;
+    min-height: 40px;
+  }
+
+  .btn:active { background: var(--teal); color: var(--bg); }
+  .btn.primary { background: var(--teal); color: var(--bg); border-color: var(--teal); font-weight: 700; }
+  .btn.primary:active { background: var(--teal-bright); }
+  .btn.danger { border-color: #6b2a2a; color: var(--loss); }
+  .btn.danger:active { background: var(--loss); color: var(--bg); }
+  .btn.small { padding: 6px 12px; font-size: 10px; min-height: auto; }
+  .btn.full { width: 100%; }
+
+  .btn-row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+  }
+
+  .field { margin-bottom: 12px; }
+  .field label {
+    display: block;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 5px;
+  }
+
+  .field-row {
+    display: grid;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .field-row.cols-2 { grid-template-columns: 1fr 1fr; }
+  .field-row.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+  /* ============ DASHBOARD ============ */
+  .dashboard-header {
+    background: linear-gradient(135deg, #0a1f20, #0a0a0a);
+    border: 1px solid var(--teal-dim);
+    border-radius: 8px;
+    padding: 20px 18px;
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .dashboard-header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, var(--teal-bg) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .dashboard-header .team {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 3px;
+    color: var(--teal);
+    line-height: 1;
+    position: relative;
+  }
+
+  .dashboard-header .season {
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    margin-top: 4px;
+    position: relative;
+  }
+
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-top: 14px;
+    position: relative;
+  }
+
+  .dash-stat {
+    background: rgba(0,0,0,0.4);
+    border-left: 3px solid var(--teal);
+    padding: 8px 10px;
+    border-radius: 2px;
+  }
+
+  .dash-stat .label {
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+  }
+
+  .dash-stat .value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: var(--teal);
+    line-height: 1;
+    margin-top: 2px;
+  }
+
+  .tile-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .tile {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 18px 14px;
+    cursor: pointer;
+    position: relative;
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    overflow: hidden;
+    transition: transform 0.15s;
+  }
+
+  .tile:active { transform: scale(0.97); }
+
+  .tile::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--teal);
+  }
+
+  .tile .tile-icon {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    color: var(--teal);
+    opacity: 0.6;
+    line-height: 1;
+  }
+
+  .tile .tile-label {
+    font-family: 'Oswald', sans-serif;
+    font-size: 13px;
+    letter-spacing: 1.5px;
+    color: var(--text);
+    text-transform: uppercase;
+  }
+
+  .tile .tile-sub {
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+    margin-top: 3px;
+  }
+
+  .next-event {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--loss);
+    border-radius: 4px;
+    padding: 12px 14px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .next-event .pip {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    color: var(--loss);
+    line-height: 1;
+  }
+
+  .next-event .info { flex: 1; }
+  .next-event .event-type {
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--loss);
+    text-transform: uppercase;
+  }
+  .next-event .event-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: 14px;
+    color: var(--text);
+    margin-top: 2px;
+  }
+  .next-event .event-meta {
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-top: 2px;
+  }
+
+  /* ============ ROSTER ============ */
+  .player-list { display: flex; flex-direction: column; gap: 6px; }
+  .player-card {
+    background: var(--panel-hi);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--teal-dim);
+    padding: 10px 12px;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .player-card.goalie-card { border-left-color: var(--goalie); }
+
+  .player-card .num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: var(--teal);
+    min-width: 36px;
+    text-align: center;
+    line-height: 1;
+  }
+
+  .player-card .name { flex: 1; font-size: 14px; }
+  .player-card .pos {
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 1.5px;
+    padding: 2px 6px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    cursor: pointer;
+  }
+  .player-card .pos:active { background: var(--panel); }
+
+  .player-card .num-input {
+    width: 48px;
+    padding: 4px 6px;
+    font-size: 14px;
+    text-align: center;
+    font-family: 'Bebas Neue', sans-serif;
+    color: var(--teal);
+  }
+
+  .player-card .del {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--loss);
+    width: 32px;
+    height: 32px;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+
+  .player-card .del:active { background: var(--loss); color: var(--bg); }
+
+  /* ============ STATS LEADERBOARD ============ */
+  .table-wrap {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow-x: auto;
+    margin-bottom: 14px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    min-width: 520px;
+  }
+
+  thead th {
+    background: var(--panel-hi);
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 9px;
+    padding: 10px 6px;
+    text-align: right;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+    cursor: pointer;
+    position: sticky;
+    top: 0;
+  }
+
+  thead th:first-child, thead th:nth-child(2) { text-align: left; }
+  thead th.sorted { color: var(--teal); }
+  thead th.sorted::after { content: ' ▼'; font-size: 8px; }
+  thead th.sorted.asc::after { content: ' ▲'; }
+
+  tbody td {
+    padding: 10px 6px;
+    border-bottom: 1px solid var(--border);
+    text-align: right;
+    color: var(--text-mid);
+    white-space: nowrap;
+  }
+
+  tbody td:first-child {
+    text-align: left;
+    color: var(--teal);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px;
+    padding-left: 14px;
+  }
+
+  tbody td:nth-child(2) { text-align: left; color: var(--text); }
+  tbody tr:active { background: var(--panel-hi); }
+
+  .highlight-col { color: var(--teal-bright) !important; font-weight: 700; }
+
+  /* ============ LINES ============ */
+  .lines-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .line-row {
+    background: var(--panel-hi);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 10px;
+  }
+
+  .line-row.has-pp1 { border-color: var(--pp1); box-shadow: inset 0 0 0 1px var(--pp1); }
+  .line-row.has-pp2 { border-color: var(--pp2); }
+  .line-row.has-pk1 { border-color: var(--pk1); box-shadow: inset 0 0 0 1px var(--pk1); }
+  .line-row.has-pk2 { border-color: var(--pk2); }
+  .line-row.has-match { border-color: var(--match); }
+
+  .line-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--teal);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .line-tags-row {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+
+  .tag-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    padding: 3px 7px;
+    font-size: 9px;
+    font-family: inherit;
+    letter-spacing: 1px;
+    border-radius: 2px;
+    cursor: pointer;
+  }
+
+  .tag-btn.active { color: var(--bg); font-weight: 700; }
+  .tag-btn.pp1.active { background: var(--pp1); border-color: var(--pp1); }
+  .tag-btn.pp2.active { background: var(--pp2); border-color: var(--pp2); }
+  .tag-btn.pk1.active { background: var(--pk1); border-color: var(--pk1); color: #fff; }
+  .tag-btn.pk2.active { background: var(--pk2); border-color: var(--pk2); color: #fff; }
+  .tag-btn.match.active { background: var(--match); border-color: var(--match); color: #fff; }
+
+  .line-slots {
+    display: grid;
+    gap: 5px;
+  }
+
+  .slots-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .slots-2 { grid-template-columns: 1fr 1fr; }
+  .slots-1 { grid-template-columns: 1fr; }
+
+  .slot {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 8px 4px;
+    min-height: 52px;
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .slot:active { background: var(--panel-hi); }
+  .slot.filled { border-color: var(--teal-dim); }
+
+  .slot .pos-tag {
+    position: absolute;
+    top: 3px;
+    left: 5px;
+    font-size: 8px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+    font-weight: 700;
+  }
+
+  .slot .slot-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    color: var(--teal);
+    line-height: 1;
+    margin-top: 6px;
+  }
+
+  .slot .slot-name {
+    font-size: 10px;
+    color: var(--text);
+    margin-top: 2px;
+  }
+
+  .slot .slot-empty {
+    font-size: 16px;
+    color: var(--text-dim);
+    opacity: 0.5;
+    margin-top: 10px;
+  }
+
+  /* Modal */
+  .modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.85);
+    display: none;
+    z-index: 500;
+    padding: 20px;
+    align-items: flex-end;
+    justify-content: center;
+  }
+
+  .modal-overlay.show { display: flex; }
+
+  .modal {
+    background: var(--panel);
+    border: 1px solid var(--teal-dim);
+    border-radius: 8px;
+    width: 100%;
+    max-width: 500px;
+    max-height: 80vh;
+    overflow-y: auto;
+    padding: 18px;
+    animation: slideUp 0.2s;
+  }
+
+  @keyframes slideUp {
+    from { transform: translateY(40px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  .modal-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: var(--teal);
+    letter-spacing: 2px;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .modal-close {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text);
+    width: 32px;
+    height: 32px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+
+  .picker-options {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+  }
+
+  .picker-options button {
+    background: var(--panel-hi);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 12px 6px;
+    cursor: pointer;
+    text-align: center;
+    color: var(--text);
+  }
+
+  .picker-options button.placed { opacity: 0.4; }
+  .picker-options button:active { background: var(--teal); color: var(--bg); }
+
+  .picker-options .p-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    color: var(--teal);
+    line-height: 1;
+  }
+
+  .picker-options .p-name { font-size: 10px; margin-top: 2px; }
+
+  /* ============ GAMES ============ */
+  .game-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 12px;
+    margin-bottom: 8px;
+    cursor: pointer;
+  }
+
+  .game-card .top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+
+  .game-card .date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+
+  .game-card .result {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 1px;
+  }
+
+  .game-card .result.w { color: var(--win); }
+  .game-card .result.l { color: var(--loss); }
+  .game-card .result.t { color: var(--tie); }
+
+  .game-card .opp {
+    font-family: 'Oswald', sans-serif;
+    font-size: 14px;
+    color: var(--text);
+  }
+
+  .game-card .meta {
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-top: 4px;
+    letter-spacing: 1px;
+  }
+
+  /* ============ PRACTICE PLAN ============ */
+  .drill-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--teal-dim);
+    border-radius: 4px;
+    padding: 12px;
+    margin-bottom: 8px;
+  }
+
+  .drill-card.cat-skating { border-left-color: var(--skating); }
+  .drill-card.cat-passing { border-left-color: var(--passing); }
+  .drill-card.cat-shooting { border-left-color: var(--shooting); }
+  .drill-card.cat-battle { border-left-color: var(--battle); }
+  .drill-card.cat-goalie { border-left-color: var(--goalie); }
+
+  .drill-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+
+  .drill-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    color: var(--text);
+    flex: 1;
+  }
+
+  .drill-duration {
+    background: var(--panel-hi);
+    border: 1px solid var(--border);
+    padding: 3px 8px;
+    font-size: 10px;
+    color: var(--teal);
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+
+  .drill-desc {
+    font-size: 11px;
+    color: var(--text-mid);
+    line-height: 1.5;
+  }
+
+  .drill-category-badge {
+    display: inline-block;
+    font-size: 9px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    background: var(--panel-hi);
+    border-radius: 2px;
+    margin-top: 6px;
+  }
+
+  .drill-points {
+    font-size: 10px;
+    color: var(--teal);
+    font-style: italic;
+    margin-top: 6px;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    display: none;
+  }
+
+  .drill-card.expanded .drill-points { display: block; }
+  .drill-card.expanded .drill-desc { display: block; }
+
+
+  .animated-drill-viewer {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px;
+    margin-top: 8px;
+  }
+  .animated-drill-viewer.empty {
+    color: var(--text-dim);
+    font-size: 11px;
+    line-height: 1.45;
+  }
+  .adv-head { display: flex; justify-content: space-between; gap: 10px; align-items: flex-start; margin-bottom: 8px; }
+  .adv-kicker { font-size: 9px; color: var(--teal); text-transform: uppercase; letter-spacing: 1px; }
+  .adv-title { font-family: 'Oswald', sans-serif; color: var(--text); font-size: 15px; letter-spacing: .5px; }
+  .adv-badge { font-size: 9px; color: var(--text-dim); border: 1px solid var(--border); background: var(--panel-hi); padding: 4px 6px; border-radius: 999px; white-space: nowrap; }
+  .adv-stage { position: relative; display: flex; justify-content: center; }
+  .adv-canvas { width: 100%; max-width: 320px; aspect-ratio: 3 / 5; background: #fff; border-radius: 4px; border: 1px solid var(--border); }
+  .animated-drill-viewer.compact .adv-canvas { max-width: 190px; }
+  .adv-status { position: absolute; right: 8px; top: 8px; background: rgba(0,0,0,.72); color: #fff; border-radius: 999px; padding: 3px 7px; font-size: 9px; letter-spacing: .7px; text-transform: uppercase; }
+  .adv-controls { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 8px; }
+  .adv-speed { display: flex; align-items: center; gap: 5px; color: var(--text-dim); font-size: 9px; text-transform: uppercase; letter-spacing: .8px; }
+  .adv-speed select { width: auto; padding: 5px 20px 5px 7px; font-size: 10px; }
+  .adv-step-label { margin-top: 7px; color: var(--teal); font-size: 10px; line-height: 1.35; }
+  .adv-timeline { display: flex; flex-direction: column; gap: 5px; margin-top: 8px; }
+  .adv-step-pill { border: 1px solid var(--border); background: var(--panel-hi); color: var(--text-mid); padding: 6px 8px; border-radius: 4px; text-align: left; font-size: 10px; }
+  .adv-step-pill.active { border-color: var(--teal); color: var(--teal); }
+  .adv-coach-card { margin-top: 12px; padding: 12px; border: 1px solid var(--border); background: var(--panel-hi); border-radius: 6px; color: var(--text-mid); font-size: 11px; line-height: 1.5; }
+  .adv-coach-title { color: var(--teal); text-transform: uppercase; letter-spacing: 1px; font-size: 9px; margin-bottom: 6px; }
+  .adv-coach-point { margin-top: 5px; }
+
+  .chip-scroll {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    margin-bottom: 10px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .chip-scroll::-webkit-scrollbar { display: none; }
+
+  .chip {
+    background: var(--panel-hi);
+    border: 1px solid var(--border);
+    color: var(--text-mid);
+    padding: 6px 12px;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-radius: 16px;
+    cursor: pointer;
+    white-space: nowrap;
+    user-select: none;
+  }
+
+  .chip.active { background: var(--teal); color: var(--bg); border-color: var(--teal); font-weight: 700; }
+
+  .plan-block-card {
+    background: var(--panel-hi);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--teal);
+    padding: 10px 12px;
+    margin-bottom: 6px;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .plan-block-card .block-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    color: var(--teal);
+    min-width: 28px;
+    text-align: center;
+  }
+
+  .plan-block-card .block-info { flex: 1; min-width: 0; }
+  .plan-block-card .bt { font-family: 'Oswald', sans-serif; font-size: 12px; color: var(--text); }
+  .plan-block-card .bm { font-size: 10px; color: var(--text-dim); margin-top: 2px; }
+
+  .plan-block-card .time-input {
+    width: 50px;
+    padding: 5px;
+    text-align: center;
+    font-size: 12px;
+  }
+
+  .plan-block-card .del {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--loss);
+    width: 28px;
+    height: 28px;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+
+  .time-budget {
+    background: var(--panel-hi);
+    border: 1px solid var(--border);
+    padding: 10px 14px;
+    border-radius: 4px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+
+  .time-budget .b-stat { text-align: center; }
+  .time-budget .b-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: var(--teal);
+    line-height: 1;
+  }
+  .time-budget .b-lbl { font-size: 9px; color: var(--text-dim); letter-spacing: 1px; text-transform: uppercase; margin-top: 3px; }
+  .time-budget.over .b-num { color: var(--loss); }
+
+  .goalie-warning {
+    background: #3a2a0a;
+    border: 1px solid #6a4a0a;
+    color: #f4cf57;
+    padding: 8px 12px;
+    border-radius: 3px;
+    margin-bottom: 12px;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    display: none;
+  }
+
+  .goalie-warning.show { display: block; }
+
+  /* ============ PACKET / WEEKLY PREVIEW ============ */
+  .packet-preview, .email-preview {
+    background: #fff;
+    color: #333;
+    padding: 18px;
+    border-radius: 4px;
+    font-family: 'Georgia', serif;
+    font-size: 13px;
+    line-height: 1.6;
+    margin-top: 14px;
+  }
+
+  .packet-preview h2, .email-preview h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    color: #000;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--teal);
+  }
+
+  .packet-preview h3, .email-preview h3 {
+    font-family: 'Oswald', sans-serif;
+    font-size: 13px;
+    color: var(--teal-dim);
+    letter-spacing: 1.5px;
+    margin: 14px 0 6px 0;
+    text-transform: uppercase;
+  }
+
+  .packet-preview .cover-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    color: #000;
+    letter-spacing: 3px;
+    text-align: center;
+    margin-bottom: 4px;
+  }
+
+  .packet-preview .cover-opp {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: var(--teal-dim);
+    text-align: center;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+  }
+
+  .packet-preview .cover-meta {
+    text-align: center;
+    font-size: 11px;
+    color: #666;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 14px;
+  }
+
+  .email-preview .potw {
+    background: linear-gradient(135deg, #e6f7f8, #fff);
+    border: 2px solid var(--teal);
+    padding: 12px 16px;
+    margin: 14px 0;
+    border-radius: 4px;
+  }
+
+  .email-preview .potw-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 2px;
+    color: var(--teal-dim);
+  }
+
+  .email-preview .potw-name {
+    font-family: 'Oswald', sans-serif;
+    font-size: 15px;
+    color: #000;
+    margin-top: 4px;
+  }
+
+  .email-preview .potw-cat {
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--teal-dim);
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  .subject-line {
+    background: var(--panel-hi);
+    border-radius: 3px;
+    padding: 8px 12px;
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-bottom: 10px;
+  }
+
+  .subject-line strong { color: var(--text); }
+
+  .empty-state {
+    padding: 40px 20px;
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 12px;
+    letter-spacing: 1px;
+  }
+
+  .empty-state .icon {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 40px;
+    color: var(--teal-dim);
+    line-height: 1;
+    margin-bottom: 10px;
+  }
+
+  .toast {
+    position: fixed;
+    bottom: 88px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--teal);
+    color: var(--bg);
+    padding: 10px 18px;
+    border-radius: 20px;
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 700;
+    opacity: 0;
+    transition: all 0.3s;
+    pointer-events: none;
+    z-index: 1000;
+  }
+
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  .install-banner {
+    background: linear-gradient(135deg, var(--teal), var(--teal-dim));
+    color: var(--bg);
+    padding: 10px 14px;
+    border-radius: 6px;
+    margin-bottom: 14px;
+    display: none;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .install-banner.show { display: flex; }
+  .install-banner .msg { flex: 1; font-size: 12px; font-weight: 700; }
+  .install-banner button {
+    background: var(--bg);
+    color: var(--teal);
+    border: none;
+    padding: 6px 12px;
+    border-radius: 3px;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .action-sheet {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--panel);
+    border-top: 1px solid var(--border);
+    padding: 20px 16px calc(20px + var(--safe-bottom));
+    z-index: 400;
+    transform: translateY(100%);
+    transition: transform 0.25s;
+  }
+
+  .action-sheet.show { transform: translateY(0); }
+
+  .action-sheet .sheet-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: 14px;
+    letter-spacing: 2px;
+    color: var(--teal);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    text-align: center;
+  }
+
+  .action-sheet .sheet-btn {
+    width: 100%;
+    background: var(--panel-hi);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 14px;
+    margin-bottom: 6px;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  .action-sheet .sheet-btn:active { background: var(--border); }
+  .action-sheet .sheet-btn.danger { color: var(--loss); }
+
+  @media print {
+    body { background: white; color: black; padding: 0; }
+    .top-bar, .bottom-nav, .install-banner, .toast, .btn-row, .chip-scroll, .action-sheet { display: none !important; }
+    .page { display: block !important; padding: 0; }
+    .panel { background: white; border-color: #333; color: black; }
+    .packet-preview, .email-preview { padding: 0; }
+  }
+
+  @media (orientation: landscape) and (max-height: 500px) {
+    .dashboard-header .team { font-size: 22px; }
+    .tile-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  /* ============ PRACTICE GENERATOR ============ */
+  .generator-panel {
+    background: linear-gradient(135deg, #0a1f20, var(--panel));
+    border: 1px solid var(--teal-dim);
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 14px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .generator-panel::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, var(--teal), var(--teal-bright), var(--teal));
+  }
+
+  .gen-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 2px;
+    color: var(--teal);
+    margin-bottom: 4px;
+  }
+
+  .gen-sub {
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+
+  .theme-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+
+  .theme-btn {
+    background: var(--panel-hi);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 10px 4px;
+    font-family: inherit;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+  }
+
+  .theme-btn:active { background: var(--panel); }
+  .theme-btn.selected { background: var(--teal); color: var(--bg); border-color: var(--teal); font-weight: 700; }
+
+  /* ============ ON-ICE MODE ============ */
+  .oi-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: #000;
+    z-index: 900;
+    display: none;
+    flex-direction: column;
+    padding: env(safe-area-inset-top, 0) 0 env(safe-area-inset-bottom, 0) 0;
+  }
+
+  .oi-overlay.show { display: flex; }
+
+  .oi-top {
+    padding: 16px 20px 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .oi-progress {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px;
+    color: var(--teal);
+    letter-spacing: 2px;
+  }
+
+  .oi-close {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text);
+    width: 40px;
+    height: 40px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 18px;
+  }
+
+  .oi-progress-bar {
+    height: 3px;
+    background: var(--panel);
+    overflow: hidden;
+  }
+
+  .oi-progress-bar-fill {
+    height: 100%;
+    background: var(--teal);
+    transition: width 0.3s;
+  }
+
+  .oi-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 20px 12px;
+    overflow-y: auto;
+    touch-action: pan-y;
+  }
+
+  .oi-category {
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--teal);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .oi-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 38px;
+    letter-spacing: 1.5px;
+    color: var(--text);
+    line-height: 1.05;
+    margin-bottom: 12px;
+  }
+
+  .oi-timer-display {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--teal);
+    padding: 14px 16px;
+    border-radius: 4px;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .oi-timer-display.running { border-left-color: var(--win); }
+  .oi-timer-display.done { border-left-color: var(--loss); animation: pulse-warn 1s infinite; }
+
+  @keyframes pulse-warn {
+    0%, 100% { background: var(--panel); }
+    50% { background: rgba(232, 118, 118, 0.15); }
+  }
+
+  .oi-timer-time {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 38px;
+    color: var(--teal);
+    line-height: 1;
+    letter-spacing: 1px;
+    min-width: 95px;
+  }
+
+  .oi-timer-display.done .oi-timer-time { color: var(--loss); }
+
+  .oi-timer-controls {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    flex: 1;
+  }
+
+  .oi-tbtn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--teal);
+    padding: 8px 12px;
+    font-family: inherit;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-radius: 3px;
+    cursor: pointer;
+    flex: 1;
+    min-width: 70px;
+  }
+
+  .oi-tbtn:active { background: var(--teal); color: var(--bg); }
+  .oi-tbtn.primary { background: var(--teal); color: var(--bg); border-color: var(--teal); font-weight: 700; }
+
+  .oi-section-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .oi-desc {
+    font-size: 15px;
+    color: var(--text-mid);
+    line-height: 1.55;
+    margin-bottom: 18px;
+  }
+
+  .oi-points {
+    background: var(--panel);
+    border-radius: 4px;
+    padding: 14px 16px;
+    border-left: 3px solid var(--teal);
+    margin-bottom: 14px;
+  }
+
+  .oi-point {
+    font-size: 16px;
+    color: var(--text);
+    line-height: 1.5;
+    padding: 5px 0;
+    display: flex;
+    gap: 10px;
+  }
+
+  .oi-point::before {
+    content: '▸';
+    color: var(--teal);
+    flex-shrink: 0;
+  }
+
+  .oi-nav {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    gap: 8px;
+    padding: 12px 16px;
+    border-top: 1px solid var(--border);
+    background: var(--panel);
+  }
+
+  .oi-nav button {
+    background: var(--panel-hi);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 14px 8px;
+    font-family: inherit;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    border-radius: 4px;
+    cursor: pointer;
+    min-height: 48px;
+  }
+
+  .oi-nav button:active { background: var(--border); }
+  .oi-nav button.center { background: var(--teal); color: var(--bg); border-color: var(--teal); font-weight: 700; }
+  .oi-nav button:disabled { opacity: 0.3; }
+
+  .oi-done {
+    text-align: center;
+    padding: 40px 20px;
+  }
+
+  .oi-done .big-check {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 72px;
+    color: var(--teal);
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+
+  .oi-done .msg {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: var(--text);
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+  }
+
+  .oi-done .sub {
+    font-size: 12px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+  }
+
+
+  /* Coach Dashboard */
+  .coach-dashboard-shell { display: grid; gap: 14px; margin-top: 16px; }
+  .coach-hero { background: linear-gradient(135deg, rgba(29, 233, 182, 0.12), rgba(255, 179, 71, 0.08)); border: 1px solid var(--border); border-radius: 10px; padding: 16px; display: grid; grid-template-columns: 1fr; gap: 14px; }
+  .coach-hero h2 { font-family: 'Bebas Neue', sans-serif; font-size: 34px; line-height: 0.95; letter-spacing: 1.5px; margin: 4px 0 6px; color: var(--text); }
+  .coach-hero p { margin: 0; color: var(--text-mid); font-size: 12px; line-height: 1.45; }
+  .coach-kicker { color: var(--teal); font-size: 10px; letter-spacing: 1.8px; text-transform: uppercase; font-weight: 700; }
+  .coach-hero-actions { display: grid; grid-template-columns: 1fr; gap: 8px; }
+  .coach-metrics { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .coach-metric { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 12px; }
+  .coach-metric span { display: block; font-family: 'Bebas Neue', sans-serif; color: var(--teal); font-size: 28px; line-height: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .coach-metric label { display: block; margin-top: 4px; color: var(--text-dim); font-size: 10px; text-transform: uppercase; letter-spacing: 1px; }
+  .coach-grid-2 { display: grid; grid-template-columns: 1fr; gap: 14px; }
+  .coach-panel { margin: 0; }
+  .coach-card-list { display: grid; gap: 8px; margin-bottom: 10px; }
+  .coach-drill-card, .coach-plan-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; background: var(--panel-hi); border: 1px solid var(--border); border-radius: 8px; padding: 10px; }
+
+  .drill-score-badge {
+    display: inline-flex; align-items: center; gap: 4px; width: fit-content;
+    padding: 4px 7px; border-radius: 999px; border: 1px solid rgba(245, 158, 11, .35);
+    background: rgba(245, 158, 11, .12); color: #fbbf24; font-size: 9px;
+    text-transform: uppercase; letter-spacing: .65px; font-weight: 800;
+  }
+  .drill-score-panel {
+    margin-top: 8px; padding: 9px; border-radius: 12px;
+    background: rgba(15, 23, 42, .58); border: 1px solid rgba(148, 163, 184, .16);
+  }
+  .drill-score-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 11px; color: var(--text); }
+  .drill-score-top span { color: #fbbf24; font-size: 9px; text-transform: uppercase; letter-spacing: .7px; }
+  .drill-score-reason { margin-top: 4px; color: var(--text-mid); font-size: 10px; line-height: 1.35; }
+  .drill-score-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; margin-top: 7px; }
+  .drill-score-grid span { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.06); border-radius: 8px; padding: 4px; font-size: 9px; color: var(--text-dim); text-align: center; }
+
+  .coach-drill-main, .coach-plan-row { cursor: pointer; }
+  .coach-drill-main { flex: 1; min-width: 0; }
+  .coach-drill-name, .coach-plan-title { color: var(--text); font-family: 'Oswald', sans-serif; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .coach-drill-meta, .coach-plan-meta, .coach-current-plan span { color: var(--text-dim); font-size: 10px; margin-top: 3px; text-transform: uppercase; letter-spacing: 0.8px; }
+  .coach-fav { width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border); background: var(--panel); color: var(--text-dim); cursor: pointer; }
+  .coach-fav.active { color: var(--gold); border-color: var(--gold); }
+  .coach-shortcuts { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 12px; }
+  .coach-shortcuts button { background: var(--panel-hi); border: 1px solid var(--border); color: var(--text); padding: 10px 8px; border-radius: 6px; font-family: inherit; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; }
+  .coach-current-plan { border-top: 1px solid var(--border); padding-top: 12px; }
+  .coach-current-plan strong { display: block; color: var(--text); margin: 4px 0; }
+  @media (min-width: 780px) { .coach-hero { grid-template-columns: 1fr 260px; align-items: center; } .coach-metrics { grid-template-columns: repeat(4, 1fr); } .coach-grid-2 { grid-template-columns: 1fr 1fr; } }
+
+</style>
+</head>
+<body data-page="app">
+
+<!-- TOP HEADER -->
+<div class="top-bar">
+  <a class="brand" href="./index.html" aria-label="Bear Den Coach HQ home">
+    <div class="logo">BB</div>
+    <div>
+      <div class="title" id="topTitle">COACH HQ</div>
+      <div class="subtitle" id="topSubtitle">Team workspace</div>
+    </div>
+  </a>
+  <button class="icon-btn" id="menuBtn" onclick="openActionSheet()">⋮</button>
+</div>
+
+<!-- ============ DASHBOARD ============ -->
+<div class="page active" id="page-dash">
+  <div class="install-banner" id="installBanner">
+    <div class="msg">📱 Install this app on your home screen</div>
+    <button onclick="installApp()">Install</button>
+  </div>
+
+  <div class="dashboard-header">
+    <div class="team" data-workspace-org>CENTRAL VERMONT</div>
+    <div class="season" data-workspace-team>BLACK BEARS · U10 T2 · 2026-2027</div>
+    <div class="stats-row">
+      <div class="dash-stat">
+        <div class="label">Record</div>
+        <div class="value" id="dashRecord">0-0-0</div>
+      </div>
+      <div class="dash-stat">
+        <div class="label">Goals For</div>
+        <div class="value" id="dashGF">0</div>
+      </div>
+      <div class="dash-stat">
+        <div class="label">Goals Against</div>
+        <div class="value" id="dashGA">0</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="nextEventContainer"></div>
+
+  <div id="coachDashboardMount"></div>
+
+  <div class="panel-title" style="margin-bottom: 10px">
+    <span>Coaching Tools</span>
+  </div>
+
+  <div class="tile-grid">
+    <div class="tile" onclick="navTo('roster')">
+      <div class="tile-icon">◆</div>
+      <div class="tile-label">Roster</div>
+      <div class="tile-sub"><span id="tileRosterCount">0</span> players</div>
+    </div>
+    <div class="tile" onclick="navTo('lines')">
+      <div class="tile-icon">▓</div>
+      <div class="tile-label">Lines</div>
+      <div class="tile-sub">Set lineups & PP/PK</div>
+    </div>
+    <div class="tile" onclick="navTo('stats')">
+      <div class="tile-icon">#</div>
+      <div class="tile-label">Stats</div>
+      <div class="tile-sub"><span id="tileGameCount">0</span> games</div>
+    </div>
+    <div class="tile" onclick="navTo('practice')">
+      <div class="tile-icon">✱</div>
+      <div class="tile-label">Practice</div>
+      <div class="tile-sub"><span id="tilePlanCount">0</span> plans · <span id="tileDrillCount">0</span> drills</div>
+    </div>
+    <div class="tile" onclick="navTo('gameday')">
+      <div class="tile-icon">◉</div>
+      <div class="tile-label">Game Day</div>
+      <div class="tile-sub">Pre-game packet</div>
+    </div>
+    <div class="tile" onclick="navTo('weekly')">
+      <div class="tile-icon">✉</div>
+      <div class="tile-label">Weekly</div>
+      <div class="tile-sub">Parent update</div>
+    </div>
+  </div>
+
+  <div class="panel" style="margin-top: 16px">
+    <div class="panel-title"><span>Top Scorer</span></div>
+    <div id="topScorerDisplay"></div>
+  </div>
+</div>
+
+<!-- ============ ROSTER ============ -->
+<div class="page" id="page-roster">
+  <div class="panel">
+    <div class="panel-title">
+      <span>Add Player</span>
+      <span class="count" id="rosterCountBadge">0</span>
+    </div>
+    <div class="field-row cols-3">
+      <div>
+        <label>#</label>
+        <input type="text" id="rosterNum" placeholder="##" maxlength="2">
+      </div>
+      <div>
+        <label>Last Name</label>
+        <input type="text" id="rosterName" placeholder="Last Name">
+      </div>
+      <div>
+        <label>Pos</label>
+        <select id="rosterPos">
+          <option value="F">F</option>
+          <option value="D">D</option>
+          <option value="G">G</option>
+        </select>
+      </div>
+    </div>
+    <button class="btn primary full" onclick="addPlayer()">+ Add Player</button>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">
+      <span>Current Roster</span>
+      <span style="font-size: 9px; color: var(--text-dim)">Tap pos to change</span>
+    </div>
+    <div class="player-list" id="rosterList"></div>
+  </div>
+</div>
+
+<!-- ============ LINES ============ -->
+<div class="page" id="page-lines">
+  <div class="panel">
+    <div class="panel-title"><span>Lineup Configs</span></div>
+    <div class="field-row cols-2">
+      <div>
+        <label>Load Config</label>
+        <select id="loadConfigSelect" onchange="loadConfig(this.value)">
+          <option value="">— Pick —</option>
+        </select>
+      </div>
+      <div>
+        <label>Save As</label>
+        <input type="text" id="saveConfigName" placeholder="e.g. vs Stowe">
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn primary" onclick="saveConfig()">Save</button>
+      <button class="btn danger" onclick="clearLines()">Clear Lines</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title"><span>Forward Lines</span></div>
+    <div class="lines-group" id="forwardLines"></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title"><span>Defensive Pairs</span></div>
+    <div class="lines-group" id="defLines"></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title"><span>Goaltender</span></div>
+    <div class="lines-group" id="goalieLine"></div>
+  </div>
+</div>
+
+<!-- ============ STATS ============ -->
+<div class="page" id="page-stats">
+  <div class="panel">
+    <div class="panel-title"><span>Season Leaderboard</span></div>
+    <div class="chip-scroll" style="margin-bottom: 0">
+      <div class="chip" onclick="navTo('games')">Games →</div>
+      <div class="chip" onclick="openGameEntry()">+ Add Game</div>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th data-sort="num">#</th>
+          <th data-sort="name">Name</th>
+          <th data-sort="gp">GP</th>
+          <th data-sort="pts" class="sorted">Pts</th>
+          <th data-sort="g">G</th>
+          <th data-sort="a">A</th>
+          <th data-sort="plusMinus">+/-</th>
+          <th data-sort="sog">SOG</th>
+        </tr>
+      </thead>
+      <tbody id="skaterTbody"></tbody>
+    </table>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Goalie</th>
+          <th>GP</th>
+          <th>Rec</th>
+          <th>SV%</th>
+          <th>GAA</th>
+          <th>SO</th>
+        </tr>
+      </thead>
+      <tbody id="goalieTbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ============ GAMES LIST ============ -->
+<div class="page" id="page-games">
+  <div class="panel">
+    <div class="panel-title">
+      <span>Game Log</span>
+      <button class="btn small primary" onclick="openGameEntry()">+ New</button>
+    </div>
+    <div id="gameListContainer"></div>
+  </div>
+</div>
+
+<!-- ============ PRACTICE ============ -->
+<div class="page" id="page-practice">
+    <div class="generator-panel">
+    <div class="gen-title">⚡ PRACTICE GENERATOR</div>
+    <div class="gen-sub">Pick a theme — get a full practice in one tap</div>
+    <div class="theme-grid">
+      <button class="theme-btn" data-theme="breakout" onclick="selectGenTheme('breakout')">Breakout</button>
+      <button class="theme-btn" data-theme="passing" onclick="selectGenTheme('passing')">Passing</button>
+      <button class="theme-btn" data-theme="forecheck" onclick="selectGenTheme('forecheck')">Forecheck</button>
+      <button class="theme-btn" data-theme="compete" onclick="selectGenTheme('compete')">Compete</button>
+      <button class="theme-btn" data-theme="skating" onclick="selectGenTheme('skating')">Skating</button>
+      <button class="theme-btn selected" data-theme="mixed" onclick="selectGenTheme('mixed')">Mixed</button>
+    </div>
+    <div class="field-row cols-2" style="margin-bottom: 10px">
+      <div>
+        <label>Duration</label>
+        <select id="genDuration">
+          <option value="45">45 min</option>
+          <option value="55" selected>55 min</option>
+          <option value="60">60 min</option>
+          <option value="75">75 min</option>
+          <option value="90">90 min</option>
+        </select>
+      </div>
+      <div>
+        <label>Age Group</label>
+        <select id="genAgeGroup">
+          <option value="8U">8U</option>
+          <option value="10U" selected>10U</option>
+          <option value="12U">12U</option>
+          <option value="14U">14U</option>
+          <option value="HS">High School</option>
+        </select>
+      </div>
+    </div>
+    <div class="field-row cols-2" style="margin-bottom: 10px">
+      <label style="display: flex; align-items: center; gap: 6px">
+        <input type="checkbox" id="genAvoidRecent" checked style="width: auto">
+        <span style="font-size: 10px; color: var(--text-mid); letter-spacing: 1px; text-transform: uppercase">Avoid recent drills</span>
+      </label>
+      <label style="display: flex; align-items: center; gap: 6px">
+        <input type="checkbox" id="genIncludeGoalie" checked style="width: auto">
+        <span style="font-size: 10px; color: var(--text-mid); letter-spacing: 1px; text-transform: uppercase">Include goalie touch</span>
+      </label>
+    </div>
+    <div class="field" style="margin-bottom: 10px">
+      <label>Progression</label>
+      <select id="genProgression" onchange="updateGenProgression(this.value)">
+        <option value="balanced" selected>Balanced</option>
+        <option value="teach">Teach</option>
+        <option value="pressure">Pressure</option>
+        <option value="transfer">Transfer</option>
+        <option value="compete">Compete</option>
+      </select>
+    </div>
+    <div class="field" style="margin-bottom: 10px">
+      <label>AI Practice Intent</label>
+      <textarea id="aiPracticeIntent" rows="3" placeholder="Example: Create a 60-minute U10 practice focused on breakout passes, quick support, and a fun small-area compete finish. We have 2 goalies and 12 skaters."></textarea>
+    </div>
+    <div class="field" style="margin-bottom: 10px">
+      <label>Coach Notes / Constraints</label>
+      <textarea id="aiPracticeNotes" rows="2" placeholder="Optional: half ice only, avoid contact, include station work, tired team, tournament prep, etc."></textarea>
+    </div>
+    <div class="btn-row" style="margin: 0">
+      <button class="btn primary full" id="aiPracticeBtn" onclick="runAIPracticeBuilder()" style="font-size: 13px; padding: 14px">🤖 AI BUILD PRACTICE</button>
+      <button class="btn full" onclick="runGenerator()" style="font-size: 13px; padding: 14px">🏒 QUICK BUILD</button>
+    </div>
+    <div id="aiPracticeStatus" style="font-size: 10px; color: var(--text-dim); margin-top: 8px; line-height: 1.45">AI uses your current drill library and prefers animated drills when they fit the intent.</div>
+  </div>
+
+
+  <div class="panel">
+    <div class="panel-title"><span>Practice Plan</span></div>
+    <div class="field-row cols-2">
+      <div>
+        <label>Date</label>
+        <input type="date" id="planDate" onchange="saveCurrentPlan()">
+      </div>
+      <div>
+        <label>Total (min)</label>
+        <input type="number" id="planTotal" value="55" min="30" max="120" onchange="saveCurrentPlan(); renderPlanBudget()">
+      </div>
+    </div>
+    <div class="field">
+      <label>Title</label>
+      <input type="text" id="planTitle" placeholder="e.g. Week 3 - Passing Focus" onchange="saveCurrentPlan()">
+    </div>
+    <div class="field">
+      <label>Theme</label>
+      <input type="text" id="planTheme" placeholder="e.g. Short passing / quick feet" onchange="saveCurrentPlan()">
+    </div>
+  </div>
+
+  <div class="time-budget" id="timeBudget">
+    <div class="b-stat"><div class="b-num" id="timeUsed">0</div><div class="b-lbl">Used</div></div>
+    <div class="b-stat"><div class="b-num" id="timeRemaining">55</div><div class="b-lbl">Left</div></div>
+    <div class="b-stat"><div class="b-num" id="blockCount">0</div><div class="b-lbl">Blocks</div></div>
+  </div>
+
+  <div class="goalie-warning" id="goalieWarning">
+    ⚠ No goalie-specific drill in plan
+  </div>
+
+  <div class="panel" id="aiPracticeSummaryPanel" style="display: none">
+    <div class="panel-title"><span>AI Coaching Summary</span></div>
+    <div id="aiPracticeSummary" style="font-size: 11px; color: var(--text-mid); line-height: 1.55"></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">
+      <span>Current Plan</span>
+      <div class="btn-row" style="margin: 0">
+        <button class="btn small" onclick="clearCurrentPlan()">Clear</button>
+        <button class="btn small" onclick="downloadCurrentPracticePdf()">PDF</button>
+        <button class="btn small" onclick="completeCurrentPractice()">Complete</button>
+        <button class="btn small primary" onclick="shareCurrentPracticePlan()">Share</button>
+        <button class="btn small primary" onclick="saveNamedPlan()">Save</button>
+      </div>
+    </div>
+    <div id="currentPlanBlocks"></div>
+    <button class="btn primary full" onclick="startOnIceMode()" style="margin-top: 10px; font-size: 13px; padding: 14px" id="runPracticeBtn">▶ RUN PRACTICE (ON-ICE MODE)</button>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">
+      <span>Drill Library</span>
+      <span class="count" id="drillLibCount">0</span>
+    </div>
+    <input type="text" id="drillSearch" placeholder="Search drills..." oninput="renderDrillList()" style="margin-bottom: 10px">
+    <div class="chip-scroll" id="categoryChips"></div>
+    <div id="drillList"></div>
+    <button class="btn full" onclick="openDrillCreator()" style="margin-top: 10px">+ Add Custom Drill</button>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title"><span>Saved Plans</span></div>
+    <div id="savedPlansList"></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">
+      <span>Season Planner</span>
+      <button class="btn small" onclick="buildSeasonPlan()">Build 4 Weeks</button>
+    </div>
+    <div class="field-row cols-2">
+      <div>
+        <label>Focus Theme</label>
+        <select id="seasonFocus">
+          <option value="breakout">Breakout</option>
+          <option value="passing">Passing</option>
+          <option value="forecheck">Forecheck</option>
+          <option value="mixed" selected>Mixed</option>
+        </select>
+      </div>
+      <div>
+        <label>Start Date</label>
+        <input type="date" id="seasonStart">
+      </div>
+    </div>
+    <div id="seasonPlannerList"></div>
+  </div>
+</div>
+
+<!-- ============ GAME DAY PACKET ============ -->
+<div class="page" id="page-gameday">
+  <div class="panel">
+    <div class="panel-title"><span>Game Info</span></div>
+    <div class="field">
+      <label>Opponent</label>
+      <input type="text" id="gdOpponent" placeholder="e.g. Stowe Mountain" oninput="renderGameDayPacket()">
+    </div>
+    <div class="field-row cols-2">
+      <div>
+        <label>Date</label>
+        <input type="date" id="gdDate" oninput="renderGameDayPacket()">
+      </div>
+      <div>
+        <label>Puck Drop</label>
+        <input type="time" id="gdPuck" oninput="renderGameDayPacket()">
+      </div>
+    </div>
+    <div class="field-row cols-2">
+      <div>
+        <label>H/A</label>
+        <select id="gdHA" onchange="renderGameDayPacket()">
+          <option value="H">Home</option>
+          <option value="A">Away</option>
+        </select>
+      </div>
+      <div>
+        <label>Jersey</label>
+        <select id="gdJersey" onchange="renderGameDayPacket()">
+          <option>Black</option>
+          <option>White</option>
+          <option>Teal</option>
+        </select>
+      </div>
+    </div>
+    <div class="field">
+      <label>Rink</label>
+      <input type="text" id="gdRink" placeholder="e.g. Waterbury Ice Center" oninput="renderGameDayPacket()">
+    </div>
+    <div class="field">
+      <label>Arrival Time</label>
+      <input type="time" id="gdArrival" oninput="renderGameDayPacket()">
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title"><span>Lineup</span></div>
+    <div class="field">
+      <label>Use Line Config</label>
+      <select id="gdLineConfig" onchange="renderGameDayPacket()">
+        <option value="">— Current lineup —</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title"><span>Opponent Scouting</span></div>
+    <div class="field">
+      <label>Key Players</label>
+      <textarea id="gdKeyPlayers" placeholder="#9 top scorer, dangerous on PP" oninput="renderGameDayPacket()"></textarea>
+    </div>
+    <div class="field">
+      <label>Tendencies</label>
+      <textarea id="gdTendencies" placeholder="Trap through neutral zone, chip-and-chase" oninput="renderGameDayPacket()"></textarea>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title"><span>Game Plan</span></div>
+    <div class="field">
+      <label>Key Matchups</label>
+      <textarea id="gdMatchups" placeholder="Our Line 1 vs their D-pair 1" oninput="renderGameDayPacket()"></textarea>
+    </div>
+    <div class="field">
+      <label>Coaching Points</label>
+      <textarea id="gdCoachPoints" placeholder="Get pucks deep, strong on walls, stay out of the box" oninput="renderGameDayPacket()"></textarea>
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn primary full" onclick="window.print()">Print Packet</button>
+  </div>
+
+  <div id="gdPreview"></div>
+</div>
+
+<!-- ============ WEEKLY UPDATE ============ -->
+<div class="page" id="page-weekly">
+  <div class="panel">
+    <div class="panel-title"><span>Weekly Update</span></div>
+    <div class="field-row cols-2">
+      <div>
+        <label>Week Of</label>
+        <input type="date" id="wkDate" oninput="renderWeekly()">
+      </div>
+      <div>
+        <label>Week #</label>
+        <input type="text" id="wkNum" placeholder="5" oninput="renderWeekly()">
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title"><span>Practice A</span></div>
+    <div class="field">
+      <label>Day / Date</label>
+      <input type="text" id="wkPracADate" placeholder="Tue 10/15" oninput="renderWeekly()">
+    </div>
+    <div class="field">
+      <label>Theme</label>
+      <input type="text" id="wkPracATheme" placeholder="Edge work + quick feet" oninput="renderWeekly()">
+    </div>
+    <div class="field">
+      <label>What We Worked On</label>
+      <textarea id="wkPracAWork" placeholder="Inside/outside edges, figure 8s with puck" oninput="renderWeekly()"></textarea>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title"><span>Practice B</span></div>
+    <div class="field">
+      <label>Day / Date</label>
+      <input type="text" id="wkPracBDate" placeholder="Thu 10/17" oninput="renderWeekly()">
+    </div>
+    <div class="field">
+      <label>Theme</label>
+      <input type="text" id="wkPracBTheme" placeholder="Passing under pressure" oninput="renderWeekly()">
+    </div>
+    <div class="field">
+      <label>What We Worked On</label>
+      <textarea id="wkPracBWork" placeholder="2v2 small area games, breakouts" oninput="renderWeekly()"></textarea>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title"><span>⭐ Player of the Week</span></div>
+    <div class="field-row cols-2">
+      <div>
+        <label>Name</label>
+        <input type="text" id="wkPOTW" placeholder="Pick from roster or type name" oninput="renderWeekly()" list="rosterNames">
+        <datalist id="rosterNames"></datalist>
+      </div>
+      <div>
+        <label>#</label>
+        <input type="text" id="wkPOTWNum" placeholder="9" oninput="renderWeekly()">
+      </div>
+    </div>
+    <div class="field">
+      <label>Category</label>
+      <select id="wkPOTWCat" onchange="renderWeekly()">
+        <option value="">— Pick —</option>
+        <option>Effort & Hustle</option>
+        <option>Most Improved</option>
+        <option>Standout Moment</option>
+        <option>Great Teammate</option>
+        <option>Skill Execution</option>
+        <option>Battle Level</option>
+        <option>Coachability</option>
+        <option>Leadership</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Why They Earned It</label>
+      <textarea id="wkPOTWReason" placeholder="Specific moments - kids love specifics!" oninput="renderWeekly()"></textarea>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title"><span>Reminders</span></div>
+    <div class="field">
+      <textarea id="wkReminders" placeholder="One per line&#10;Team photo day next Wed" oninput="renderWeekly()"></textarea>
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn primary full" onclick="copyWeeklyUpdate()">Copy to Clipboard</button>
+    <button class="btn full" onclick="openWeeklyInEmail()">Open in Email</button>
+  </div>
+
+  <div class="panel" style="margin-top: 14px">
+    <div class="panel-title"><span>Preview</span></div>
+    <div id="wkPreview" class="email-preview"></div>
+  </div>
+</div>
+
+<!-- ========== MODALS ========== -->
+<div class="modal-overlay" id="playerPickerModal" onclick="if(event.target === this) closePlayerPicker()">
+  <div class="modal">
+    <div class="modal-title">
+      <span id="pickerTitle">Pick Player</span>
+      <button class="modal-close" onclick="closePlayerPicker()">✕</button>
+    </div>
+    <div class="picker-options" id="pickerOptions"></div>
+    <button class="btn full" onclick="clearSlotFromPicker()" style="margin-top: 12px">Clear Slot</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="gameEntryModal" onclick="if(event.target === this) closeGameEntry()">
+  <div class="modal" style="max-height: 90vh">
+    <div class="modal-title">
+      <span id="gameEntryTitle">New Game</span>
+      <button class="modal-close" onclick="closeGameEntry()">✕</button>
+    </div>
+
+    <div class="field">
+      <label>Opponent</label>
+      <input type="text" id="geOpponent" placeholder="Opponent name">
+    </div>
+    <div class="field-row cols-2">
+      <div>
+        <label>Date</label>
+        <input type="date" id="geDate">
+      </div>
+      <div>
+        <label>H/A</label>
+        <select id="geHA">
+          <option value="H">Home</option>
+          <option value="A">Away</option>
+        </select>
+      </div>
+    </div>
+    <div class="field-row cols-2">
+      <div>
+        <label>BB Score</label>
+        <input type="number" id="geSF" min="0" value="0">
+      </div>
+      <div>
+        <label>Opp Score</label>
+        <input type="number" id="geSA" min="0" value="0">
+      </div>
+    </div>
+    <div class="field">
+      <label>Type</label>
+      <select id="geType">
+        <option>League</option>
+        <option>Tournament</option>
+        <option>Scrimmage</option>
+        <option>Playoff</option>
+      </select>
+    </div>
+
+    <div class="panel-title" style="margin-top: 14px; padding-top: 10px"><span>Skaters</span></div>
+    <div id="geSkaters"></div>
+
+    <div class="panel-title" style="margin-top: 14px; padding-top: 10px"><span>Goalie</span></div>
+    <div id="geGoalies"></div>
+
+    <div class="btn-row" style="margin-top: 14px">
+      <button class="btn" onclick="closeGameEntry()">Cancel</button>
+      <button class="btn danger" id="geDeleteBtn" onclick="deleteGameFromEntry()" style="display: none">Delete</button>
+      <button class="btn primary" onclick="saveGameFromEntry()">Save</button>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal-overlay" id="animatedDrillViewerModal" onclick="if(event.target === this) closeAnimatedViewer()">
+  <div class="modal">
+    <div class="modal-title">
+      <span>Animated Drill Viewer</span>
+      <button class="modal-close" onclick="closeAnimatedViewer()">✕</button>
+    </div>
+    <div id="animatedDrillViewerBody"></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="drillModal" onclick="if(event.target === this) closeDrillEditor()">
+  <div class="modal">
+    <div class="modal-title">
+      <span id="drillModalTitle">Add Drill</span>
+      <button class="modal-close" onclick="closeDrillEditor()">✕</button>
+    </div>
+    <div class="field">
+      <label>Drill Name</label>
+      <input type="text" id="drillName" placeholder="e.g. Figure 8 Crossovers">
+    </div>
+    <div class="field-row cols-2">
+      <div>
+        <label>Duration (min)</label>
+        <input type="number" id="drillDuration" min="1" max="30" value="8">
+      </div>
+      <div>
+        <label>Category</label>
+        <select id="drillCategory"></select>
+      </div>
+    </div>
+    <div class="field">
+      <label>Diagram Editor</label>
+      <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px">
+        <button class="btn small tool-btn active" data-tool="player" type="button">Player</button>
+        <button class="btn small tool-btn" data-tool="forward" type="button">Fwd</button>
+        <button class="btn small tool-btn" data-tool="defense" type="button">Def</button>
+        <button class="btn small tool-btn" data-tool="defender" type="button">X</button>
+        <button class="btn small tool-btn" data-tool="puck" type="button">Puck</button>
+        <button class="btn small tool-btn" data-tool="cone" type="button">Cone</button>
+        <button class="btn small tool-btn" data-tool="arrow" type="button">Arrow</button>
+        <button class="btn small tool-btn" data-tool="move" type="button">Move</button>
+        <button class="btn small tool-btn" data-tool="delete" type="button">Delete</button>
+      </div>
+      <div class="btn-row" style="margin-bottom: 10px">
+        <button class="btn small" type="button" onclick="toggleEditorRink()">Toggle 1/2-1/4 Ice</button>
+        <button class="btn small" type="button" onclick="undoEditorChange()">Undo</button>
+        <button class="btn small" type="button" onclick="clearEditorCanvas()">Clear</button>
+      </div>
+      <div style="display: flex; justify-content: center; margin-bottom: 10px">
+        <canvas id="editorCanvas" style="width: 100%; max-width: 300px; aspect-ratio: 3 / 5; background: #fff; border-radius: 4px; border: 1px solid var(--border)"></canvas>
+      </div>
+    </div>
+    <div class="field">
+      <label>Description</label>
+      <textarea id="drillDescription" placeholder="Setup, flow, sequence"></textarea>
+    </div>
+    <div class="field">
+      <label>Coaching Points</label>
+      <textarea id="drillPoints" placeholder="- Keep head up&#10;- Tight turns"></textarea>
+    </div>
+    <div class="btn-row">
+      <button class="btn" onclick="closeDrillEditor()">Cancel</button>
+      <button class="btn danger" id="drillDeleteBtn" onclick="deleteCurrentDrill()" style="display: none">Delete</button>
+      <button class="btn primary" onclick="saveDrillFromEditor()">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="cloudModal" onclick="if(event.target === this) closeCloudSettings()">
+  <div class="modal">
+    <div class="modal-title">
+      <span>Cloud Sync</span>
+      <button class="modal-close" onclick="closeCloudSettings()">✕</button>
+    </div>
+    <div class="field">
+      <label>Team Code</label>
+      <input type="text" id="cloudTeamCode" placeholder="black-bears-10u-2026">
+    </div>
+    <div class="field">
+      <label>Firebase Config (JSON)</label>
+      <textarea id="cloudConfigJson" placeholder='{"apiKey":"...","authDomain":"...","projectId":"...","appId":"..."}'></textarea>
+    </div>
+    <div id="cloudStatus" style="font-size: 12px; color: var(--text-mid); margin-bottom: 10px">Not configured</div>
+    <div class="btn-row">
+      <button class="btn" onclick="saveCloudSettings()">Save</button>
+      <button class="btn" onclick="testCloudSync()">Test</button>
+      <button class="btn" onclick="pushCloudState()">Push</button>
+      <button class="btn" onclick="pullCloudState()">Pull</button>
+    </div>
+    <div class="btn-row" style="margin-top: 10px">
+      <button class="btn danger" onclick="clearCloudSettings()">Clear Config</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="actionSheetOverlay" style="background: rgba(0,0,0,0.5)" onclick="if(event.target === this) closeActionSheet()">
+  <div class="action-sheet" id="actionSheet">
+    <div class="sheet-title">Settings & Data</div>
+    <button class="sheet-btn" onclick="openCloudSettings()">☁️ Cloud Sync</button>
+    <button class="sheet-btn" onclick="exportAllData()">📥 Export All Data (Backup)</button>
+    <button class="sheet-btn" onclick="document.getElementById('importFileInput').click()">📤 Import Data</button>
+    <input type="file" id="importFileInput" accept=".json" style="display: none" onchange="handleImport(event)">
+    <button class="sheet-btn" onclick="navTo('roster'); closeActionSheet()">👥 Manage Roster</button>
+    <button class="sheet-btn" onclick="seedSampleData()">🔄 Reset to Default Roster</button>
+    <button class="sheet-btn danger" onclick="resetAllData()">🗑 Erase Everything</button>
+    <button class="sheet-btn" onclick="closeActionSheet()">Close</button>
+  </div>
+</div>
+
+<!-- ========== ON-ICE MODE ========== -->
+<div class="oi-overlay" id="oiOverlay">
+  <div class="oi-top">
+    <div class="oi-progress" id="oiProgress">DRILL 1 / 5</div>
+    <button class="oi-close" onclick="closeOnIceMode()">✕</button>
+  </div>
+  <div class="oi-progress-bar"><div class="oi-progress-bar-fill" id="oiProgressFill"></div></div>
+  <div class="oi-body" id="oiBody"></div>
+  <div class="oi-nav" id="oiNav">
+    <button id="oiPrev" onclick="oiPrev()">◀ Prev</button>
+    <button class="center" id="oiTimerBtn" onclick="oiToggleTimer()">▶ Start Timer</button>
+    <button id="oiNext" onclick="oiNext()">Next ▶</button>
+  </div>
+</div>
+
+<!-- ============ BOTTOM NAV ============ -->
+<div class="bottom-nav">
+  <button class="active" data-nav="dash" onclick="navTo('dash')">
+    <span class="nav-icon">◆</span>
+    <span>Home</span>
+  </button>
+  <button data-nav="lines" onclick="navTo('lines')">
+    <span class="nav-icon">▓</span>
+    <span>Lines</span>
+  </button>
+  <button data-nav="stats" onclick="navTo('stats')">
+    <span class="nav-icon">#</span>
+    <span>Stats</span>
+  </button>
+  <button data-nav="practice" onclick="navTo('practice')">
+    <span class="nav-icon">✱</span>
+    <span>Practice</span>
+  </button>
+  <button data-nav="gameday" onclick="navTo('gameday')">
+    <span class="nav-icon">◉</span>
+    <span>Game</span>
+  </button>
+  <button data-nav="weekly" onclick="navTo('weekly')">
+    <span class="nav-icon">✉</span>
+    <span>Weekly</span>
+  </button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { requireAuthenticatedPage, attachAuthStateListener } from "./src/features/auth/session.js";
+import { hydrateWorkspaceContext } from "./src/features/app/workspace-context.js";
+
+try {
+  const state = await requireAuthenticatedPage();
+  if (state?.user) {
+    await hydrateWorkspaceContext().catch(() => {});
+    attachAuthStateListener(() => {
+      window.location.replace("./auth.html");
+    });
+  }
+} catch {
+  window.location.replace("./auth.html");
+}
+</script>
+<script type="module" src="./src/features/practice/drill-scoring.js"></script>
+<script type="module" src="./src/features/practice/team-development-tracking.js"></script>
+<script type="module" src="./src/features/dashboard/coach-dashboard.js"></script>
+<script type="module" src="./src/features/practice/practice-engine.js"></script>
+<script type="module" src="./src/features/practice/drill-media-tabs.js"></script>
+<script type="module" src="./src/features/practice/animated-drill-viewer.js"></script>
+<script type="module" src="./src/features/practice/ai-practice-builder.js"></script>
+<script type="module" src="./src/features/sharing/practice-sharing.js"></script>
+<script type="module" src="./src/features/marketplace/practice-marketplace.js"></script>
+<!-- app-state.js MUST be loaded as a non-module script BEFORE the inline block
+     below so its declarations are visible by bare name. See file header. -->
+<script src="./src/features/app/app-state.js"></script>
+<script src="./src/features/roster/roster.js"></script>
+<script src="./src/features/practice/practice-ui.js"></script>
+<script src="./src/features/game-day/game-day.js"></script>
+<script>
+// ============================================
+// CONSTANTS
+// ============================================
+// STORAGE_KEY, LEGACY_STORAGE_KEY are provided by src/features/app/app-state.js
+
+const CATEGORIES = [
+  { id: 'skating', label: 'Skating' },
+  { id: 'puck', label: 'Puck Handling' },
+  { id: 'passing', label: 'Passing' },
+  { id: 'shooting', label: 'Shooting' },
+  { id: 'battle', label: 'Battles' },
+  { id: 'breakout', label: 'Breakouts' },
+  { id: 'dzone', label: 'D-Zone' },
+  { id: 'ozone', label: 'O-Zone' },
+  { id: 'pp', label: 'Power Play' },
+  { id: 'pk', label: 'Penalty Kill' },
+  { id: 'sag', label: 'Small Area' },
+  { id: 'cond', label: 'Conditioning' },
+  { id: 'goalie', label: 'Goalie' },
+];
+
+// Preloaded roster from graphic - 12 players (edit positions as needed)
+const PRELOADED_ROSTER = [
+  { num: '', name: 'Austin Avery', pos: 'F' },
+  { num: '', name: 'Colton Barr', pos: 'F' },
+  { num: '', name: 'Brandt Boutin', pos: 'F' },
+  { num: '', name: 'Charlie Diego', pos: 'F' },
+  { num: '', name: 'Jayce Huskes', pos: 'F' },
+  { num: '', name: 'William Isham', pos: 'F' },
+  { num: '', name: 'Tucker Ladieu', pos: 'F' },
+  { num: '', name: 'Owen Liptak', pos: 'F' },
+  { num: '', name: 'Sonny Storellicastro', pos: 'F' },
+  { num: '', name: 'Blake Turley', pos: 'F' },
+  { num: '', name: 'Hudson Weide', pos: 'F' },
+  { num: '', name: 'Ethan Williams', pos: 'F' },
+];
+
+// 50 preloaded drills — Black Bears themed, 10U T2 focused
+const PRELOADED_DRILLS = [
+  // --- SKATING (6) ---
+  { name: 'Bear Den Warm-Up', category: 'skating', duration: 5, description: 'Laps around half-ice with progressive movement: glide, forward strides, crossovers, backward.', points: 'Knees bent, head up\nFull extension on each stride' },
+  { name: 'Bear Claw Edge Circuit', category: 'skating', duration: 7, description: '3 stations: inside edges, outside edges, two-foot slaloms using cones.', points: 'Deep knee bend\nBlade angle, not lean' },
+  { name: 'C-Cut Progression', category: 'skating', duration: 6, description: 'Forward C-cuts down ice, backward C-cuts back. Progress to crossover C-cuts.', points: 'Push through the edge\nBalance over skate' },
+  { name: 'Tight Turn Takeoff', category: 'skating', duration: 6, description: 'Skate to cone, tight turn around it, accelerate out. Alternate directions. Add pivots on coach call.', points: 'Bend knees into turn\nExplosive exit' },
+  { name: 'Stops & Starts Ladder', category: 'skating', duration: 7, description: 'From blue line: skate to red, hockey stop, explode back. Progress distances.', points: 'Both skates bite\nLow stance out of stop' },
+  { name: 'Bear Sprint Lines', category: 'skating', duration: 8, description: 'Full sprints across ice with explicit technique: crossovers, heel-to-heel, two-foot push-offs.', points: 'Full extension\nArms drive the legs' },
+
+  // --- PUCK HANDLING (5) ---
+  { name: 'Paw Figure 8', category: 'puck', duration: 6, description: 'Two cones 15ft apart. Figure 8 while stickhandling.', points: 'Eyes up after each turn\nSoft hands on puck' },
+  { name: 'Stickhandling Gauntlet', category: 'puck', duration: 6, description: 'Row of 6-8 cones. Weave through using quick hands, explode through last gate.', points: 'Quick hands, quiet feet\nHead up by cone 3' },
+  { name: 'Toe Drag Progression', category: 'puck', duration: 5, description: 'Stationary toe drag to stickhandle. Progress to moving. Finish with shot.', points: 'Use your toe\nBody between defender and puck' },
+  { name: 'Protect the Den', category: 'puck', duration: 6, description: 'Players skate inside circle with puck. One defender tries to knock it loose. Protect using body and soft hands.', points: 'Body between stick and defender\nKeep feet moving' },
+  { name: 'Bear Tracks Obstacle Course', category: 'puck', duration: 8, description: 'Set up stations: cones to weave, tire to drag around, gate to pass through. Timed runs.', points: 'Head up at each station\nSoft hands under pressure' },
+
+  // --- PASSING (5) ---
+  { name: 'Give & Go Attack', category: 'passing', duration: 8, description: 'Pairs skate up half-ice passing, finish with shot.', points: 'Pass to the stick\nSkate through the catch\nDont admire the pass' },
+  { name: 'Bear Square Passing', category: 'passing', duration: 5, description: '4 players form a square, pass in patterns. Add one-touch round.', points: 'Head up before receiving\nCushion the puck' },
+  { name: 'Saucer Pass Practice', category: 'passing', duration: 6, description: 'Partners 20ft apart with sticks in the lane as obstacles. Saucer pass over the sticks.', points: 'Pass with the heel\nFollow through upward' },
+  { name: 'Bank Pass Off Boards', category: 'passing', duration: 6, description: 'Passer along boards, receiver in slot. Bank the puck off boards onto tape.', points: 'Angle your blade\nCalibrate off wall angle' },
+  { name: '3-Bear Weave', category: 'passing', duration: 8, description: 'Classic 3-player weave up ice: pass and follow. Finish with shot. Rotate spots.', points: 'Go to space you passed to\nKeep feet moving' },
+
+  // --- SHOOTING (5) ---
+  { name: 'Shooting Warm-Up Line', category: 'shooting', duration: 6, description: 'Single line of shots from slot. Wrist, snap, backhand. Focus on accuracy.', points: 'Weight on back leg loading\nFollow through to target' },
+  { name: 'Quick Claw Release', category: 'shooting', duration: 7, description: 'Receive pass, shoot, second puck fed immediately for quick second shot.', points: 'Stick on ice, ready\nDont cradle, release' },
+  { name: 'Corner Target Practice', category: 'shooting', duration: 6, description: 'Place targets in all 4 corners of net. Shoot from different angles.', points: 'Pick corner before shot\nAdjust stick blade angle' },
+  { name: 'One-Timer Attack', category: 'shooting', duration: 7, description: 'Feeder in slot, shooter on wing. Clean pass onto tape for one-timer.', points: 'Stick pre-loaded\nFollow through through puck' },
+  { name: 'Crash the Net Rebounds', category: 'shooting', duration: 6, description: 'Coach dumps puck in crease area, player crashes net and shoots quick.', points: 'Get to net hard\nShort quick release' },
+
+  // --- BATTLES / 1v1 (5) ---
+  { name: 'Corner Chaos 1v1', category: 'battle', duration: 7, description: 'Puck in corner. Two players race in, compete, attacker exits with possession.', points: 'Body position on wall\nStick on the puck' },
+  { name: 'Full Lane Showdown', category: 'battle', duration: 8, description: 'Attacker starts at blue line, defender from goal line. 1v1 to net.', points: 'Defender: gap control\nAttacker: protect puck' },
+  { name: 'Net-Front Box Out', category: 'battle', duration: 6, description: 'D-man must box out attacker while loose puck is dumped toward net.', points: 'Low stance, butt out\nStick on stick' },
+  { name: 'Loose Puck Race', category: 'battle', duration: 5, description: 'Coach dumps puck, 2 players race to it. Whoever wins it tries to score.', points: 'First step quickness\nShield puck on arrival' },
+  { name: 'Bear Hunt Backcheck', category: 'battle', duration: 7, description: 'Attacker gets head start, defender must back-check and angle them off. 1v1 to net.', points: 'Angle not chase\nStick in lane' },
+
+  // --- BREAKOUTS (4) ---
+  { name: 'D-to-D Bear Breakout', category: 'breakout', duration: 8, description: 'G passes to D, D-to-D, breakout up wall or center with winger and center support.', points: 'Communication from G\nStrong firm passes\nCenter low support' },
+  { name: 'Wheel Breakout', category: 'breakout', duration: 8, description: 'D picks up puck behind net, wheels around to strong side with speed.', points: 'Full speed on wheel\nHead up reading pressure' },
+  { name: 'Reverse the Den', category: 'breakout', duration: 7, description: 'D starts to wheel one way then reverses to other side when pressure comes.', points: 'Sell the fake\nUse net as shield\nQuick change of direction' },
+  { name: 'Rim Breakout', category: 'breakout', duration: 7, description: 'D rims puck hard around boards to strong-side winger. Winger controls and moves up ice.', points: 'Rim hard and low\nWinger angle to receive' },
+
+  // --- D-ZONE (4) ---
+  { name: 'Bear Cage D-Zone', category: 'dzone', duration: 10, description: 'D-zone shape: 2 D front of net, 2 wingers on points, center covers slot. Box+1 coverage.', points: 'Stick in lane, box out\nPick up your man' },
+  { name: 'Low Zone 2v2', category: 'dzone', duration: 8, description: '2v2 below the goal line. Defenders try to contain, forwards try to create chances.', points: 'Inside position\nDont get pinned' },
+  { name: 'D-Zone Clear Progression', category: 'dzone', duration: 7, description: 'Defensive clear sequence: retrieve puck, support, clear up boards or glass.', points: 'Know your outlet\nGet it out, get it deep' },
+  { name: 'Penalty Kill Clears', category: 'dzone', duration: 7, description: 'On PK: clear from behind net, from wall, from front of net. Identify best option.', points: 'Safety first\nIce is ok, turnover is not' },
+
+  // --- O-ZONE / FORECHECK (4) ---
+  { name: 'Bear Pack Forecheck (F1-F2-F3)', category: 'ozone', duration: 8, description: '3 forwards into O-zone. F1 pressures, F2 strong side, F3 reads high.', points: 'F1 angle, force to wall\nF3 stay high' },
+  { name: 'Cycle Down Low', category: 'ozone', duration: 7, description: 'Teach the cycle: D-to-D high, D-to-F down low. Puck movement to find lanes.', points: 'Skate into space\nSupport angles' },
+  { name: '2-1-2 Forecheck', category: 'ozone', duration: 8, description: 'Two forwards deep, one high, 2 D up. Puck dump, pressure, retrieve.', points: 'F1 and F2 together\nSupport lanes open' },
+  { name: 'Point Shots & Tips', category: 'ozone', duration: 7, description: 'D from point shoots, forward tips/screens at net front.', points: 'D: low and hard\nF: stick blade in lane' },
+
+  // --- POWER PLAY (3) ---
+  { name: 'Umbrella PP', category: 'pp', duration: 7, description: 'Umbrella: 1 high, 2 flanks, 2 low. Move puck, look for seams.', points: 'One-timer ready\nMove puck quickly' },
+  { name: '1-3-1 PP Formation', category: 'pp', duration: 8, description: '1 high, 3 across middle, 1 low. Create lanes for seam passes and one-timers.', points: 'Puck moves fast\nNet front screens' },
+  { name: 'PP Zone Entries', category: 'pp', duration: 6, description: 'Practice carrying puck into zone with numbers. Drop passes, controlled entries.', points: 'Speed through neutral zone\nWidth at blue line' },
+
+  // --- PENALTY KILL (3) ---
+  { name: 'Box PK Formation', category: 'pk', duration: 7, description: 'Box PK: 4 players tight box, wings pressure points, D front of net.', points: 'Sticks in lanes\nDont chase, stay compact' },
+  { name: 'Diamond PK Pressure', category: 'pk', duration: 7, description: 'Diamond formation for aggressive PK. Top forward presses point.', points: 'Smart pressure only\nDont leave your lane' },
+  { name: 'PK Breakouts', category: 'pk', duration: 6, description: 'On PK: clear zone, change line on fly, fresh legs onto ice.', points: 'First clear option fast\nLine change timing' },
+
+  // --- SMALL AREA GAMES (4) ---
+  { name: 'Den Battle 2v2', category: 'sag', duration: 8, description: 'Confined area. 2v2 continuous with 2 nets, short shifts.', points: 'Support each other\nQuick decisions' },
+  { name: 'Den Domination 3v3', category: 'sag', duration: 10, description: 'Cross-ice with two nets. 3v3 game. Short shifts, full compete.', points: 'Find open ice\nTalk on the ice\nCompete every puck' },
+  { name: 'King of the Den', category: 'sag', duration: 8, description: 'Winner stays. Small area 1v1 battles, continuous flow.', points: 'Win your battles\nShort intense efforts' },
+  { name: 'Bear Rush 3v2', category: 'sag', duration: 8, description: 'Attack 3v2. Rotate to 2v1 for defenders. Continuous.', points: 'Attackers: support angles\nDefenders: gap, triangle' },
+
+  // --- CONDITIONING (2) ---
+  { name: 'Suicides', category: 'cond', duration: 4, description: 'Half-ice suicides: red line, blue, goal line, back. 3 sets.', points: 'Full effort every rep' },
+  { name: 'Final Bear Push', category: 'cond', duration: 6, description: 'End of practice: 4 lengths of ice at full speed with 30 sec rest between.', points: 'Leave it on the ice\nMental toughness rep' },
+
+  // --- GOALIE (5) ---
+  { name: 'Goalie Post-to-Post', category: 'goalie', duration: 6, description: 'Post to post on coaches call. Shots from various angles.', points: 'Strong push off post\nSquare to shooter' },
+  { name: 'Goalie Rebound Control', category: 'goalie', duration: 6, description: 'Shots from slot. Control rebounds: deflect wide, cover, direct to stick.', points: 'Absorb with body\nRedirect, dont repel' },
+  { name: 'Goalie Breakaway Reads', category: 'goalie', duration: 7, description: 'Breakaways from red line. Goalie: patience, tracking, read shot vs deke.', points: 'Stay on feet\nMatch speed to shooter' },
+  { name: 'Goalie Screen & Tips', category: 'goalie', duration: 6, description: 'Shots from point with traffic/tips. Goalie tracks through the screen.', points: 'Low stance\nFind puck through bodies' },
+  { name: 'Goalie Crease Movement', category: 'goalie', duration: 6, description: 'T-pushes, shuffles, recovery. Coach calls directions, goalie moves and sets.', points: 'Square to puck\nEdges stay strong' },
+];
+
+const LINE_CONFIG = {
+  F1: { type: 'fwd', label: 'Line 1', positions: ['LW', 'C', 'RW'] },
+  F2: { type: 'fwd', label: 'Line 2', positions: ['LW', 'C', 'RW'] },
+  F3: { type: 'fwd', label: 'Line 3', positions: ['LW', 'C', 'RW'] },
+  F4: { type: 'fwd', label: 'Line 4', positions: ['LW', 'C', 'RW'] },
+  D1: { type: 'def', label: 'D-Pair 1', positions: ['LD', 'RD'] },
+  D2: { type: 'def', label: 'D-Pair 2', positions: ['LD', 'RD'] },
+  D3: { type: 'def', label: 'D-Pair 3', positions: ['LD', 'RD'] },
+  G:  { type: 'goal', label: 'Starter', positions: ['G'] },
+};
+
+const TAGS = ['pp1', 'pp2', 'pk1', 'pk2', 'match'];
+const TAG_LABELS = { pp1: 'PP1', pp2: 'PP2', pk1: 'PK1', pk2: 'PK2', match: 'KEY' };
+
+// emptyLines(), state, save() are provided by src/features/app/app-state.js (loaded above).
+
+// BearDenEditor and BearDenCloud are var-declared so their bindings live on the
+// global object — required because src/features/practice/practice-ui.js (loaded
+// as a separate classic script) reads BearDenEditor.
+var BearDenEditor = null;
+var BearDenCloud = null;
+
+// ============================================
+// PERSISTENCE
+// ============================================
+// load() is a thin wrapper around the loadState() helper from app-state.js.
+// It injects this file's domain constants (PRELOADED_*, sortRoster) so the
+// helper itself stays free of app-specific data.
+function load() {
+  loadState({
+    preloadedDrills: PRELOADED_DRILLS,
+    preloadedRoster: PRELOADED_ROSTER,
+    sortRoster: typeof sortRoster === 'function' ? sortRoster : null,
+    ensureDevelopment: window.BearDenHQ && window.BearDenHQ.ensureDevelopmentState,
+  });
+}
+
+function seedSampleData() {
+  if (!confirm('This resets your roster to the 13 default players from your roster graphic. Your games, plans, and drills stay intact. Continue?')) return;
+  state.roster = PRELOADED_ROSTER.map(p => ({ id: crypto.randomUUID(), ...p }));
+  sortRoster();
+  save();
+  closeActionSheet();
+  navTo('roster');
+  toast('Roster reset');
+}
+
+// ============================================
+// NAVIGATION
+// ============================================
+const PAGE_TITLES = {
+  dash: 'Dashboard', roster: 'Roster', lines: 'Lineups', stats: 'Stats',
+  games: 'Games', practice: 'Practice', gameday: 'Game Day', weekly: 'Weekly Update',
+};
+
+function navTo(page) {
+  state.ui.currentPage = page;
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const target = document.getElementById(`page-${page}`);
+  if (target) target.classList.add('active');
+  document.querySelectorAll('.bottom-nav button').forEach(b => {
+    const navKey = b.dataset.nav;
+    b.classList.toggle('active', navKey === page || (navKey === 'stats' && page === 'games'));
+  });
+  document.getElementById('topSubtitle').textContent = `U10 T2 · ${PAGE_TITLES[page] || ''}`;
+  window.scrollTo(0, 0);
+
+  if (page === 'dash') renderDashboard();
+  if (page === 'roster') renderRoster();
+  if (page === 'lines') renderLines();
+  if (page === 'stats') renderStats();
+  if (page === 'games') renderGamesList();
+  if (page === 'practice') {
+    renderCurrentPlan();
+    renderDrillList();
+    renderSavedPlans();
+    renderSeasonPlanner();
+    // Sync theme button state
+    const theme = state.ui.genTheme || 'mixed';
+    const progression = state.ui.genProgression || 'balanced';
+    document.querySelectorAll('.theme-btn').forEach(b => {
+      b.classList.toggle('selected', b.dataset.theme === theme);
+    });
+    const progressionSelect = document.getElementById('genProgression');
+    if (progressionSelect) progressionSelect.value = progression;
+  }
+  if (page === 'gameday') renderGameDayPacket();
+  if (page === 'weekly') {
+    populateRosterDatalist();
+    if (window.BearDenHQ?.autoSyncWeekly) state = window.BearDenHQ.autoSyncWeekly(state);
+    populateWeeklyForm();
+    renderWeekly();
+  }
+
+  save();
+}
+
+// ============================================
+// DASHBOARD
+// ============================================
+function renderDashboard() {
+  let w=0, l=0, t=0, gf=0, ga=0;
+  state.games.forEach(g => {
+    gf += g.scoreFor || 0; ga += g.scoreAgainst || 0;
+    if (g.scoreFor > g.scoreAgainst) w++;
+    else if (g.scoreFor < g.scoreAgainst) l++;
+    else t++;
+  });
+  document.getElementById('dashRecord').textContent = `${w}-${l}-${t}`;
+  document.getElementById('dashGF').textContent = gf;
+  document.getElementById('dashGA').textContent = ga;
+  document.getElementById('tileRosterCount').textContent = state.roster.length;
+  document.getElementById('tileGameCount').textContent = state.games.length;
+  document.getElementById('tilePlanCount').textContent = state.plans.length;
+  document.getElementById('tileDrillCount').textContent = state.drills.length;
+
+
+  const coachDash = document.getElementById('coachDashboardMount');
+  if (coachDash && window.BearDenHQ?.renderCoachDashboardHtml) {
+    coachDash.innerHTML = window.BearDenHQ.renderCoachDashboardHtml(state);
+  }
+
+  const skaters = state.roster.filter(p => p.pos !== 'G');
+  const top = skaters.map(p => ({ player: p, stats: computeSkaterStats(p.id) }))
+    .filter(x => x.stats.gp > 0)
+    .sort((a, b) => b.stats.pts - a.stats.pts)[0];
+
+  if (top) {
+    document.getElementById('topScorerDisplay').innerHTML = `
+      <div style="display: flex; align-items: center; gap: 12px">
+        <div style="font-family: 'Bebas Neue'; font-size: 36px; color: var(--teal); line-height: 1">#${top.player.num || '-'}</div>
+        <div style="flex: 1">
+          <div style="font-family: 'Oswald'; font-size: 16px; color: var(--text)">${escapeHtml(top.player.name)}</div>
+          <div style="font-size: 11px; color: var(--text-dim); margin-top: 3px">${top.stats.g}G · ${top.stats.a}A in ${top.stats.gp}GP</div>
+        </div>
+        <div style="font-family: 'Bebas Neue'; font-size: 32px; color: var(--teal); line-height: 1">${top.stats.pts}<span style="font-size: 10px; color: var(--text-dim); letter-spacing: 1px; display: block; text-align: right">PTS</span></div>
+      </div>
+    `;
+  } else {
+    document.getElementById('topScorerDisplay').innerHTML = `<div class="empty-state" style="padding: 20px"><div class="icon">◆</div>No games logged yet</div>`;
+  }
+
+  const nextEvent = document.getElementById('nextEventContainer');
+  if (state.gameDay.opponent && state.gameDay.date) {
+    const date = new Date(state.gameDay.date + 'T12:00:00');
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    if (date >= today) {
+      const ha = state.gameDay.homeAway === 'H' ? 'vs' : '@';
+      const timeStr = state.gameDay.puck ? formatTime(state.gameDay.puck) : '';
+      nextEvent.innerHTML = `
+        <div class="next-event" onclick="navTo('gameday')">
+          <div class="pip">◉</div>
+          <div class="info">
+            <div class="event-type">Next Game</div>
+            <div class="event-title">${ha} ${escapeHtml(state.gameDay.opponent)}</div>
+            <div class="event-meta">${formatDateShort(state.gameDay.date)}${timeStr ? ' · ' + timeStr : ''}${state.gameDay.rink ? ' · ' + escapeHtml(state.gameDay.rink) : ''}</div>
+          </div>
+        </div>
+      `;
+    } else nextEvent.innerHTML = '';
+  } else nextEvent.innerHTML = '';
+}
+
+
+function dashboardBuildTonight() {
+  const focus = window.BearDenHQ?.getCoachDashboardData?.(state)?.suggestedFocus?.key || 'mixed';
+  dashboardBuildFocus(focus);
+}
+
+function openMarketplace() { window.location.href = "./marketplace.html"; }
+
+function dashboardAIBuilder() {
+  navTo('practice');
+  setTimeout(() => {
+    const input = document.getElementById('aiPracticeIntent');
+    if (input && !input.value) input.value = 'Build a high-tempo, age-appropriate practice using animated drills and one clear teaching theme.';
+    input?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    input?.focus();
+  }, 100);
+}
+
+function dashboardContinuePlan() {
+  navTo('practice');
+  setTimeout(() => document.getElementById('currentPlanBlocks')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+}
+
+function dashboardBuildFocus(focus) {
+  state.ui.genTheme = focus || 'mixed';
+  state.ui.genProgression = focus === 'battle' ? 'compete' : 'balanced';
+  if (!window.BearDenHQ?.generateCoachPlan) {
+    navTo('practice');
+    toast('Planner not ready');
+    return;
+  }
+  state.currentPlan = window.BearDenHQ.generateCoachPlan({
+    theme: state.ui.genTheme,
+    progression: state.ui.genProgression,
+    duration: 60,
+    avoidRecent: true,
+    ageGroup: document.getElementById('genAgeGroup')?.value || '10U',
+    includeGoalie: true,
+  }, state);
+  save();
+  navTo('practice');
+  renderCurrentPlan();
+  toast('Coach Dashboard built a practice');
+}
+
+function toggleDashboardFavorite(drillId) {
+  const drill = state.drills.find((d) => d.id === drillId);
+  if (!drill) return;
+  drill.favorite = !drill.favorite;
+  drill.isFavorite = drill.favorite;
+  save();
+  renderDashboard();
+  window.BearDenHQ?.trackEvent?.('drill_favorited', { drillId, favorited: drill.favorite });
+  toast(drill.favorite ? 'Added to favorites' : 'Removed from favorites');
+}
+
+function previewDashboardDrill(drillId) {
+  if (window.BearDenHQ?.openAnimatedDrillViewer) {
+    window.BearDenHQ.openAnimatedDrillViewer(drillId, state);
+    return;
+  }
+  openDashboardDrill(drillId);
+}
+
+function openDashboardDrill(drillId) {
+  navTo('practice');
+  setTimeout(() => {
+    if (window.BearDenHQ?.openAnimatedDrillViewer) window.BearDenHQ.openAnimatedDrillViewer(drillId, state);
+    else openDrillCreator(drillId);
+  }, 100);
+}
+
+function loadDashboardPlan(planId) {
+  if (!planId) return;
+  loadSavedPlan(planId);
+  navTo('practice');
+}
+
+
+// ============================================
+// ROSTER, LINES, STATS, GAMES
+// ============================================
+// All roster/lines/stats/games rendering and event handlers are provided
+// by src/features/roster/roster.js (loaded as a classic script above).
+
+// ============================================
+// PRACTICE PLAN
+// ============================================
+// Provided by src/features/practice/practice-ui.js
+
+// ============================================
+// GAME DAY PACKET + WEEKLY UPDATE
+// ============================================
+// Provided by src/features/game-day/game-day.js
+
+// ============================================
+// EXPORT / IMPORT / RESET
+// ============================================
+function exportAllData() {
+  const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `bb-coach-backup-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  closeActionSheet();
+  toast('Backup saved');
+}
+
+function handleImport(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  if (!confirm('This REPLACES your current data. Export a backup first. Continue?')) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const data = JSON.parse(e.target.result);
+      state = { ...state, ...data };
+      save();
+      closeActionSheet();
+      navTo('dash');
+      toast('Imported');
+    } catch (err) { toast('Import failed'); }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
+function resetAllData() {
+  if (!confirm('This ERASES ALL data (roster, games, plans, everything). Continue?')) return;
+  if (!confirm('Last chance. Really erase everything?')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  location.reload();
+}
+
+function openActionSheet() {
+  document.getElementById('actionSheetOverlay').classList.add('show');
+  setTimeout(() => document.getElementById('actionSheet').classList.add('show'), 10);
+}
+
+function closeActionSheet() {
+  document.getElementById('actionSheet').classList.remove('show');
+  setTimeout(() => document.getElementById('actionSheetOverlay').classList.remove('show'), 250);
+}
+
+function openCloudSettings() {
+  closeActionSheet();
+  document.getElementById('cloudModal').classList.add('show');
+  renderCloudSettings();
+}
+
+function closeCloudSettings() {
+  document.getElementById('cloudModal').classList.remove('show');
+}
+
+function renderCloudSettings(statusMsg = null, isError = false) {
+  if (!BearDenCloud) return;
+  document.getElementById('cloudTeamCode').value = BearDenCloud.getTeamCode();
+  const cfg = BearDenCloud.getCloudConfig();
+  document.getElementById('cloudConfigJson').value = cfg ? JSON.stringify(cfg, null, 2) : '';
+  const statusEl = document.getElementById('cloudStatus');
+  statusEl.textContent = statusMsg || (BearDenCloud.isSyncEnabled() ? 'Configured' : 'Not configured');
+  statusEl.style.color = isError ? 'var(--loss)' : 'var(--text-mid)';
+}
+
+function saveCloudSettings() {
+  if (!BearDenCloud) return;
+  const teamCode = document.getElementById('cloudTeamCode').value.trim();
+  const raw = document.getElementById('cloudConfigJson').value.trim();
+  let parsed = null;
+  if (raw) {
+    try {
+      parsed = JSON.parse(raw);
+    } catch (err) {
+      renderCloudSettings('Config is not valid JSON', true);
+      return;
+    }
+  }
+  if (parsed) BearDenCloud.saveCloudConfig(parsed);
+  BearDenCloud.setTeamCode(teamCode);
+  BearDenCloud.setSyncEnabled(Boolean(parsed && teamCode));
+  renderCloudSettings('Cloud settings saved');
+}
+
+async function testCloudSync() {
+  if (!BearDenCloud) return;
+  renderCloudSettings('Testing connection...');
+  try {
+    await BearDenCloud.testConnection();
+    renderCloudSettings('Connection OK');
+  } catch (err) {
+    renderCloudSettings(err?.message || 'Connection failed', true);
+  }
+}
+
+async function pushCloudState() {
+  if (!BearDenCloud) return;
+  renderCloudSettings('Pushing...');
+  try {
+    const result = await BearDenCloud.pushState(state);
+    renderCloudSettings(`Pushed ${result.drills} drills, ${result.plans} plans, ${result.seasons} seasons`);
+  } catch (err) {
+    renderCloudSettings(err?.message || 'Push failed', true);
+  }
+}
+
+async function pullCloudState() {
+  if (!BearDenCloud) return;
+  renderCloudSettings('Pulling...');
+  try {
+    const pulled = await BearDenCloud.pullState();
+    if (!pulled) throw new Error('No cloud state found');
+    state = { ...state, ...pulled };
+    if (window.BearDenHQ?.migrateState) state = window.BearDenHQ.migrateState(state);
+    save();
+    navTo(state.ui.currentPage || 'dash');
+    renderCloudSettings('Cloud state pulled');
+  } catch (err) {
+    renderCloudSettings(err?.message || 'Pull failed', true);
+  }
+}
+
+function clearCloudSettings() {
+  if (!BearDenCloud) return;
+  BearDenCloud.clearCloudConfig();
+  BearDenCloud.setTeamCode('');
+  BearDenCloud.setSyncEnabled(false);
+  renderCloudSettings('Cloud config cleared');
+}
+
+// ============================================
+// PRACTICE GENERATOR
+// ============================================
+// Provided by src/features/practice/practice-ui.js
+
+// ============================================
+// ON-ICE MODE
+// ============================================
+// Provided by src/features/practice/practice-ui.js
+
+// ============================================
+// PWA INSTALL
+// ============================================
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById('installBanner').classList.add('show');
+});
+
+function installApp() {
+  if (!deferredPrompt) { toast('Use your browser menu to install'); return; }
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then(() => {
+    document.getElementById('installBanner').classList.remove('show');
+    deferredPrompt = null;
+  });
+}
+
+window.addEventListener('appinstalled', () => {
+  document.getElementById('installBanner').classList.remove('show');
+});
+
+// ============================================
+// UTILITIES
+// ============================================
+function formatDateShort(iso) {
+  if (!iso) return '';
+  const d = new Date(iso + 'T12:00:00');
+  return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+}
+
+function formatTime(time24) {
+  if (!time24) return '';
+  const [h, m] = time24.split(':').map(Number);
+  const period = h >= 12 ? 'PM' : 'AM';
+  const h12 = h === 0 ? 12 : h > 12 ? h - 12 : h;
+  return `${h12}:${String(m).padStart(2, '0')} ${period}`;
+}
+
+function escapeHtml(str) {
+  return String(str || '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+let toastTimer;
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2200);
+}
+
+// ============================================
+// INIT
+// ============================================
+bootApp();
+
+async function bootApp() {
+  // super-merge.js and super-cloud.js were legacy prototype sync modules,
+  // removed in v0.2.0. The new SaaS-native sync path will replace them.
+  try {
+    BearDenEditor = await import('./components/editor.js');
+  } catch (err) {
+    console.warn('Editor module failed to load:', err);
+  }
+  load();
+  if (window.BearDenHQ?.migrateState) state = window.BearDenHQ.migrateState(state);
+  navTo(state.ui.currentPage || 'dash');
+}
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(err => console.warn('SW register failed:', err));
+  });
+}
+</script>
+</body>
+</html>

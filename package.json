@@ -1,0 +1,27 @@
+{
+  "name": "bear-den-coach-hq",
+  "version": "0.3.7",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=18.17"
+  },
+  "scripts": {
+    "config:build": "node scripts/generate-runtime-config.js",
+    "db:test": "node scripts/test-db.js",
+    "dev": "npx --yes http-server -p 3000 -c-1 .",
+    "build": "node scripts/generate-runtime-config.js",
+    "test": "node tests/smoke.mjs && node tests/app-state.unit.mjs && node tests/classic-scripts.load.mjs && node tests/ai-handler.behavior.mjs && node tests/marketplace-checkout.behavior.mjs",
+    "test:smoke": "node tests/smoke.mjs",
+    "test:ai": "node tests/ai-handler.behavior.mjs",
+    "test:state": "node tests/app-state.unit.mjs",
+    "test:marketplace": "node tests/marketplace-checkout.behavior.mjs",
+    "test:load": "node tests/classic-scripts.load.mjs"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.4",
+    "dotenv": "^17.4.2",
+    "postgres": "^3.4.7",
+    "stripe": "^17.5.0"
+  }
+}

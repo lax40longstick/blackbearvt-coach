@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Start a trial for Bear Den Coach HQ.">
+<link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./site.css">
+<title>Start Trial | Bear Den Coach HQ</title>
+<script src="./runtime-config.js"></script>
+</head>
+<body data-page="auth">
+  <div class="site-shell">
+    <header class="site-header">
+      <a class="brand" href="./index.html">
+        <span class="brand-mark">BD</span>
+        <span><strong>Bear Den Coach HQ</strong><small>Professional coaching workspace</small></span>
+      </a>
+      <nav class="site-nav">
+        <a href="./pricing.html">Pricing</a>
+        <a href="./app.html" class="button ghost">Open App</a>
+      </nav>
+    </header>
+
+    <section class="page-hero">
+      <div>
+        <p class="eyebrow">Authentication flow</p>
+        <h1>Replace anonymous sync with a real account journey.</h1>
+        <p>This page is the front-end contract for sign-up, sign-in, and passwordless magic-link or email/password auth.</p>
+      </div>
+      <div class="page-card">
+        <p class="eyebrow">Recommended stack</p>
+        <h2>Auth implementation target</h2>
+        <ul>
+          <li>Email + password</li>
+          <li>Magic link sign-in</li>
+          <li>Password reset</li>
+          <li>Invite-only staff onboarding</li>
+        </ul>
+      </div>
+    </section>
+
+    <div class="page-grid">
+      <section class="page-card">
+        <p class="eyebrow">Create account</p>
+        <h2>Start your 14-day trial</h2>
+        <form data-auth-signup-form>
+          <div class="form-grid">
+            <div class="field">
+              <label for="firstName">First name</label>
+              <input id="firstName" name="firstName" autocomplete="given-name">
+            </div>
+            <div class="field">
+              <label for="lastName">Last name</label>
+              <input id="lastName" name="lastName" autocomplete="family-name">
+            </div>
+            <div class="field full">
+              <label for="email">Work email</label>
+              <input id="email" name="email" type="email" autocomplete="email">
+            </div>
+            <div class="field">
+              <label for="password">Password</label>
+              <input id="password" name="password" type="password" autocomplete="new-password">
+            </div>
+            <div class="field">
+              <label for="plan">Plan</label>
+              <select id="plan" name="plan">
+                <option>Starter</option>
+                <option>Team</option>
+                <option>Club</option>
+              </select>
+            </div>
+            <div class="field full">
+              <label for="teamName">Team or organization</label>
+              <input id="teamName" name="teamName" autocomplete="organization">
+            </div>
+          </div>
+          <div class="auth-actions">
+            <button class="button primary" type="submit">Create Trial Account</button>
+            <a class="button secondary" href="./onboarding.html">Preview onboarding</a>
+          </div>
+          <p class="status-banner" data-auth-status>Supabase auth is not configured yet.</p>
+          <p class="status-banner" data-form-status>Complete the vendor setup, then this form can create real accounts.</p>
+        </form>
+      </section>
+
+      <aside class="page-card">
+        <p class="eyebrow">Sign in options</p>
+        <h2>Scaffolded auth flows</h2>
+        <form data-auth-signin-form>
+          <div class="field">
+            <label for="signinEmail">Email</label>
+            <input id="signinEmail" name="email" type="email" autocomplete="email">
+          </div>
+          <div class="field">
+            <label for="signinPassword">Password</label>
+            <input id="signinPassword" name="password" type="password" autocomplete="current-password">
+          </div>
+          <div class="auth-actions">
+            <button class="button secondary" type="submit">Sign In</button>
+          </div>
+          <p class="status-banner" data-form-status>Sign-in flow scaffolded. It will activate when Supabase config is present.</p>
+        </form>
+        <form data-auth-magic-form>
+          <div class="field">
+            <label for="magicEmail">Magic link email</label>
+            <input id="magicEmail" name="email" type="email" autocomplete="email">
+          </div>
+          <div class="auth-actions">
+            <button class="button ghost" type="submit">Send Magic Link</button>
+          </div>
+          <p class="status-banner" data-form-status>Passwordless sign-in scaffolded.</p>
+        </form>
+        <form data-auth-reset-form>
+          <div class="field">
+            <label for="resetEmail">Reset password email</label>
+            <input id="resetEmail" name="email" type="email" autocomplete="email">
+          </div>
+          <div class="auth-actions">
+            <button class="button ghost" type="submit">Send Reset Email</button>
+          </div>
+          <p class="status-banner" data-form-status>Password reset scaffolded.</p>
+        </form>
+      </aside>
+    </div>
+  </div>
+  <script type="module" src="./site.js"></script>
+</body>
+</html>

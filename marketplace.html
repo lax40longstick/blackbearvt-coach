@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Practice Marketplace · Bear Den Coach HQ</title>
+  <link rel="stylesheet" href="./site.css">
+</head>
+<body>
+  <main class="app-shell" style="max-width:1100px;margin:0 auto;padding:24px">
+    <div class="panel" style="margin-bottom:16px"><a href="./app.html">← Back to Coach HQ</a></div>
+    <div id="marketplaceRoot"></div>
+  </main>
+  <script type="module" src="./src/features/marketplace/practice-marketplace.js"></script>
+  <script type="module">
+    window.addEventListener('DOMContentLoaded', () => window.BearDenHQ?.renderMarketplace?.('marketplaceRoot'));
+  </script>
+</body>
+</html>

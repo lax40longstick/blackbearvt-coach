@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Shared Practice Plan | Bear Den Coach HQ</title>
+  <link rel="stylesheet" href="./site.css">
+  <style>
+    body { background: #071314; color: #f6fbfb; }
+    .public-shell { max-width: 920px; margin: 0 auto; padding: 28px 16px 48px; }
+    .public-practice-card { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); border-radius: 22px; padding: 22px; box-shadow: 0 20px 60px rgba(0,0,0,.24); }
+    .public-header { display: flex; justify-content: space-between; gap: 18px; align-items: flex-start; border-bottom: 1px solid rgba(255,255,255,.12); padding-bottom: 16px; margin-bottom: 18px; }
+    .public-header h1 { margin: 4px 0 6px; font-size: clamp(28px, 5vw, 44px); letter-spacing: -.04em; }
+    .public-header p, .public-notes, .public-block p { color: rgba(246,251,251,.76); line-height: 1.55; }
+    .share-kicker { color: #5de0c2; text-transform: uppercase; letter-spacing: .16em; font-size: 11px; font-weight: 800; }
+    .public-score { min-width: 86px; height: 86px; border-radius: 20px; background: rgba(93,224,194,.14); border: 1px solid rgba(93,224,194,.35); display: grid; place-items: center; font-size: 22px; font-weight: 900; color: #5de0c2; }
+    .public-blocks { display: grid; gap: 14px; }
+    .public-block { display: grid; grid-template-columns: 42px 1fr; gap: 14px; padding: 16px; border-radius: 18px; background: rgba(255,255,255,.055); border: 1px solid rgba(255,255,255,.1); }
+    .public-block-num { width: 42px; height: 42px; border-radius: 14px; display: grid; place-items: center; font-weight: 900; background: rgba(255,255,255,.1); }
+    .public-block h2 { margin: 0 0 4px; font-size: 18px; }
+    .public-meta { font-size: 12px; text-transform: uppercase; letter-spacing: .08em; margin-top: 0; }
+    .public-toolbar { display: flex; gap: 10px; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .public-error { background: rgba(255,80,80,.1); border: 1px solid rgba(255,80,80,.28); border-radius: 18px; padding: 18px; }
+    @media print { body { background: white; color: black; } .public-shell { max-width: none; padding: 0; } .public-toolbar { display:none; } .public-practice-card, .public-block { box-shadow:none; border-color:#ccc; background:white; } .public-header p, .public-notes, .public-block p { color:#222; } }
+  </style>
+</head>
+<body>
+  <main class="public-shell">
+    <div class="public-toolbar">
+      <a class="btn" href="./app.html">← Bear Den Coach HQ</a>
+      <button class="btn primary" onclick="window.print()">Print / Save PDF</button>
+    </div>
+    <div id="sharedPracticeRoot"><div class="public-practice-card">Loading shared practice…</div></div>
+  </main>
+  <script type="module" src="./src/features/sharing/practice-sharing.js"></script>
+  <script type="module">
+    import { getSupabaseClient } from './src/lib/supabase.js';
+    const root = document.getElementById('sharedPracticeRoot');
+    const id = new URLSearchParams(location.search).get('id');
+    async function boot() {
+      if (!id) {
+        root.innerHTML = '<div class="public-error">Missing practice id.</div>';
+        return;
+      }
+      try {
+        const supabase = await getSupabaseClient();
+        const { data, error } = await supabase
+          .from('practice_plans')
+          .select('title, data, is_public')
+          .eq('id', id)
+          .eq('is_public', true)
+          .single();
+        if (error) throw error;
+        root.innerHTML = window.BearDenHQ.renderPublicPracticePlan(data.data || { title: data.title, blocks: [] });
+      } catch (error) {
+        root.innerHTML = `<div class="public-error">This practice is unavailable or private. ${String(error.message || '')}</div>`;
+      }
+    }
+    boot();
+  </script>
+</body>
+</html>

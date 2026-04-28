@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Pricing for Bear Den Coach HQ coaching software.">
+<link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./site.css">
+<title>Pricing | Bear Den Coach HQ</title>
+<script src="./runtime-config.js"></script>
+</head>
+<body data-page="pricing">
+  <div class="site-shell">
+    <header class="site-header">
+      <a class="brand" href="./index.html">
+        <span class="brand-mark">BD</span>
+        <span><strong>Bear Den Coach HQ</strong><small>Professional coaching workspace</small></span>
+      </a>
+      <nav class="site-nav">
+        <a href="./index.html">Home</a>
+        <a href="./onboarding.html">Onboarding</a>
+        <a href="./account.html">Account</a>
+        <a href="./app.html" class="button ghost">Open App</a>
+      </nav>
+    </header>
+
+    <section class="page-hero">
+      <div>
+        <p class="eyebrow">Packaging and billing</p>
+        <h1>Price the product like software, not a custom favor.</h1>
+        <p>These plans create clear entitlement boundaries for solo coaches, team staff, and associations. Hook them into Stripe once your backend is ready.</p>
+      </div>
+      <div class="page-card">
+        <p class="eyebrow">Billing mode</p>
+        <h2>Offer a simple annual incentive</h2>
+        <p>Keep monthly pricing easy to understand and reward annual prepay with two months free.</p>
+        <label class="field">
+          <span>Show annual pricing</span>
+          <input type="checkbox" data-billing-toggle>
+        </label>
+      </div>
+    </section>
+
+    <section class="pricing-grid">
+      <article class="price-card">
+        <span class="pill">Starter</span>
+        <h2>Solo coach</h2>
+        <p>For one head coach managing one active team.</p>
+        <div class="price-line">
+          <strong data-price-monthly data-price-yearly="$190/yr" data-price-monthly="$19/mo">$19/mo</strong>
+        </div>
+        <ul>
+          <li>1 team workspace</li>
+          <li>Practice planner and drill library</li>
+          <li>On-ice mode and exports</li>
+          <li>Email support</li>
+        </ul>
+        <div class="auth-actions">
+          <button class="button secondary" type="button" data-checkout-plan="starter">Choose Starter</button>
+        </div>
+      </article>
+
+      <article class="price-card featured">
+        <span class="pill">Team</span>
+        <h2>Staff collaboration</h2>
+        <p>For head coaches plus assistants, team managers, and shared planning.</p>
+        <div class="price-line">
+          <strong data-price-monthly data-price-yearly="$390/yr" data-price-monthly="$39/mo">$39/mo</strong>
+        </div>
+        <ul>
+          <li>Up to 5 staff users</li>
+          <li>Shared roster, plans, and game prep</li>
+          <li>Cloud sync and permissions</li>
+          <li>Priority support</li>
+        </ul>
+        <div class="auth-actions">
+          <button class="button primary" type="button" data-checkout-plan="team">Choose Team</button>
+        </div>
+      </article>
+
+      <article class="price-card">
+        <span class="pill">Club</span>
+        <h2>Association rollout</h2>
+        <p>For hockey directors standardizing planning across multiple teams.</p>
+        <div class="price-line">
+          <strong data-price-monthly data-price-yearly="$990/yr" data-price-monthly="$99/mo">$99/mo</strong>
+        </div>
+        <ul>
+          <li>Up to 10 teams</li>
+          <li>Shared club drill library</li>
+          <li>Director dashboard</li>
+          <li>Implementation support</li>
+        </ul>
+        <div class="auth-actions">
+          <button class="button secondary" type="button" data-checkout-plan="club">Choose Club</button>
+        </div>
+      </article>
+    </section>
+
+    <section class="section-block">
+      <div class="page-card">
+        <p class="eyebrow">Checkout status</p>
+        <h2>Billing scaffold</h2>
+        <p data-pricing-status>Choose a plan to test the checkout scaffold. Real Stripe session wiring is the next billing step.</p>
+      </div>
+    </section>
+
+    <section class="section-block">
+      <div class="section-heading">
+        <p class="eyebrow">Launch rules</p>
+        <h2>Billing details to enforce in the backend</h2>
+      </div>
+      <div class="stack-grid">
+        <article class="stack-card">
+          <h3>Stripe mapping</h3>
+          <p>Create one product per plan with monthly and annual prices. Webhooks should update team entitlements, seat counts, and trial expiration.</p>
+        </article>
+        <article class="stack-card">
+          <h3>Entitlements</h3>
+          <p>Starter limits team count. Team unlocks shared staff access. Club unlocks organization-level admin and templates.</p>
+        </article>
+        <article class="stack-card">
+          <h3>Trials</h3>
+          <p>Use a 14-day trial with credit card optional for early pilots, then require card-on-file when the funnel is proven.</p>
+        </article>
+        <article class="stack-card">
+          <h3>Upgrade path</h3>
+          <p>Support in-app plan change, proration, and immediate entitlement upgrades without human intervention.</p>
+        </article>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <div><strong>Bear Den Coach HQ</strong><p>Professional coaching software for youth hockey programs.</p></div>
+      <div class="footer-links"><a href="./privacy.html">Privacy</a><a href="./terms.html">Terms</a></div>
+    </footer>
+  </div>
+  <script type="module" src="./site.js"></script>
+</body>
+</html>

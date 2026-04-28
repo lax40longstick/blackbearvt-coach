@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Onboarding flow for Bear Den Coach HQ.">
+<link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./site.css">
+<title>Onboarding | Bear Den Coach HQ</title>
+<script src="./runtime-config.js"></script>
+</head>
+<body data-page="onboarding">
+  <div class="site-shell">
+    <header class="site-header">
+      <a class="brand" href="./index.html">
+        <span class="brand-mark">BD</span>
+        <span><strong>Bear Den Coach HQ</strong><small>Professional coaching workspace</small></span>
+      </a>
+      <nav class="site-nav">
+        <a href="./pricing.html">Pricing</a>
+        <a href="./auth.html" class="button primary">Start Trial</a>
+      </nav>
+    </header>
+
+    <section class="page-hero">
+      <div>
+        <p class="eyebrow">Customer activation</p>
+        <h1>Get a coach from sign-up to first practice in under 10 minutes.</h1>
+        <p>This page outlines the setup flow you need to convert trials into paying accounts.</p>
+      </div>
+      <div class="page-card">
+        <p class="eyebrow">Target outcome</p>
+        <h2>First value in one session</h2>
+        <ul>
+          <li>Create organization and team</li>
+          <li>Import roster or start from template</li>
+          <li>Generate first practice</li>
+          <li>Invite assistants</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="timeline">
+      <article>
+        <span>01</span>
+        <h3>Create organization</h3>
+        <p>Collect organization name, role, age group, and season. Use this to scope the account and defaults.</p>
+      </article>
+      <article>
+        <span>02</span>
+        <h3>Build the team</h3>
+        <p>Import player names and numbers from CSV or enter manually. Seed positions and goalie count.</p>
+      </article>
+      <article>
+        <span>03</span>
+        <h3>Select coaching style</h3>
+        <p>Choose practice themes, progression defaults, and communication preferences.</p>
+      </article>
+      <article>
+        <span>04</span>
+        <h3>Generate the first plan</h3>
+        <p>Use the existing planner to show immediate value and help the coach save something real.</p>
+      </article>
+      <article>
+        <span>05</span>
+        <h3>Invite staff</h3>
+        <p>Add assistants or team managers and explain seat usage before the trial ends.</p>
+      </article>
+    </section>
+
+    <section class="section-block">
+      <div class="metric-grid">
+        <article class="metric-card">
+          <strong>&lt;10 min</strong>
+          <p>Ideal time from signup to saved practice.</p>
+        </article>
+        <article class="metric-card">
+          <strong>1 first win</strong>
+          <p>Coach should leave onboarding with a saved plan and usable team data.</p>
+        </article>
+        <article class="metric-card">
+          <strong>2 invites</strong>
+          <p>Assistant and manager invites improve retention and account stickiness.</p>
+        </article>
+        <article class="metric-card">
+          <strong>0 manual config</strong>
+          <p>Firebase config and team codes should never be entered by customers.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section-block">
+      <div class="page-grid">
+        <section class="page-card">
+          <p class="eyebrow">Bootstrap workspace</p>
+          <h2>Create your organization and first team</h2>
+          <form data-onboarding-form>
+            <div class="form-grid">
+              <div class="field full">
+                <label for="organizationName">Organization name</label>
+                <input id="organizationName" name="organizationName" autocomplete="organization">
+              </div>
+              <div class="field full">
+                <label for="teamName">Team name</label>
+                <input id="teamName" name="teamName">
+              </div>
+              <div class="field">
+                <label for="ageGroup">Age group</label>
+                <input id="ageGroup" name="ageGroup" placeholder="U14">
+              </div>
+              <div class="field">
+                <label for="seasonLabel">Season label</label>
+                <input id="seasonLabel" name="seasonLabel" placeholder="2026-2027">
+              </div>
+              <div class="field full">
+                <label for="timezone">Timezone</label>
+                <input id="timezone" name="timezone" value="America/New_York">
+              </div>
+            </div>
+            <div class="auth-actions">
+              <button class="button primary" type="submit">Create Team Workspace</button>
+              <a class="button secondary" href="./auth.html">Back to auth</a>
+            </div>
+            <p class="status-banner" data-form-status>Sign in first, then use this form to create the initial organization and team in Supabase.</p>
+          </form>
+        </section>
+        <aside class="page-card">
+          <p class="eyebrow">Bootstrap result</p>
+          <h2>What this creates</h2>
+          <ul class="checklist">
+            <li>One organization record</li>
+            <li>One first team record</li>
+            <li>One owner membership for the signed-in user</li>
+            <li>A clean starting point for roster and billing setup</li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+  </div>
+  <script type="module" src="./site.js"></script>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Account and operations surface for Bear Den Coach HQ.">
+<link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./site.css">
+<title>Account | Bear Den Coach HQ</title>
+<script src="./runtime-config.js"></script>
+</head>
+<body data-page="account">
+  <div class="site-shell">
+    <header class="site-header">
+      <a class="brand" href="./index.html">
+        <span class="brand-mark">BD</span>
+        <span><strong>Bear Den Coach HQ</strong><small>Professional coaching workspace</small></span>
+      </a>
+      <nav class="site-nav">
+        <a href="./pricing.html">Pricing</a>
+        <a href="./app.html" class="button ghost">Open App</a>
+      </nav>
+    </header>
+
+    <section class="page-hero">
+      <div>
+        <p class="eyebrow">Account management</p>
+        <h1>Give paying customers a place to manage billing, teams, and trust settings.</h1>
+        <p>This page is the SaaS control panel surface missing from the original prototype.</p>
+      </div>
+      <div class="page-card">
+        <p class="eyebrow">Current tenant</p>
+        <h2 data-session-user>Signed-in user</h2>
+        <p class="mono" data-session-email>Waiting for session</p>
+        <div class="status-banner">Active memberships: <span data-session-membership-count>0</span></div>
+        <div class="auth-actions">
+          <button class="button ghost" type="button" data-signout>Sign Out</button>
+        </div>
+      </div>
+    </section>
+
+    <div class="account-grid">
+      <section class="page-card">
+        <p class="eyebrow">Subscription</p>
+        <h2>Plan and billing</h2>
+        <ul>
+          <li>Current plan: <span data-plan-name>Starter</span></li>
+          <li>Current price: <span data-plan-price>$19/mo</span></li>
+          <li>Subscription status: <span data-subscription-status>trial</span></li>
+          <li>Workspace team limit and seat rules come from entitlements below.</li>
+        </ul>
+        <div class="auth-actions">
+          <button class="button secondary" type="button" data-manage-plan>Manage Plan</button>
+        </div>
+        <p class="status-banner" data-account-billing-status>Billing scaffold is ready. Stripe wiring is the next step.</p>
+      </section>
+      <section class="page-card">
+        <p class="eyebrow">Team context</p>
+        <h2>Current workspace</h2>
+        <ul>
+          <li>Organization: <span data-org-name>No organization yet</span></li>
+          <li>Organization slug: <span class="mono" data-org-slug>Not created</span></li>
+          <li>Team: <span data-team-name>No team yet</span></li>
+          <li>Team info: <span data-team-meta>Finish onboarding</span></li>
+          <li>Role: <span data-role-name>No role</span></li>
+        </ul>
+      </section>
+      <section class="page-card">
+        <p class="eyebrow">Entitlements</p>
+        <h2>Plan rules</h2>
+        <ul data-entitlements>
+          <li>Loading entitlements...</li>
+        </ul>
+      </section>
+      <section class="page-card">
+        <p class="eyebrow">Available plans</p>
+        <h2>Upgrade reference</h2>
+        <ul data-available-plans>
+          <li>Loading plan list...</li>
+        </ul>
+      </section>
+    </div>
+  </div>
+  <script type="module" src="./site.js"></script>
+</body>
+</html>

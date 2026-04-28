@@ -1,0 +1,32 @@
+{
+  "name": "Bear Den Coach HQ",
+  "short_name": "Coach HQ",
+  "description": "Professional youth hockey coaching software for practice planning, team operations, and on-ice execution.",
+  "start_url": "./app.html",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#7dd3d8",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "./icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "categories": ["sports", "productivity"],
+  "screenshots": []
+}
