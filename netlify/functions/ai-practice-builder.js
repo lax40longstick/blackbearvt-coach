@@ -88,7 +88,14 @@ function compactDrill(drill) {
     difficulty: cleanText(drill.difficulty || drill.intensity, 40),
     goalie: drill.category === "goalie" || safeArray(drill.tags, 12).some((tag) => /goal/i.test(tag)),
     animated: Boolean(drill.animated || drill.diagram),
-    description: cleanText(drill.description || drill.instructions, 220),
+    quality: cleanText(drill.quality, 20),
+    qualityScore: clampNumber(drill.qualityScore, 0, 10, 0),
+    fitScore: clampNumber(drill.fitScore, 0, 10, 0),
+    animationSteps: safeArray(drill.animationSteps, 6),
+    coachingPoints: safeArray(drill.coachingPoints, 6),
+    commonMistakes: safeArray(drill.commonMistakes, 5),
+    progressions: safeArray(drill.progressions, 5),
+    description: cleanText(drill.description || drill.instructions, 260),
   };
 }
 
@@ -111,7 +118,7 @@ async function verifyOptionalSession(req) {
 }
 
 function buildSystemPrompt() {
-  return `You are an elite youth ice hockey practice planner. Return ONLY valid JSON. Build safe, age-appropriate, high-tempo practice plans from the provided drill library. Prefer animated drills when suitable. Do not invent drill IDs. Use exact drill ids from the drill_library. Balance teaching, repetitions, fun, transitions, water/rest, and goalie involvement when requested.`;
+  return `You are an elite youth ice hockey practice planner. Return ONLY valid JSON. Build safe, age-appropriate, high-tempo practice plans from the provided drill library. Prefer drills marked quality=elite with high qualityScore and fitScore first, then animated drills with meaningful animationSteps. The animation must match the drill's teaching objective and the selected block should explicitly use its animation steps for teaching. Do not invent drill IDs. Use exact drill ids from the drill_library. Balance teaching, repetitions, fun, transitions, water/rest, and goalie involvement when requested.`;
 }
 
 function buildUserPrompt(payload, drills) {
@@ -154,7 +161,8 @@ function buildUserPrompt(payload, drills) {
     rules: [
       "Use only exact drillId values from drill_library.",
       "Sum block minutes as close as possible to requested duration.",
-      "Prefer drills with animated=true when they match the intent.",
+      "Prefer high fitScore + high qualityScore drills. Do not choose a drill just because it is animated; the animationSteps and coachingPoints must match the practice objective.",
+      "Every selected drill should have animationSteps that make sense for the coach's objective whenever possible.",
       "If includeGoalie=true, include at least one goalie drill or goalie-relevant drill when available.",
       "Avoid duplicate drill IDs.",
       "Keep each block practical for one coach on ice.",
