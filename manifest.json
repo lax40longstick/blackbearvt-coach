@@ -1,6 +1,6 @@
 {
-  "name": "Bear Den Coach HQ",
-  "short_name": "Coach HQ",
+  "name": "BenchBoss Coach HQ",
+  "short_name": "BenchBoss",
   "description": "Professional youth hockey coaching software for practice planning, team operations, and on-ice execution.",
   "start_url": "./app.html",
   "display": "standalone",
@@ -27,6 +27,9 @@
       "purpose": "maskable"
     }
   ],
-  "categories": ["sports", "productivity"],
+  "categories": [
+    "sports",
+    "productivity"
+  ],
   "screenshots": []
 }

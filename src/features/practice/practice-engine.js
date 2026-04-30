@@ -1,5 +1,8 @@
 import { drawDiagram, playDiagram } from '../../../components/diagram.js';
-import { drills as animatedDrills } from '../../../data/drills.js';
+import { drills as baseDrills } from '../../../data/drills.js';
+import { eliteDrills } from '../../../data/elite-drills.js';
+
+const animatedDrills = [...eliteDrills, ...baseDrills];
 
 const CATEGORY_MAP = {
   compete: 'battle',
@@ -15,6 +18,10 @@ const THEME_WEIGHTS = {
   passing: { passing: 5, puck: 1, breakout: 2, shooting: 1 },
   breakout: { breakout: 5, passing: 2, dzone: 1, skating: 1 },
   forecheck: { ozone: 3, battle: 3, sag: 2, skating: 1 },
+  shooting: { shooting: 5, passing: 2, sag: 1, goalie: 1 },
+  goalie: { goalie: 5, shooting: 2, battle: 1 },
+  defense: { dzone: 5, breakout: 2, battle: 1, passing: 1 },
+  transition: { transition: 4, passing: 2, shooting: 1, breakout: 1 },
   compete: { battle: 4, sag: 3, shooting: 1, cond: 1 },
 };
 
@@ -158,7 +165,7 @@ function migrateState(state) {
   const existingNames = new Set(enriched.map((d) => String(d.name || '').toLowerCase()));
   const premiumAdds = getAnimatedLibrary()
     .filter((d) => !existingNames.has(String(d.name || '').toLowerCase()))
-    .slice(0, 18)
+    
     .map((d) => ({ ...d, id: d.id || crypto.randomUUID(), isCustom: false, usage: d.usage || 0 }));
   next.drills = [...enriched, ...premiumAdds];
   next.currentPlan = normalizePlan(next.currentPlan);
@@ -180,15 +187,20 @@ function normalizePlan(plan) {
   };
 }
 
-function weightedPick(entries, usedIds, avoidRecent, state) {
-  const candidates = entries.filter((d) => !usedIds.has(d.id));
+function weightedPick(entries, usedIds, avoidRecent, state, context = {}) {
+  const sortedEntries = [...entries].sort((a, b) => drillFitScore(b, context) - drillFitScore(a, context));
+  const candidates = sortedEntries.filter((d) => !usedIds.has(d.id));
   const pool = candidates.length ? candidates : entries;
   if (!pool.length) return null;
   const weights = pool.map((d) => {
     let weight = 1;
     if (avoidRecent) weight *= fatigueWeight(d.id, state);
-    if (d.animated) weight *= 1.35;
-    if (d.difficulty === 'intermediate') weight *= 1.1;
+    weight *= drillFitScore(d, context);
+    if (d.quality === 'elite') weight *= 3.5;
+    if (d.qualityScore) weight *= Math.max(1, Number(d.qualityScore) / 5);
+    if (d.animated) weight *= 1.2;
+    if (d.diagram?.sequence?.length >= 4) weight *= 1.45;
+    if (d.difficulty === 'intermediate') weight *= 1.05;
     return { d, weight };
   });
   let total = weights.reduce((sum, x) => sum + x.weight, 0);
@@ -207,6 +219,29 @@ function fatigueWeight(drillId, state) {
     if ((plan.blocks || []).some((b) => b.drillId === drillId)) weight = Math.min(weight, [0.18, 0.35, 0.55, 0.75, 0.9][i] || 1);
   });
   return weight;
+}
+
+function drillFitScore(drill, context = {}) {
+  let score = 1;
+  const age = context.ageGroup || context.age || '';
+  const focusText = String((context.focus || '') + ' ' + (context.theme || '')).toLowerCase();
+  const haystack = String((drill.name || '') + ' ' + (drill.category || '') + ' ' + ((drill.tags || []).join(' ')) + ' ' + ((drill.skillFocus || []).join(' '))).toLowerCase();
+
+  if (age && (drill.ageLevels || []).includes(age)) score += 1.7;
+  else if (age && (drill.ageLevels || []).length) score += 0.25;
+
+  const focusTerms = focusText.split(/[^a-z0-9]+/).filter((term) => term.length > 2);
+  const matchedTerms = focusTerms.filter((term) => haystack.includes(term));
+  score += Math.min(2.4, matchedTerms.length * 0.55);
+
+  if (context.includeGoalie && (drill.goalie || drill.category === 'goalie' || haystack.includes('goalie'))) score += 0.9;
+  if (context.includeGoalie === false && drill.category === 'goalie') score -= 0.6;
+  if (drill.quality === 'elite') score += 1.2;
+  if (Number(drill.qualityScore)) score += Math.min(1.2, Number(drill.qualityScore) / 10);
+  if (drill.diagram?.sequence?.length >= 4) score += 0.7;
+  if (drill.commonMistakes?.length && (drill.progressions?.length || drill.progression?.length)) score += 0.4;
+
+  return Math.max(0.35, score);
 }
 
 function chooseCategory(weights) {
@@ -241,21 +276,21 @@ function generateCoachPlan(options, state) {
   const used = new Set();
   const blocks = [];
 
-  const warmup = weightedPick(byCategory.get('skating') || all, used, avoidRecent, state);
+  const warmup = weightedPick(byCategory.get('skating') || all, used, avoidRecent, state, options);
   if (warmup) pushBlock(blocks, used, warmup, blockTimes.shift(), labels[0], 'Raise tempo, confirm edges, and set practice pace.');
 
   while (blocks.length < targetBlocks && blockTimes.length) {
     let category = chooseCategory(weights);
     if (blocks.length === targetBlocks - 1 && theme === 'compete') category = 'battle';
     const pool = byCategory.get(category) || all.filter((d) => d.category !== 'goalie');
-    const drill = weightedPick(pool, used, avoidRecent, state) || weightedPick(all, used, avoidRecent, state);
+    const drill = weightedPick(pool, used, avoidRecent, state, options) || weightedPick(all, used, avoidRecent, state, options);
     if (!drill) break;
     const label = labels[Math.min(blocks.length, labels.length - 1)] || `Block ${blocks.length + 1}`;
     pushBlock(blocks, used, drill, blockTimes.shift(), label, buildObjective(drill, theme, progression));
   }
 
   if (includeGoalie && !blocks.some((b) => all.find((d) => d.id === b.drillId)?.category === 'goalie')) {
-    const goalie = weightedPick(byCategory.get('goalie') || [], used, avoidRecent, state);
+    const goalie = weightedPick(byCategory.get('goalie') || [], used, avoidRecent, state, options);
     if (goalie && blocks.length) {
       const replaceIndex = Math.max(1, blocks.length - 2);
       blocks[replaceIndex] = makeBlock(goalie, Math.max(6, blocks[replaceIndex].minutes), 'Goalie Touch', 'Include goalie-specific reads while skaters rotate through reps.');
@@ -269,8 +304,8 @@ function generateCoachPlan(options, state) {
     theme: `${titleCase(theme)} / ${titleCase(progression)}`,
     progression: titleCase(progression),
     totalMinutes: duration,
-    notes: 'Generated with animated-drill priority, recent-drill avoidance, and progression labels.',
-    coachBrain: { theme, progression, animatedBlocks: blocks.length, generatedAt: new Date().toISOString() },
+    notes: 'Generated with quality-fit scoring, matched animation paths, recent-drill avoidance, and progression labels.',
+    coachBrain: { theme, progression, qualityFit: true, animatedBlocks: blocks.length, generatedAt: new Date().toISOString() },
     blocks,
   };
 }
@@ -297,7 +332,8 @@ function makeBlock(drill, minutes, label, objective) {
     minutes: Math.max(1, minutes || drill.duration || 8),
     label,
     objective,
-    coachNote: drill.animated ? 'Animated: use Play in plan or On-Ice Mode to preview movement.' : 'Static: add a diagram sequence in the editor when ready.',
+    coachNote: drill.coaching_points?.[0] || (drill.animated ? 'Play the animation once, then freeze the key read before live reps.' : 'Walk through setup, then run short high-tempo reps.'),
+    teachingMoment: drill.diagram?.sequence?.[0]?.label || drill.instructions || '',
   };
 }
 
@@ -331,4 +367,5 @@ window.BearDenHQ = {
   drawDrillDiagram,
   playDrillDiagram,
   getAnimatedLibrary,
+  drillFitScore,
 };

@@ -37,7 +37,7 @@ export async function getTenantContext() {
     supabase,
     "teams",
     sessionState.memberships.map((membership) => membership.team_id),
-    "id, organization_id, name, slug, age_group, season_label, timezone"
+    "id, organization_id, name, slug, age_group, season_label, timezone, brand_product_name, brand_short_name, brand_primary_color, brand_secondary_color, brand_accent_color, brand_background_color, brand_monogram, logo_url"
   );
 
   const primaryMembership = sessionState.memberships[0] || null;

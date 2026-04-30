@@ -1,7 +1,7 @@
 // src/features/practice/practice-ui.js
 // -----------------------------------------------------------------------------
 // Practice plan editing, drill library UI, season planner, practice generator,
-// and on-ice mode for Bear Den Coach HQ.
+// and on-ice mode for BenchBoss Coach HQ.
 //
 // Loaded as a NON-module classic script before the inline <script> in
 // app.html so its declarations are visible by bare name.
@@ -263,6 +263,7 @@ function renderSeasonPlanner() {
       </div>
       <div style="font-size:11px; color:var(--text-mid); margin-top:4px">${escapeHtml(week.summary || '')}</div>
       <div style="font-size:11px; color:var(--text-dim); margin-top:6px">${escapeHtml(week.practice?.title || week.practice?.name || '')}</div>
+      ${week.measurement ? `<div style="font-size:10px; color:var(--text-dim); margin-top:4px"><strong>Measure:</strong> ${escapeHtml(week.measurement)}</div>` : ''}
       <div style="display:flex; gap:4px; margin-top:10px">
         <button class="btn small" onclick="openSeasonWeek(${index})">Open</button>
         <button class="btn small" onclick="regenerateSeasonWeek(${index})">Regen</button>
@@ -274,37 +275,40 @@ function renderSeasonPlanner() {
 function buildSeasonPlan() {
   const focus = document.getElementById('seasonFocus')?.value || 'mixed';
   const start = document.getElementById('seasonStart')?.value || new Date().toISOString().slice(0, 10);
-  const weekProfiles = [
-    { week: 1, label: 'Teach', summary: 'Foundational reps. Clean execution first.', progression: 'teach', theme: focus },
-    { week: 2, label: 'Add Pressure', summary: 'Same concept with pressure and opposition.', progression: 'pressure', theme: focus === 'mixed' ? 'passing' : focus },
-    { week: 3, label: 'Game Transfer', summary: 'Push the concept into flow and reads.', progression: 'transfer', theme: focus === 'mixed' ? 'forecheck' : focus },
-    { week: 4, label: 'Compete', summary: 'Game-like compete and application.', progression: 'compete', theme: focus === 'mixed' ? 'mixed' : focus },
-  ];
-  const baseDate = new Date(`${start}T12:00:00`);
-  const season = {
-    id: `season_${Date.now()}`,
-    focus,
-    name: `${focus.charAt(0).toUpperCase() + focus.slice(1)} Progression`,
-    startDate: start,
-    weeks: weekProfiles.map((profile, index) => {
-      const date = new Date(baseDate);
-      date.setDate(baseDate.getDate() + index * 7);
-      const practice = window.BearDenHQ?.generateCoachPlan?.({ theme: profile.theme, progression: profile.progression, duration: 55, avoidRecent: index !== 0 }, state);
-      practice.title = `Week ${profile.week}: ${profile.label}`;
-      practice.date = date.toISOString().slice(0, 10);
-      return {
-        ...profile,
-        date: practice.date,
-        practice,
-      };
-    }),
-  };
-  state.seasons = [season];
+  const ageGroup = document.getElementById('genAgeGroup')?.value || '10U';
+  const includeGoalie = document.getElementById('genIncludeGoalie')?.checked !== false;
+  const duration = Number(document.getElementById('genDuration')?.value || 60);
+
+  if (window.BearDenHQ?.buildSeasonCurriculum) {
+    state.seasons = [window.BearDenHQ.buildSeasonCurriculum({ focus, startDate: start, weeks: 12, duration, ageGroup, includeGoalie }, state)];
+  } else {
+    const weekProfiles = [
+      { week: 1, label: 'Teach', summary: 'Foundational reps. Clean execution first.', progression: 'teach', theme: focus },
+      { week: 2, label: 'Add Pressure', summary: 'Same concept with pressure and opposition.', progression: 'pressure', theme: focus === 'mixed' ? 'passing' : focus },
+      { week: 3, label: 'Game Transfer', summary: 'Push the concept into flow and reads.', progression: 'transfer', theme: focus === 'mixed' ? 'forecheck' : focus },
+      { week: 4, label: 'Compete', summary: 'Game-like compete and application.', progression: 'compete', theme: focus === 'mixed' ? 'mixed' : focus },
+    ];
+    const baseDate = new Date(`${start}T12:00:00`);
+    const season = {
+      id: `season_${Date.now()}`,
+      focus,
+      name: `${focus.charAt(0).toUpperCase() + focus.slice(1)} Progression`,
+      startDate: start,
+      weeks: weekProfiles.map((profile, index) => {
+        const date = new Date(baseDate);
+        date.setDate(baseDate.getDate() + index * 7);
+        const practice = window.BearDenHQ?.generateCoachPlan?.({ theme: profile.theme, progression: profile.progression, duration: 55, avoidRecent: index !== 0 }, state);
+        practice.title = `Week ${profile.week}: ${profile.label}`;
+        practice.date = date.toISOString().slice(0, 10);
+        return { ...profile, date: practice.date, practice };
+      }),
+    };
+    state.seasons = [season];
+  }
   save();
   renderSeasonPlanner();
-  toast('Season built');
+  toast('Season curriculum built');
 }
-
 function openSeasonWeek(index) {
   const week = state.seasons?.[0]?.weeks?.[index];
   if (!week?.practice) return;

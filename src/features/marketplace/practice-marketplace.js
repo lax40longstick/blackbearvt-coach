@@ -7,9 +7,9 @@ const CHECKOUT_FN = "/api/create-marketplace-checkout";
 function safe(value) { return String(value ?? "").replace(/[&<>\"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c])); }
 function money(cents) { return Number(cents || 0) > 0 ? `$${(Number(cents)/100).toFixed(2)}` : "Free"; }
 const STARTER_PACKS = [
-  { id: "pack-u10-skills", title: "U10 Skill Builder Pack", author_name: "Bear Den Coaching", age_group: "10U", focus: "Skating · Passing · Compete", price_cents: 0, rating_avg: 4.8, rating_count: 42, plan_data: { title: "U10 Skill Builder", theme: "Skill development", totalMinutes: 60, blocks: [] } },
-  { id: "pack-breakouts", title: "Breakout Progression Pack", author_name: "Bear Den Coaching", age_group: "12U+", focus: "Breakouts · Support · Transition", price_cents: 900, rating_avg: 4.9, rating_count: 18, plan_data: { title: "Breakout Progression", theme: "Breakouts", totalMinutes: 60, blocks: [] } },
-  { id: "pack-goalie", title: "Goalie Touch Practice Pack", author_name: "Bear Den Coaching", age_group: "All", focus: "Goalie · Shooting · Rebounds", price_cents: 700, rating_avg: 4.7, rating_count: 13, plan_data: { title: "Goalie Touch Practice", theme: "Goalie", totalMinutes: 60, blocks: [] } }
+  { id: "pack-u10-skills", title: "U10 Skill Builder Pack", author_name: "BenchBoss Coaching", age_group: "10U", focus: "Skating · Passing · Compete", price_cents: 0, rating_avg: 4.8, rating_count: 42, plan_data: { title: "U10 Skill Builder", theme: "Skill development", totalMinutes: 60, blocks: [] } },
+  { id: "pack-breakouts", title: "Breakout Progression Pack", author_name: "BenchBoss Coaching", age_group: "12U+", focus: "Breakouts · Support · Transition", price_cents: 900, rating_avg: 4.9, rating_count: 18, plan_data: { title: "Breakout Progression", theme: "Breakouts", totalMinutes: 60, blocks: [] } },
+  { id: "pack-goalie", title: "Goalie Touch Practice Pack", author_name: "BenchBoss Coaching", age_group: "All", focus: "Goalie · Shooting · Rebounds", price_cents: 700, rating_avg: 4.7, rating_count: 13, plan_data: { title: "Goalie Touch Practice", theme: "Goalie", totalMinutes: 60, blocks: [] } }
 ];
 
 async function fetchMarketplacePlans() {

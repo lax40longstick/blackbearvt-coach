@@ -1,4 +1,4 @@
-// Bear Den Coach HQ — Service Worker
+// BenchBoss Coach HQ — Service Worker
 // Enables offline support by caching the app shell
 
 const CACHE_NAME = 'bear-den-coach-hq-v3';

@@ -12,7 +12,7 @@ export async function hydrateWorkspaceContext() {
   const teamName = context.primaryTeam?.name || "Coach Workspace";
   const ageGroup = context.primaryTeam?.age_group || "";
   const seasonLabel = context.primaryTeam?.season_label || "";
-  const orgName = context.primaryOrganization?.name || "Bear Den";
+  const orgName = context.primaryOrganization?.name || "BenchBoss";
   const role = context.primaryMembership?.role || "member";
 
   fill("#topTitle", orgName.toUpperCase());

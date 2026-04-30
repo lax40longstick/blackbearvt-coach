@@ -44,3 +44,22 @@ POSTHOG_HOST=https://app.posthog.com
 ```
 
 After adding or changing environment variables, trigger a fresh Netlify deploy.
+
+## Production Team Hub v0.6.0 additions
+
+```env
+# GameSheet scheduled/manual importer
+GAMESHEET_SYNC_URLS=[{"url":"https://gamesheetstats.com/seasons/10754/scores?filter%5Bdivision%5D=overall","teamName":"Black Bears Youth 12U T2","teamId":"YOUR_SUPABASE_TEAM_UUID"}]
+GAMESHEET_REFRESH_SCHEDULE=@daily
+
+# SportsEngine API sync placeholder - only add after SportsEngine grants API access
+SPORTSENGINE_CLIENT_ID=your_sportsengine_client_id
+SPORTSENGINE_CLIENT_SECRET=your_sportsengine_client_secret
+SPORTSENGINE_API_BASE_URL=https://api.sportsengine.com
+```
+
+Production Team Hub also requires the SQL migration:
+
+```text
+supabase/migrations/v0.6.0-production-team-hub.sql
+```

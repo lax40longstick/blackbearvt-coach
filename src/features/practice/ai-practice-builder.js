@@ -15,6 +15,13 @@ function compactDrillForAI(drill) {
     iceUsage: drill.iceUsage || drill.ice_type || "",
     difficulty: drill.difficulty || drill.intensity || "",
     animated: Boolean(drill.animated || drill.diagram),
+    quality: drill.quality || '',
+    qualityScore: drill.qualityScore || 0,
+    fitScore: window.BearDenHQ?.drillFitScore ? window.BearDenHQ.drillFitScore(drill, window.__BDH_AI_CONTEXT__ || {}) : 1,
+    animationSteps: drill.diagram?.sequence?.map((step) => step.label).filter(Boolean).slice(0, 6) || [],
+    coachingPoints: drill.coaching_points || drill.points || [],
+    commonMistakes: drill.commonMistakes || [],
+    progressions: drill.progressions || drill.progression || [],
     description: drill.description || drill.instructions || "",
   };
 }
@@ -78,7 +85,7 @@ function addPracticeScore(plan, state, options = {}) {
       ...(plan.coachBrain || {}),
       practiceScore: overall,
       drillScores: blockScores,
-      scoringVersion: "0.3.4",
+      scoringVersion: "0.4.1",
     },
   };
 }
@@ -105,9 +112,15 @@ function localFallbackPlan(options, state, reason) {
 }
 
 async function buildAIPracticePlan(options, state) {
+  window.__BDH_AI_CONTEXT__ = options;
   const drills = (state.drills || [])
     .map(compactDrillForAI)
     .filter((drill) => drill.id && drill.name)
+    .sort((a, b) => {
+      const aq = a.quality === 'elite' ? 20 : 0;
+      const bq = b.quality === 'elite' ? 20 : 0;
+      return (bq + (b.qualityScore || 0) + (b.fitScore || 0)) - (aq + (a.qualityScore || 0) + (a.fitScore || 0));
+    })
     .slice(0, 120);
 
   const accessToken = await getAccessToken();

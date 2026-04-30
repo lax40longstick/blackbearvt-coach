@@ -1,0 +1,8 @@
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="256" height="256" rx="58" fill="#0A0A0A"/>
+  <rect x="14" y="14" width="228" height="228" rx="48" stroke="#7DD3D8" stroke-width="12"/>
+  <text x="49" y="150" font-family="Arial Black, Arial, sans-serif" font-size="86" fill="#7DD3D8" font-weight="900">BB</text>
+  <path d="M62 191 L196 62" stroke="#F4CF57" stroke-width="14" stroke-linecap="round"/>
+  <path d="M187 60 L214 87" stroke="#F4CF57" stroke-width="14" stroke-linecap="round"/>
+  <ellipse cx="184" cy="194" rx="28" ry="10" fill="#7DD3D8"/>
+</svg>

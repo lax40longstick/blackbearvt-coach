@@ -1,8 +1,8 @@
-# Bear Den Coach HQ Product Spec
+# BenchBoss Coach HQ Product Spec
 
 ## Product summary
 
-Bear Den Coach HQ is coaching software for youth hockey teams. It combines practice planning, drill management, roster operations, and bench-ready execution in one workspace.
+BenchBoss Coach HQ is coaching software for youth hockey teams. It combines practice planning, drill management, roster operations, and bench-ready execution in one workspace.
 
 ## Primary buyer
 
