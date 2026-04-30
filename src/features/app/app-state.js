@@ -1,6 +1,6 @@
 // src/features/app/app-state.js
 // -----------------------------------------------------------------------------
-// Global state helpers for Bear Den Coach HQ.
+// Global state helpers for BenchBoss Coach HQ.
 //
 // Loaded as a NON-module script before the main inline <script> block in
 // app.html so its declarations are visible by bare name to inline code:

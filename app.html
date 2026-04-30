@@ -7,11 +7,11 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Coach HQ">
+<meta name="apple-mobile-web-app-title" content="BenchBoss">
 <link rel="manifest" href="./manifest.json">
 <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
 <link rel="apple-touch-icon" href="./icons/icon-192.png">
-<title>Bear Den Coach HQ Workspace</title>
+<title>BenchBoss Coach HQ Workspace</title>
 <script src="./runtime-config.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1557,16 +1557,82 @@
   .coach-current-plan strong { display: block; color: var(--text); margin: 4px 0; }
   @media (min-width: 780px) { .coach-hero { grid-template-columns: 1fr 260px; align-items: center; } .coach-metrics { grid-template-columns: repeat(4, 1fr); } .coach-grid-2 { grid-template-columns: 1fr 1fr; } }
 
+
+  /* ============ TEAM BRANDING SETTINGS ============ */
+  .top-bar .logo img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+  .branding-grid { display: grid; gap: 12px; }
+  .branding-grid.cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .color-field { display: grid; grid-template-columns: 46px 1fr; gap: 10px; align-items: center; }
+  .color-field input[type="color"] { width: 46px; height: 42px; min-height: 42px; padding: 3px; border-radius: 8px; cursor: pointer; }
+  .brand-upload-box { border: 1px dashed var(--border-hi); background: var(--panel-hi); border-radius: 10px; padding: 14px; display: grid; gap: 10px; }
+  .brand-preview-card { background: linear-gradient(135deg, var(--preview-bg), #171717); border: 1px solid var(--preview-primary); border-radius: 14px; padding: 16px; box-shadow: 0 16px 40px rgba(0,0,0,.28); }
+  .brand-preview-top { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .brand-preview-logo { width: 58px; height: 58px; border-radius: 16px; border: 2px solid var(--preview-primary); display: grid; place-items: center; color: var(--preview-primary); font-family: 'Bebas Neue', sans-serif; font-size: 24px; background: rgba(255,255,255,.05); overflow: hidden; }
+  .brand-preview-logo img { width: 100%; height: 100%; object-fit: cover; }
+  .brand-preview-card h3 { margin: 0; color: #fff; font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 1px; }
+  .brand-preview-card p { margin: 3px 0 0; color: var(--text-mid); font-size: 11px; }
+  .brand-preview-body { display: flex; justify-content: space-between; gap: 12px; align-items: center; padding: 12px; border-radius: 10px; background: rgba(255,255,255,.06); }
+  .brand-preview-body strong { display:block; color:#fff; font-size: 13px; }
+  .brand-preview-body span { display:block; color: var(--text-mid); font-size: 10px; margin-top: 4px; }
+  .brand-preview-body button { border: 0; border-radius: 999px; padding: 10px 12px; background: var(--preview-primary); color: #031315; font-weight: 800; white-space: nowrap; }
+  .settings-note { color: var(--text-mid); font-size: 11px; line-height: 1.5; margin-top: 8px; }
+  @media (max-width: 520px) { .branding-grid.cols-2 { grid-template-columns: 1fr; } .brand-preview-body { align-items: stretch; flex-direction: column; } }
+
+
+  /* Team Hub v1 */
+  .teamhub-shell { display: grid; gap: 14px; margin: 16px 0; }
+  .teamhub-hero { background: linear-gradient(135deg, rgba(29,233,182,.13), rgba(59,130,246,.08)); border: 1px solid var(--border); border-radius: 10px; padding: 16px; display: grid; gap: 12px; }
+  .teamhub-hero h2 { margin: 3px 0 5px; font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 1px; color: var(--text); }
+  .teamhub-hero p, .teamhub-muted, .teamhub-source-note { color: var(--text-mid); font-size: 11px; line-height: 1.45; }
+  .teamhub-actions { display: grid; gap: 8px; }
+  .teamhub-panel { margin-top: 14px; }
+  .teamhub-big { font-family: 'Oswald', sans-serif; color: var(--text); font-size: 18px; margin-bottom: 4px; }
+  .teamhub-stat-row, .teamhub-game-row { display: grid; grid-template-columns: 1fr auto auto; gap: 8px; align-items: center; background: var(--panel-hi); border: 1px solid var(--border); border-radius: 8px; padding: 9px 10px; margin-bottom: 7px; }
+  .teamhub-stat-row span, .teamhub-game-row span { color: var(--text); font-size: 12px; }
+  .teamhub-stat-row strong, .teamhub-game-row strong { color: var(--teal); font-size: 12px; }
+  .teamhub-stat-row small { color: var(--text-dim); font-size: 10px; }
+  .teamhub-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 12px 0; }
+  .teamhub-metrics div { border: 1px solid var(--border); border-radius: 8px; background: var(--panel-hi); padding: 10px; text-align: center; }
+  .teamhub-metrics strong { display: block; color: var(--teal); font-family: 'Bebas Neue', sans-serif; font-size: 24px; line-height: 1; }
+  .teamhub-metrics span { display: block; margin-top: 4px; color: var(--text-dim); font-size: 9px; letter-spacing: .8px; text-transform: uppercase; }
+  .teamhub-error { margin: 10px 0; background: rgba(239,68,68,.12); border: 1px solid rgba(239,68,68,.35); color: #fecaca; border-radius: 8px; padding: 9px; font-size: 11px; }
+  @media (min-width: 780px) { .teamhub-hero { grid-template-columns: 1fr 220px; align-items: center; } }
+
+  /* Production Team Hub v0.6.0 */
+  .prod-shell { display: grid; gap: 14px; margin: 16px 0; }
+  .prod-hero { display: grid; gap: 14px; padding: 16px; border: 1px solid var(--border); border-radius: 14px; background: linear-gradient(135deg, rgba(125,211,216,.14), rgba(244,207,87,.08)); }
+  .prod-hero h2 { margin: 4px 0 6px; font-family: 'Bebas Neue', sans-serif; font-size: 34px; letter-spacing: 1.2px; line-height: .95; }
+  .prod-hero p { color: var(--text-mid); font-size: 11px; line-height: 1.5; }
+  .prod-status-card { background: rgba(0,0,0,.28); border: 1px solid var(--border); border-radius: 12px; padding: 12px; display: grid; gap: 5px; align-content: center; }
+  .prod-status-card strong { color: var(--text); font-family: 'Oswald', sans-serif; font-size: 16px; }
+  .prod-status-card span { color: var(--text-dim); font-size: 10px; text-transform: uppercase; letter-spacing: .8px; }
+  .prod-pill { display: inline-flex; width: fit-content; border: 1px solid rgba(125,211,216,.35); color: var(--teal); background: rgba(125,211,216,.1); border-radius: 999px; padding: 5px 8px; font-size: 9px; text-transform: uppercase; letter-spacing: .8px; font-weight: 800; }
+  .prod-pill.good { border-color: rgba(74,217,168,.4); color: var(--win); background: rgba(74,217,168,.1); }
+  .prod-pill.warn { border-color: rgba(244,207,87,.4); color: var(--gold, #f4cf57); background: rgba(244,207,87,.1); }
+  .prod-metrics { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .prod-metrics div, .prod-parent-grid div { border: 1px solid var(--border); background: var(--panel-hi); border-radius: 10px; padding: 10px; text-align: center; }
+  .prod-metrics strong, .prod-parent-grid strong { display: block; color: var(--teal); font-family: 'Bebas Neue', sans-serif; font-size: 28px; line-height: 1; }
+  .prod-metrics span, .prod-parent-grid span { display: block; margin-top: 4px; color: var(--text-dim); font-size: 9px; text-transform: uppercase; letter-spacing: .8px; }
+  .prod-panel { margin-top: 0; }
+  .prod-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin: 12px 0; }
+  .prod-link-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: 10px; color: var(--text-mid); font-size: 11px; }
+  .prod-code, .prod-created-link code { display: block; max-width: 100%; overflow: auto; white-space: nowrap; background: rgba(255,255,255,.05); border: 1px solid var(--border); border-radius: 8px; padding: 9px; color: var(--teal); font-size: 10px; margin-top: 8px; }
+  .prod-invite-result { margin-top: 10px; }
+  .prod-created-link { border: 1px solid rgba(74,217,168,.35); background: rgba(74,217,168,.08); border-radius: 10px; padding: 10px; }
+  .prod-created-link strong { display: block; color: var(--win); margin-bottom: 5px; }
+  .prod-parent-preview { display: grid; gap: 10px; }
+  .prod-parent-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  @media (min-width: 780px) { .prod-hero { grid-template-columns: 1fr 240px; align-items: center; } .prod-metrics { grid-template-columns: repeat(6, minmax(0, 1fr)); } .prod-parent-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 </style>
 </head>
 <body data-page="app">
 
 <!-- TOP HEADER -->
 <div class="top-bar">
-  <a class="brand" href="./index.html" aria-label="Bear Den Coach HQ home">
-    <div class="logo">BB</div>
+  <a class="brand" href="./index.html" aria-label="BenchBoss Coach HQ home">
+    <div class="logo" id="appBrandLogo"><img id="appBrandLogoImg" alt="Team logo" style="display:none"><span id="appBrandLogoText">BB</span></div>
     <div>
-      <div class="title" id="topTitle">COACH HQ</div>
+      <div class="title" id="topTitle">BENCHBOSS</div>
       <div class="subtitle" id="topSubtitle">Team workspace</div>
     </div>
   </a>
@@ -1602,6 +1668,8 @@
   <div id="nextEventContainer"></div>
 
   <div id="coachDashboardMount"></div>
+  <div id="teamHubParentMount"></div>
+  <div id="productionTeamHubMount"></div>
 
   <div class="panel-title" style="margin-bottom: 10px">
     <span>Coaching Tools</span>
@@ -1637,6 +1705,11 @@
       <div class="tile-icon">✉</div>
       <div class="tile-label">Weekly</div>
       <div class="tile-sub">Parent update</div>
+    </div>
+    <div class="tile" onclick="navTo('settings')">
+      <div class="tile-icon">◈</div>
+      <div class="tile-label">Branding</div>
+      <div class="tile-sub">Logo & team colors</div>
     </div>
   </div>
 
@@ -1674,6 +1747,8 @@
     <button class="btn primary full" onclick="addPlayer()">+ Add Player</button>
   </div>
 
+  <div id="teamHubRosterImportMount"></div>
+
   <div class="panel">
     <div class="panel-title">
       <span>Current Roster</span>
@@ -1705,6 +1780,8 @@
     </div>
   </div>
 
+  <div id="lineupBuilderMount"></div>
+
   <div class="panel">
     <div class="panel-title"><span>Forward Lines</span></div>
     <div class="lines-group" id="forwardLines"></div>
@@ -1730,6 +1807,8 @@
       <div class="chip" onclick="openGameEntry()">+ Add Game</div>
     </div>
   </div>
+
+  <div id="gamesheetDashboardMount"></div>
 
   <div class="table-wrap">
     <table>
@@ -2265,6 +2344,44 @@
   </div>
 </div>
 
+
+<!-- ============ SETTINGS ============ -->
+<div class="page" id="page-settings">
+  <div id="teamManagerProductionMount"></div>
+  <div class="panel">
+    <div class="panel-title"><span>Team Branding</span><span class="count">BenchBoss</span></div>
+    <p class="settings-note">Customize how the app looks for your team. These settings update the header, dashboard, lineup cards, parent view, and shareable team surfaces.</p>
+    <div class="branding-grid" style="margin-top:12px">
+      <div><label>Product Name</label><input id="brandProductName" type="text" placeholder="BenchBoss Coach HQ"></div>
+      <div class="field-row cols-2">
+        <div><label>Short Header Name</label><input id="brandShortName" type="text" placeholder="BenchBoss"></div>
+        <div><label>Logo Monogram</label><input id="brandMonogram" type="text" maxlength="4" placeholder="BB"></div>
+      </div>
+      <div><label>Organization Name</label><input id="brandOrgName" type="text" placeholder="Black Bear Hockey"></div>
+      <div><label>Team Name</label><input id="brandTeamName" type="text" placeholder="Black Bears Youth 12U T2"></div>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="panel-title"><span>Logo</span></div>
+    <div class="brand-upload-box">
+      <div><label>Upload Team Logo</label><input id="brandLogoUpload" type="file" accept="image/*" onchange="handleTeamLogoUpload(event)"></div>
+      <div class="btn-row"><button class="btn" onclick="document.getElementById('brandLogoUpload').click()">Choose Logo</button><button class="btn danger" onclick="removeTeamLogo()">Remove Logo</button></div>
+      <p class="settings-note">Use a square PNG/JPG logo under 1.5MB. Production storage notes are included in SUPABASE_TEAM_BRANDING.md.</p>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="panel-title"><span>Colors</span></div>
+    <div class="branding-grid cols-2">
+      <div class="color-field"><input id="brandPrimaryColor" type="color" value="#7dd3d8"><div><label>Primary</label><p class="settings-note">Buttons, headers, active nav</p></div></div>
+      <div class="color-field"><input id="brandSecondaryColor" type="color" value="#f4cf57"><div><label>Secondary</label><p class="settings-note">Highlights, badges, accents</p></div></div>
+      <div class="color-field"><input id="brandAccentColor" type="color" value="#4ad9a8"><div><label>Accent</label><p class="settings-note">Status, success, dashboards</p></div></div>
+      <div class="color-field"><input id="brandBackgroundColor" type="color" value="#0a0a0a"><div><label>Background</label><p class="settings-note">Preview and branded cards</p></div></div>
+    </div>
+    <div class="btn-row" style="margin-top:14px"><button class="btn primary" onclick="updateBrandingFromSettings()">Save Branding</button><button class="btn" onclick="resetTeamBranding()">Reset</button></div>
+  </div>
+  <div class="panel"><div class="panel-title"><span>Live Preview</span></div><div id="teamBrandingPreview"></div></div>
+</div>
+
 <div class="modal-overlay" id="cloudModal" onclick="if(event.target === this) closeCloudSettings()">
   <div class="modal">
     <div class="modal-title">
@@ -2295,6 +2412,8 @@
 <div class="modal-overlay" id="actionSheetOverlay" style="background: rgba(0,0,0,0.5)" onclick="if(event.target === this) closeActionSheet()">
   <div class="action-sheet" id="actionSheet">
     <div class="sheet-title">Settings & Data</div>
+    <button class="sheet-btn" onclick="navTo('settings'); closeActionSheet()">Team Branding & Production</button>
+    <button class="sheet-btn" onclick="window.open('./parent.html','_blank')">👨‍👩‍👧 Parent Portal</button>
     <button class="sheet-btn" onclick="openCloudSettings()">☁️ Cloud Sync</button>
     <button class="sheet-btn" onclick="exportAllData()">📥 Export All Data (Backup)</button>
     <button class="sheet-btn" onclick="document.getElementById('importFileInput').click()">📤 Import Data</button>
@@ -2367,15 +2486,20 @@ try {
   window.location.replace("./auth.html");
 }
 </script>
+<script type="module" src="./src/features/branding/team-branding.js"></script>
 <script type="module" src="./src/features/practice/drill-scoring.js"></script>
 <script type="module" src="./src/features/practice/team-development-tracking.js"></script>
 <script type="module" src="./src/features/dashboard/coach-dashboard.js"></script>
 <script type="module" src="./src/features/practice/practice-engine.js"></script>
+<script type="module" src="./src/features/practice/season-curriculum.js"></script>
 <script type="module" src="./src/features/practice/drill-media-tabs.js"></script>
 <script type="module" src="./src/features/practice/animated-drill-viewer.js"></script>
 <script type="module" src="./src/features/practice/ai-practice-builder.js"></script>
 <script type="module" src="./src/features/sharing/practice-sharing.js"></script>
 <script type="module" src="./src/features/marketplace/practice-marketplace.js"></script>
+<script type="module" src="./src/features/team-hub/team-hub.js"></script>
+<script type="module" src="./src/features/team-hub/lineup-builder.js"></script>
+<script type="module" src="./src/features/team-hub/production-team-hub.js"></script>
 <!-- app-state.js MUST be loaded as a non-module script BEFORE the inline block
      below so its declarations are visible by bare name. See file header. -->
 <script src="./src/features/app/app-state.js"></script>
@@ -2423,7 +2547,7 @@ const PRELOADED_ROSTER = [
 // 50 preloaded drills — Black Bears themed, 10U T2 focused
 const PRELOADED_DRILLS = [
   // --- SKATING (6) ---
-  { name: 'Bear Den Warm-Up', category: 'skating', duration: 5, description: 'Laps around half-ice with progressive movement: glide, forward strides, crossovers, backward.', points: 'Knees bent, head up\nFull extension on each stride' },
+  { name: 'BenchBoss Warm-Up', category: 'skating', duration: 5, description: 'Laps around half-ice with progressive movement: glide, forward strides, crossovers, backward.', points: 'Knees bent, head up\nFull extension on each stride' },
   { name: 'Bear Claw Edge Circuit', category: 'skating', duration: 7, description: '3 stations: inside edges, outside edges, two-foot slaloms using cones.', points: 'Deep knee bend\nBlade angle, not lean' },
   { name: 'C-Cut Progression', category: 'skating', duration: 6, description: 'Forward C-cuts down ice, backward C-cuts back. Progress to crossover C-cuts.', points: 'Push through the edge\nBalance over skate' },
   { name: 'Tight Turn Takeoff', category: 'skating', duration: 6, description: 'Skate to cone, tight turn around it, accelerate out. Alternate directions. Add pivots on coach call.', points: 'Bend knees into turn\nExplosive exit' },
@@ -2517,6 +2641,9 @@ const LINE_CONFIG = {
 
 const TAGS = ['pp1', 'pp2', 'pk1', 'pk2', 'match'];
 const TAG_LABELS = { pp1: 'PP1', pp2: 'PP2', pk1: 'PK1', pk2: 'PK2', match: 'KEY' };
+window.LINE_CONFIG = LINE_CONFIG;
+window.TAGS = TAGS;
+window.TAG_LABELS = TAG_LABELS;
 
 // emptyLines(), state, save() are provided by src/features/app/app-state.js (loaded above).
 
@@ -2556,7 +2683,7 @@ function seedSampleData() {
 // ============================================
 const PAGE_TITLES = {
   dash: 'Dashboard', roster: 'Roster', lines: 'Lineups', stats: 'Stats',
-  games: 'Games', practice: 'Practice', gameday: 'Game Day', weekly: 'Weekly Update',
+  games: 'Games', practice: 'Practice', gameday: 'Game Day', weekly: 'Weekly Update', settings: 'Team Branding',
 };
 
 function navTo(page) {
@@ -2572,8 +2699,15 @@ function navTo(page) {
   window.scrollTo(0, 0);
 
   if (page === 'dash') renderDashboard();
+  if (window.BearDenHQ?.hydrateTeamHubPanels) window.BearDenHQ.hydrateTeamHubPanels(state);
+  if (window.BearDenHQ?.hydrateProductionTeamHub) window.BearDenHQ.hydrateProductionTeamHub(state);
+  if (window.BenchBossBranding?.applyTeamBranding) window.BenchBossBranding.applyTeamBranding(state);
+  if (page === 'settings' && window.BenchBossBranding?.hydrateBrandingSettings) window.BenchBossBranding.hydrateBrandingSettings(state);
   if (page === 'roster') renderRoster();
-  if (page === 'lines') renderLines();
+  if (page === 'lines') {
+    renderLines();
+    if (window.BearDenHQ?.hydrateLineupBuilder) window.BearDenHQ.hydrateLineupBuilder(state);
+  }
   if (page === 'stats') renderStats();
   if (page === 'games') renderGamesList();
   if (page === 'practice') {
@@ -2977,6 +3111,9 @@ async function bootApp() {
   }
   load();
   if (window.BearDenHQ?.migrateState) state = window.BearDenHQ.migrateState(state);
+  if (window.BearDenHQ?.ensureTeamHubState) window.BearDenHQ.ensureTeamHubState(state);
+  if (window.BenchBossBranding?.ensureTeamBrandingState) window.BenchBossBranding.ensureTeamBrandingState(state);
+  if (window.BenchBossBranding?.applyTeamBranding) window.BenchBossBranding.applyTeamBranding(state);
   navTo(state.ui.currentPage || 'dash');
 }
 

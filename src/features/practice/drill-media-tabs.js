@@ -25,9 +25,19 @@ function normalizeVideoUrl(url) {
   }
 }
 
+function asList(value) {
+  if (Array.isArray(value)) return value.map((v) => String(v || "").trim()).filter(Boolean);
+  return String(value || "").split(/[\n;]/).map((v) => v.trim()).filter(Boolean);
+}
+
 function pointsFor(drill) {
-  const raw = drill?.coachingPoints || drill?.coaching_points || drill?.points || [];
-  return Array.isArray(raw) ? raw : String(raw || "").split(/[\n;]/).map((v) => v.trim()).filter(Boolean);
+  return asList(drill?.coachingPoints || drill?.coaching_points || drill?.points || []);
+}
+
+function renderList(title, items) {
+  const list = asList(items);
+  if (!list.length) return "";
+  return `<div class="adv-coach-title">${safe(title)}</div>${list.slice(0, 6).map((p) => `<div class="adv-coach-point">• ${safe(p)}</div>`).join("")}`;
 }
 
 export function getDrillVideoEmbedUrl(drill) {
@@ -39,6 +49,8 @@ export function renderDrillMediaTabs(drill, options = {}) {
   const embed = getDrillVideoEmbedUrl(drill);
   const points = pointsFor(drill);
   const compact = Boolean(options.compact);
+  const steps = asList(drill?.diagram?.sequence?.map((step) => step.label));
+  const badge = drill?.quality === "elite" ? `<span class="adv-badge">Elite matched animation</span>` : "";
   return `
     <div class="drill-media-tabs ${compact ? "compact" : ""}" id="${id}" data-drill-media-tabs>
       <div class="dmt-tabs" role="tablist">
@@ -52,11 +64,13 @@ export function renderDrillMediaTabs(drill, options = {}) {
       </div>
       <div class="dmt-panel" data-panel="coaching">
         <div class="adv-coach-card">
-          <div class="adv-coach-title">${safe(drill?.name || "Drill")} coaching card</div>
-          ${drill?.description ? `<p>${safe(drill.description)}</p>` : ""}
-          ${points.length ? points.slice(0, 8).map((p) => `<div class="adv-coach-point">• ${safe(p)}</div>`).join("") : `<div class="empty-state">No coaching points added yet.</div>`}
-          ${drill?.commonMistakes ? `<div class="adv-coach-title">Common mistakes</div><p>${safe(drill.commonMistakes)}</p>` : ""}
-          ${drill?.progressions ? `<div class="adv-coach-title">Progressions</div><p>${safe(drill.progressions)}</p>` : ""}
+          <div class="adv-coach-title">${safe(drill?.name || "Drill")} coaching card ${badge}</div>
+          ${drill?.instructions ? `<p><strong>How to run it:</strong> ${safe(drill.instructions)}</p>` : drill?.description ? `<p>${safe(drill.description)}</p>` : ""}
+          ${points.length ? renderList("Key coaching cues", points) : `<div class="empty-state">No coaching points added yet.</div>`}
+          ${steps.length ? renderList("Animation checkpoints", steps) : ""}
+          ${renderList("Common mistakes", drill?.commonMistakes)}
+          ${renderList("Progressions", drill?.progressions || drill?.progression)}
+          ${renderList("Regressions", drill?.regressions)}
         </div>
       </div>
     </div>`;

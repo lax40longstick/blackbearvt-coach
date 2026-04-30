@@ -1,4 +1,4 @@
-# Bear Den Coach HQ
+# BenchBoss Coach HQ
 
 AI-powered hockey coaching platform for building, running, tracking, and sharing practice plans with animated drills.
 
@@ -97,3 +97,29 @@ Do not expose server secrets in frontend code:
 - `TURNSTILE_SECRET_KEY`
 
 Enable Supabase RLS before public launch.
+
+## v0.6.0 Production Team Hub
+
+This version adds the production team platform layer:
+
+- Persistent Supabase roster, staff, guardians, lineups, practices, published drills, announcements, and source links
+- Parent / player / viewer roles
+- Manager and coach permissions
+- Invite links for parents, managers, assistant coaches, players, and viewers
+- Parent portal at `/parent.html`
+- Supabase Storage logo upload for persistent team branding
+- SportsEngine deep-link settings for roster, schedule, and chat
+- GameSheet import history support
+
+Required setup:
+
+```text
+supabase/migrations/v0.6.0-production-team-hub.sql
+```
+
+See:
+
+```text
+PRODUCTION_TEAM_HUB_v0.6.0.md
+CHANGELOG_v0.6.0_PRODUCTION_TEAM_HUB.md
+```

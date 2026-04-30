@@ -1,4 +1,4 @@
-# Bear Den Coach HQ Selling Roadmap
+# BenchBoss Coach HQ Selling Roadmap
 
 This repo now covers the seven major commercialization tracks in a concrete way.
 
@@ -10,7 +10,7 @@ This repo now covers the seven major commercialization tracks in a concrete way.
 
 Positioning statement:
 
-`Bear Den Coach HQ is a coaching workspace for youth hockey teams that combines practice planning, roster operations, and bench execution in one product.`
+`BenchBoss Coach HQ is a coaching workspace for youth hockey teams that combines practice planning, roster operations, and bench execution in one product.`
 
 ## 2. Refactor into a sellable product shell
 

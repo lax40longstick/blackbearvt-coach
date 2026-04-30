@@ -1,4 +1,4 @@
-# Bear Den Coach HQ — Deployment Guide
+# BenchBoss Coach HQ — Deployment Guide
 
 This is a static frontend + two Netlify serverless functions + Supabase (auth + database).
 

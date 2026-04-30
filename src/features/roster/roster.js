@@ -1,6 +1,6 @@
 // src/features/roster/roster.js
 // -----------------------------------------------------------------------------
-// Roster, lines, stats, and games for Bear Den Coach HQ.
+// Roster, lines, stats, and games for BenchBoss Coach HQ.
 //
 // Loaded as a NON-module classic script before the inline <script> in
 // app.html so its `function` declarations are visible by bare name.

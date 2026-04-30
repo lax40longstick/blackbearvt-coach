@@ -1,6 +1,6 @@
 // src/features/game-day/game-day.js
 // -----------------------------------------------------------------------------
-// Game Day Packet and Weekly Update for Bear Den Coach HQ.
+// Game Day Packet and Weekly Update for BenchBoss Coach HQ.
 //
 // Loaded as a NON-module classic script before the inline <script> in
 // app.html so its declarations are visible by bare name.

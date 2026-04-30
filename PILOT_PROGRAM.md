@@ -1,4 +1,4 @@
-# Bear Den Coach HQ Pilot Program
+# BenchBoss Coach HQ Pilot Program
 
 ## Goal
 
@@ -20,7 +20,7 @@ Validate whether youth hockey coaches will pay for practice planning and team op
 
 ## Interview questions
 
-1. What did you replace with Bear Den Coach HQ?
+1. What did you replace with BenchBoss Coach HQ?
 2. Where did setup feel slow or confusing?
 3. Which screen gave you the most immediate value?
 4. What would block you from paying monthly?

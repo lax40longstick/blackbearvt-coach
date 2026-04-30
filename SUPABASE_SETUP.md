@@ -91,3 +91,44 @@ where schemaname = 'public'
   and tablename in ('profiles', 'organizations', 'teams', 'memberships', 'subscriptions');
 -- expect all 5 with rowsecurity = true
 ```
+
+## Optional Team Hub v1 tables
+
+Team Hub v1 currently stores roster/stat imports in client state for a fast MVP. For multi-device/team production use, add dedicated tables like these and sync them through Supabase RPCs or Netlify Functions.
+
+```sql
+create table if not exists team_sources (
+  id uuid primary key default gen_random_uuid(),
+  organization_id uuid references organizations(id) on delete cascade,
+  source_type text not null check (source_type in ('sportsengine','gamesheet','manual')),
+  source_url text,
+  last_sync_at timestamptz,
+  settings jsonb not null default '{}',
+  created_at timestamptz not null default now()
+);
+
+create table if not exists team_staff (
+  id uuid primary key default gen_random_uuid(),
+  organization_id uuid references organizations(id) on delete cascade,
+  name text not null,
+  title text,
+  phone text,
+  email text,
+  source text,
+  created_at timestamptz not null default now()
+);
+
+create table if not exists imported_game_stats (
+  id uuid primary key default gen_random_uuid(),
+  organization_id uuid references organizations(id) on delete cascade,
+  source_type text not null default 'gamesheet',
+  source_url text,
+  payload jsonb not null default '{}',
+  imported_at timestamptz not null default now()
+);
+
+alter table team_sources enable row level security;
+alter table team_staff enable row level security;
+alter table imported_game_stats enable row level security;
+```
+```
