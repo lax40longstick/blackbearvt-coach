@@ -27,3 +27,5 @@ writeFileSync(
 );
 
 console.log("Generated runtime-config.js from environment variables");
+
+process.exit(0);

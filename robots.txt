@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Disallow: /app.html
+Disallow: /account.html
+Disallow: /auth.html
+Disallow: /onboarding.html
+Disallow: /parent.html
+Disallow: /club.html
+Disallow: /api/
+
+Sitemap: https://benchboss-coach-hq.com/sitemap.xml

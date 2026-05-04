@@ -73,6 +73,7 @@ export function createAnimatedDrillViewer(containerOrId, drill, options = {}) {
       <div class="adv-controls">
         <button class="btn small" id="${viewerId}_play" type="button">▶ Play</button>
         <button class="btn small" id="${viewerId}_restart" type="button">↺ Restart</button>
+        <button class="btn small" id="${viewerId}_annotate" type="button">✎ Freeze + Annotate</button>
         <label class="adv-speed">Speed
           <select id="${viewerId}_speed">
             <option value="0.75">0.75x</option>
@@ -90,6 +91,7 @@ export function createAnimatedDrillViewer(containerOrId, drill, options = {}) {
   const canvas = document.getElementById(`${viewerId}_canvas`);
   const playButton = document.getElementById(`${viewerId}_play`);
   const restartButton = document.getElementById(`${viewerId}_restart`);
+  const annotateButton = document.getElementById(`${viewerId}_annotate`);
   const speedSelect = document.getElementById(`${viewerId}_speed`);
   const status = document.getElementById(`${viewerId}_status`);
   const stepLabel = document.getElementById(`${viewerId}_step`);
@@ -98,8 +100,10 @@ export function createAnimatedDrillViewer(containerOrId, drill, options = {}) {
 
   let player = null;
   let playerState = 'ready';
+  let currentStepIndex = 0;
 
   function setStep(index, total, step) {
+    currentStepIndex = Number(index || 0);
     const label = step?.label || steps[index]?.label || `Step ${index + 1}`;
     stepLabel.textContent = `${index + 1}/${total}: ${label}`;
     timeline?.querySelectorAll('.adv-step-pill').forEach((pill, i) => pill.classList.toggle('active', i === index));
@@ -153,6 +157,11 @@ export function createAnimatedDrillViewer(containerOrId, drill, options = {}) {
 
   playButton.addEventListener('click', start);
   restartButton.addEventListener('click', restart);
+  annotateButton?.addEventListener('click', () => {
+    if (window.BenchBossWhiteboard?.openFromDrill) {
+      window.BenchBossWhiteboard.openFromDrill(drill, { freezeStep: currentStepIndex, source: 'animated-drill-viewer' });
+    }
+  });
   speedSelect.addEventListener('change', () => {
     if (playerState === 'playing') restart();
   });

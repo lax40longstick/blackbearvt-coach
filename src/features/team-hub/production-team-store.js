@@ -109,13 +109,16 @@ export async function loadProductionTeamHubData() {
   const ctx = await getProductionTeamContext();
   requireTeam(ctx);
   const { supabase, team } = ctx;
+  const fullAccess = Boolean(ctx.canCoach || ctx.canManage);
+  const playerSource = fullAccess ? 'team_players' : 'team_player_public_cards';
+  const sourceLinkSource = fullAccess ? 'team_sources' : 'team_public_source_links';
 
   const [players, staff, practices, lineups, sources, imports, announcements] = await Promise.all([
-    supabase.from('team_players').select('*').eq('team_id', team.id).eq('active', true).order('jersey_number', { ascending: true }),
+    supabase.from(playerSource).select('*').eq('team_id', team.id).eq('active', true).order('jersey_number', { ascending: true }),
     supabase.from('team_staff').select('*').eq('team_id', team.id).order('title', { ascending: true }),
     supabase.from('team_practices').select('*').eq('team_id', team.id).order('practice_date', { ascending: false }).limit(20),
     supabase.from('team_lineups').select('*').eq('team_id', team.id).order('game_date', { ascending: false }).limit(20),
-    supabase.from('team_sources').select('*').eq('team_id', team.id).order('source_type', { ascending: true }),
+    supabase.from(sourceLinkSource).select('*').eq('team_id', team.id).order('source_type', { ascending: true }),
     supabase.from('gamesheet_import_runs').select('*').eq('team_id', team.id).order('imported_at', { ascending: false }).limit(10),
     supabase.from('team_announcements').select('*').eq('team_id', team.id).order('published_at', { ascending: false }).limit(20),
   ]);

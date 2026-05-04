@@ -121,7 +121,7 @@ async function buildAIPracticePlan(options, state) {
       const bq = b.quality === 'elite' ? 20 : 0;
       return (bq + (b.qualityScore || 0) + (b.fitScore || 0)) - (aq + (a.qualityScore || 0) + (a.fitScore || 0));
     })
-    .slice(0, 120);
+    .slice(0, 180);
 
   const accessToken = await getAccessToken();
   const headers = { "content-type": "application/json" };

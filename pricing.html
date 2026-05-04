@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Pricing for BenchBoss Coach HQ coaching software.">
+<meta name="description" content="Pricing for BenchBoss Coach HQ — free for individual coaches, with paid tiers for staff and associations.">
 <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -29,70 +29,94 @@
 
     <section class="page-hero">
       <div>
-        <p class="eyebrow">Packaging and billing</p>
-        <h1>Price the product like software, not a custom favor.</h1>
-        <p>These plans create clear entitlement boundaries for solo coaches, team staff, and associations. Hook them into Stripe once your backend is ready.</p>
+        <p class="eyebrow">Built for the rink</p>
+        <h1>Start free. Upgrade when you want AI plans, sharing, or staff.</h1>
+        <p>Bench Mode and the animated drill library are free for every coach. AI Practice Builder, PDF / link sharing, and multi-coach workspaces unlock at the Pro tier and up.</p>
       </div>
       <div class="page-card">
         <p class="eyebrow">Billing mode</p>
-        <h2>Offer a simple annual incentive</h2>
-        <p>Keep monthly pricing easy to understand and reward annual prepay with two months free.</p>
+        <h2>Annual saves you 17%</h2>
+        <p>Monthly is for trying it. Annual is what most coaches actually pay — two months free baked in.</p>
         <label class="field">
           <span>Show annual pricing</span>
-          <input type="checkbox" data-billing-toggle>
+          <input type="checkbox" data-billing-toggle checked>
         </label>
       </div>
     </section>
 
     <section class="pricing-grid">
+
       <article class="price-card">
-        <span class="pill">Starter</span>
-        <h2>Solo coach</h2>
-        <p>For one head coach managing one active team.</p>
+        <span class="pill">Free</span>
+        <h2>Coach Free</h2>
+        <p>Try the rink-first workflow that beats sticky notes and dry-erase boards.</p>
         <div class="price-line">
-          <strong data-price-monthly data-price-yearly="$190/yr" data-price-monthly="$19/mo">$19/mo</strong>
+          <strong data-price-monthly data-price-yearly="Free" data-price-monthly="Free">Free</strong>
         </div>
         <ul>
-          <li>1 team workspace</li>
-          <li>Practice planner and drill library</li>
-          <li>On-ice mode and exports</li>
-          <li>Email support</li>
+          <li>1 coach, 1 team workspace</li>
+          <li>Full animated drill library (157+ drills)</li>
+          <li>Bench Mode + offline rink workflow</li>
+          <li>Save up to 3 active practice plans</li>
+          <li class="muted">No AI builder, PDF export, or sharing links</li>
         </ul>
         <div class="auth-actions">
-          <button class="button secondary" type="button" data-checkout-plan="starter">Choose Starter</button>
+          <a class="button secondary" href="./auth.html?plan=free">Sign up free</a>
         </div>
       </article>
 
       <article class="price-card featured">
-        <span class="pill">Team</span>
-        <h2>Staff collaboration</h2>
-        <p>For head coaches plus assistants, team managers, and shared planning.</p>
+        <span class="pill">Most popular</span>
+        <h2>Pro Coach</h2>
+        <p>For solo head coaches who run their own bench every week.</p>
         <div class="price-line">
-          <strong data-price-monthly data-price-yearly="$390/yr" data-price-monthly="$39/mo">$39/mo</strong>
+          <strong data-price-monthly data-price-yearly="$89/yr" data-price-monthly="$9/mo">$89/yr</strong>
         </div>
         <ul>
-          <li>Up to 5 staff users</li>
-          <li>Shared roster, plans, and game prep</li>
-          <li>Cloud sync and permissions</li>
-          <li>Priority support</li>
+          <li>Everything in Free, plus:</li>
+          <li>AI Practice Builder (gpt-4o-mini)</li>
+          <li>Unlimited saved practice plans</li>
+          <li>PDF export + public share links</li>
+          <li>GameSheet imports + team branding</li>
+          <li>Parent portal recap publishing</li>
         </ul>
         <div class="auth-actions">
-          <button class="button primary" type="button" data-checkout-plan="team">Choose Team</button>
+          <button class="button primary" type="button" data-checkout-plan="starter">Choose Pro Coach</button>
+        </div>
+      </article>
+
+      <article class="price-card">
+        <span class="pill">Team</span>
+        <h2>Staff workspace</h2>
+        <p>For head coach plus two assistants on a shared roster.</p>
+        <div class="price-line">
+          <strong data-price-monthly data-price-yearly="$179/yr" data-price-monthly="$18/mo">$179/yr</strong>
+        </div>
+        <ul>
+          <li>Everything in Pro Coach, plus:</li>
+          <li>Up to 3 staff seats</li>
+          <li>Shared roster, plans, and lineups</li>
+          <li>Cloud sync across devices</li>
+          <li>Manager / parent invites</li>
+        </ul>
+        <div class="auth-actions">
+          <button class="button secondary" type="button" data-checkout-plan="team">Choose Team</button>
         </div>
       </article>
 
       <article class="price-card">
         <span class="pill">Club</span>
         <h2>Association rollout</h2>
-        <p>For hockey directors standardizing planning across multiple teams.</p>
+        <p>For hockey directors standardizing planning across many teams.</p>
         <div class="price-line">
-          <strong data-price-monthly data-price-yearly="$990/yr" data-price-monthly="$99/mo">$99/mo</strong>
+          <strong data-price-monthly data-price-yearly="$99/team/yr" data-price-monthly="$99/team/mo">$99/team/yr</strong>
         </div>
         <ul>
-          <li>Up to 10 teams</li>
-          <li>Shared club drill library</li>
-          <li>Director dashboard</li>
-          <li>Implementation support</li>
+          <li>Everything in Team, plus:</li>
+          <li>Up to 10 teams (custom for more)</li>
+          <li>Director dashboard + shared club library</li>
+          <li>Implementation and onboarding support</li>
+          <li>Volume pricing — contact for 25+ teams</li>
         </ul>
         <div class="auth-actions">
           <button class="button secondary" type="button" data-checkout-plan="club">Choose Club</button>
@@ -110,25 +134,51 @@
 
     <section class="section-block">
       <div class="section-heading">
+        <p class="eyebrow">Why these prices</p>
+        <h2>Anchored to the hockey-coaching market</h2>
+        <p>Pricing now sits inside the band that competing hockey-specific tools occupy — see the comparison.</p>
+      </div>
+      <div class="stack-grid">
+        <article class="stack-card">
+          <h3>Free tier seeds usage</h3>
+          <p>Federation tools (USA Hockey Mobile Coach, Hockey Canada Network) ship free. A free BenchBoss tier removes the "what if I don't use it" objection at signup.</p>
+        </article>
+        <article class="stack-card">
+          <h3>Pro Coach $89/yr</h3>
+          <p>Sits between Ice Hockey Systems ($60/yr), HockeyShare ($75/yr), and flexxCOACH ($89.95/yr). Hockey Coach Vision is highest at $129/yr.</p>
+        </article>
+        <article class="stack-card">
+          <h3>Team $179/yr for 3 coaches</h3>
+          <p>Roughly $60 per coach — competitive with CoachThem ($72/coach) and HockeyShare association tiers.</p>
+        </article>
+        <article class="stack-card">
+          <h3>Club $99/team/yr</h3>
+          <p>Matches CoachThem's $100/team association plan for hockey directors. Volume discounts for associations of 25+ teams.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section-block alt">
+      <div class="section-heading">
         <p class="eyebrow">Launch rules</p>
         <h2>Billing details to enforce in the backend</h2>
       </div>
       <div class="stack-grid">
         <article class="stack-card">
           <h3>Stripe mapping</h3>
-          <p>Create one product per plan with monthly and annual prices. Webhooks should update team entitlements, seat counts, and trial expiration.</p>
+          <p>One product per paid plan with monthly + annual prices. Webhooks update entitlements, seat counts, trial expiration.</p>
         </article>
         <article class="stack-card">
-          <h3>Entitlements</h3>
-          <p>Starter limits team count. Team unlocks shared staff access. Club unlocks organization-level admin and templates.</p>
+          <h3>Free tier provisioning</h3>
+          <p>Free signup goes straight to <code>auth.html?plan=free</code> — no Stripe checkout. Entitlements set by user metadata at account creation.</p>
         </article>
         <article class="stack-card">
-          <h3>Trials</h3>
-          <p>Use a 14-day trial with credit card optional for early pilots, then require card-on-file when the funnel is proven.</p>
+          <h3>Trial path</h3>
+          <p>Coaches who want to test Pro features can self-upgrade with a 14-day trial; downgrade returns them to Free without data loss.</p>
         </article>
         <article class="stack-card">
           <h3>Upgrade path</h3>
-          <p>Support in-app plan change, proration, and immediate entitlement upgrades without human intervention.</p>
+          <p>In-app plan change with proration. Free → Pro is one button; data retention is preserved.</p>
         </article>
       </div>
     </section>

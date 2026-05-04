@@ -1,8 +1,10 @@
 import { drawDiagram, playDiagram } from '../../../components/diagram.js';
 import { drills as baseDrills } from '../../../data/drills.js';
 import { eliteDrills } from '../../../data/elite-drills.js';
+import { eliteDrillsPack2 } from '../../../data/elite-drills-pack-2.js';
+import { eliteDrillsPack3 } from '../../../data/elite-drills-pack-3.js';
 
-const animatedDrills = [...eliteDrills, ...baseDrills];
+const animatedDrills = [...eliteDrills, ...eliteDrillsPack2, ...eliteDrillsPack3, ...baseDrills];
 
 const CATEGORY_MAP = {
   compete: 'battle',

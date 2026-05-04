@@ -37,10 +37,13 @@ STRIPE_PRICE_CLUB_ANNUAL=price_xxxxx
 
 ## Optional analytics and monitoring
 
+These are public browser keys and must use the `PUBLIC_` prefix because `runtime-config.js` is generated at build time.
+
 ```env
-SENTRY_DSN=https://examplePublicKey@o0.ingest.sentry.io/0
-POSTHOG_API_KEY=phc_xxxxx
-POSTHOG_HOST=https://app.posthog.com
+PUBLIC_SENTRY_DSN=https://examplePublicKey@o0.ingest.sentry.io/0
+PUBLIC_SENTRY_TRACES_SAMPLE_RATE=0.05
+PUBLIC_POSTHOG_KEY=phc_xxxxx
+PUBLIC_POSTHOG_HOST=https://us.i.posthog.com
 ```
 
 After adding or changing environment variables, trigger a fresh Netlify deploy.
@@ -63,3 +66,14 @@ Production Team Hub also requires the SQL migration:
 ```text
 supabase/migrations/v0.6.0-production-team-hub.sql
 ```
+
+
+## v0.10.0 production hardening
+
+After the v0.6.0 migration, also run:
+
+```text
+supabase/migrations/v0.10.0-marketability-lift.sql
+```
+
+This adds the Free tier plan key, parent-safe roster/source views, forced RLS, and the `rls_production_check` verification view.

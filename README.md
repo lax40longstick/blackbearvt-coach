@@ -15,6 +15,14 @@ AI-powered hockey coaching platform for building, running, tracking, and sharing
 - Stripe billing
 - Supabase auth/database
 - Netlify Functions backend
+- Bench Mode offline rink workflow
+- One-tap half-ice/no-goalie/low-number practice adjustments
+- Rink-side practice recap capture
+- 217-drill animated library across base + elite packs
+- SEO landing pages for practice-plan discovery
+- Club/director dashboard starter
+- Parent-safe roster/source views
+- Offline analytics queue for Bench Mode events
 
 ## Deploy on Netlify from GitHub
 
@@ -29,7 +37,7 @@ Publish directory: .
 Functions directory: netlify/functions
 ```
 
-5. Add environment variables from `.env.example` in **Netlify → Site configuration → Environment variables**.
+5. Add environment variables from `NETLIFY_ENV_TEMPLATE.md` in **Netlify → Site configuration → Environment variables**.
 6. Deploy.
 
 ## Required environment variables
@@ -47,7 +55,7 @@ OPENAI_API_KEY=sk-xxxxx
 OPENAI_MODEL=gpt-4o-mini
 ```
 
-Also add your Stripe price IDs and optional Sentry/PostHog/Turnstile values from `.env.example`.
+Also add your Stripe price IDs and optional Sentry/PostHog/Turnstile values from `NETLIFY_ENV_TEMPLATE.md`.
 
 ## Local development
 
@@ -122,4 +130,68 @@ See:
 ```text
 PRODUCTION_TEAM_HUB_v0.6.0.md
 CHANGELOG_v0.6.0_PRODUCTION_TEAM_HUB.md
+```
+
+## v0.7.0 Bench Mode
+
+Bench Mode adds the live rink workflow: preload a practice before the rink, run it with large high-contrast controls, adjust for half-ice/no-goalie/low-number situations, save quick notes, and create a post-practice recap. See `BENCH_MODE_v0.7.0.md` for the full coach workflow and QA checklist.
+
+
+## v0.10.0 production notes
+
+After deploying, run:
+
+```text
+supabase/migrations/v0.10.0-marketability-lift.sql
+```
+
+Then verify RLS:
+
+```sql
+select * from public.rls_production_check;
+```
+
+Pilot materials are included in:
+
+```text
+PILOT_PROGRAM_v0.10.0.md
+pilot/
+```
+
+## v0.11.0 Coach Tablet PWA + Whiteboard
+
+This version shifts the product focus toward a coach mobile/tablet app plus a lighter parent/team portal.
+
+Coach/tablet focus:
+
+- Practice planning
+- Offline Bench Mode
+- Animated drills
+- Lineup builder
+- Stats glance
+- Whiteboard / draw board
+
+Parent/team focus:
+
+- Published lineups
+- Team/player stats
+- Published drills
+- Schedule/source links
+- Team updates and recaps
+
+New routes:
+
+```text
+coach.html       tablet/mobile coach launcher
+whiteboard.html  standalone full/half-rink coach board
+parent.html      lighter parent/team mobile portal
+```
+
+Whiteboard features include full/half-rink views, freehand drawing, arrows, players, pucks, cones, eraser/delete, undo/redo, save, duplicate, attach to current practice, export to PNG/PDF, draw over existing drill diagrams, and freeze-frame annotation from animated drills or Bench Mode.
+
+See:
+
+```text
+COACH_TABLET_PWA_WHITEBOARD_v0.11.0.md
+CHANGELOG_v0.11.0_COACH_TABLET_WHITEBOARD.md
 ```
