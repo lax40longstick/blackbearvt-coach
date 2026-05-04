@@ -1,3 +1,16 @@
+# Changelog — v0.11.0 "coach tablet board"
+
+Tablet/PWA focus update. Adds a coach-first mobile/tablet launcher and a full whiteboard/draw board so coaches can plan, run, annotate, and export practice/game diagrams from iPad/tablet while keeping the parent/team portal lightweight.
+
+## Added
+
+- `coach.html` coach mobile/tablet launcher.
+- `whiteboard.html` standalone whiteboard route.
+- `src/features/whiteboard/coach-whiteboard.js` with full/half rink, drawing, arrows, players, pucks, cones, erase/delete, undo/redo, save, duplicate, practice attachment, PNG/PDF export.
+- Freeze + Annotate from animated drills and Bench Mode.
+- Whiteboard page/tab in `app.html`.
+- PWA manifest shortcuts and service-worker cache entries for coach/whiteboard routes.
+
 # Changelog — v0.2.0 "billing that actually works"
 
 Audit-driven rebuild of the billing, schema, auth, and onboarding paths.

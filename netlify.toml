@@ -38,6 +38,11 @@
   status = 200
 
 [[redirects]]
+  from = "/bench-mode"
+  to = "/bench-mode.html"
+  status = 200
+
+[[redirects]]
   from = "/marketplace"
   to = "/marketplace.html"
   status = 200

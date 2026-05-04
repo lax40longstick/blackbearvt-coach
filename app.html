@@ -13,6 +13,7 @@
 <link rel="apple-touch-icon" href="./icons/icon-192.png">
 <title>BenchBoss Coach HQ Workspace</title>
 <script src="./runtime-config.js"></script>
+<script type="module" src="./src/lib/analytics.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;500;700&family=Oswald:wght@400;600;700&display=swap" rel="stylesheet">
@@ -165,7 +166,7 @@
     border-top: 1px solid var(--border);
     padding-bottom: var(--safe-bottom);
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(7, 1fr);
   }
 
   .bottom-nav button {
@@ -1558,6 +1559,17 @@
   @media (min-width: 780px) { .coach-hero { grid-template-columns: 1fr 260px; align-items: center; } .coach-metrics { grid-template-columns: repeat(4, 1fr); } .coach-grid-2 { grid-template-columns: 1fr 1fr; } }
 
 
+  /* ============ BENCH MODE v0.7.0 ============ */
+  .bench-prep-card{border:1px solid rgba(125,211,216,.35);background:linear-gradient(135deg,rgba(125,211,216,.12),rgba(0,0,0,.35));border-radius:14px;padding:16px;margin:14px 0;box-shadow:0 18px 46px rgba(0,0,0,.26)}
+  .bench-prep-head{display:grid;gap:12px;align-items:center}.bench-eyebrow{color:var(--teal);font-size:9px;letter-spacing:2px;text-transform:uppercase;font-weight:800}.bench-prep-card h3{margin:4px 0 6px;font-family:'Bebas Neue',sans-serif;font-size:34px;line-height:1;letter-spacing:1.5px;color:var(--text)}.bench-prep-card p{color:var(--text-mid);font-size:11px;line-height:1.55}.bench-status{border:1px solid rgba(244,207,87,.42);background:rgba(244,207,87,.09);border-radius:12px;padding:12px;min-width:150px}.bench-status.ready{border-color:rgba(74,217,168,.45);background:rgba(74,217,168,.10)}.bench-status strong{display:block;color:var(--text);font-family:'Oswald',sans-serif;font-size:17px}.bench-status span{display:block;margin-top:4px;color:var(--text-dim);font-size:10px;text-transform:uppercase;letter-spacing:.8px}
+  .bench-prep-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:14px 0}.bench-prep-grid div{border:1px solid var(--border);border-radius:10px;background:rgba(0,0,0,.25);padding:10px;text-align:center}.bench-prep-grid strong{display:block;color:var(--teal);font-family:'Bebas Neue',sans-serif;font-size:24px;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.bench-prep-grid span{display:block;margin-top:4px;color:var(--text-dim);font-size:9px;text-transform:uppercase;letter-spacing:.9px}
+  .bench-rink-settings,.bench-action-grid{display:grid;gap:8px;margin-top:10px}.bench-rink-settings{grid-template-columns:repeat(3,minmax(0,1fr))}.bench-action-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.bench-chip{border:1px solid var(--border);background:var(--panel-hi);color:var(--text-mid);border-radius:999px;padding:10px 8px;font-size:10px;letter-spacing:.9px;text-transform:uppercase;cursor:pointer}.bench-chip.active{border-color:var(--teal);background:var(--teal);color:#031315;font-weight:900}.bench-warning{border:1px solid rgba(244,207,87,.4);background:rgba(244,207,87,.08);color:#fde68a;border-radius:10px;padding:10px;font-size:11px;line-height:1.45;margin:10px 0}
+  .oi-overlay.bench-contrast{background:#000;color:#fff}.oi-overlay.bench-contrast .oi-body,.oi-overlay.bench-contrast .oi-top,.oi-overlay.bench-contrast .oi-nav{background:#000}.oi-overlay.bench-contrast .oi-title{color:#fff;text-shadow:0 0 14px rgba(125,211,216,.22)}.oi-overlay.bench-large .oi-title{font-size:clamp(40px,9vw,74px)}.oi-overlay.bench-large .oi-desc,.oi-overlay.bench-large .oi-point{font-size:clamp(17px,3.2vw,24px)}.oi-overlay.bench-large .oi-nav button,.oi-overlay.bench-large .oi-tbtn{min-height:58px;font-size:13px;font-weight:800}
+  .bench-hud{border:1px solid rgba(125,211,216,.32);background:rgba(125,211,216,.08);border-radius:12px;padding:10px;margin:0 0 16px}.bench-hud-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin-bottom:7px}.bench-hud-row.small button,.bench-big{background:#121212;border:1px solid #3a3a3a;color:#fff;border-radius:8px;padding:12px 7px;min-height:52px;font-family:inherit;font-size:10px;letter-spacing:.8px;text-transform:uppercase;cursor:pointer}.bench-big.active,.bench-hud-row.small button:active,.bench-big:active{background:var(--teal);color:#020808;border-color:var(--teal);font-weight:900}.bench-live-meta{display:flex;flex-wrap:wrap;gap:6px;color:var(--text-mid);font-size:10px;line-height:1.4}.bench-live-meta span{border:1px solid var(--border);background:rgba(0,0,0,.24);border-radius:999px;padding:5px 8px}
+  .bench-recap-card{border:1px solid rgba(74,217,168,.42);background:rgba(74,217,168,.08);border-radius:12px;padding:12px;text-align:left;margin:14px 0}.bench-recap-card strong{display:block;color:var(--win);font-size:15px;margin-bottom:5px}.bench-recap-card span{display:block;color:var(--text-mid);font-size:11px;margin-bottom:8px}.bench-recap-card ul{margin:8px 0 0 18px;color:var(--text);font-size:12px;line-height:1.5}
+  @media (min-width:720px){.bench-prep-head{grid-template-columns:1fr 190px}.bench-prep-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.bench-action-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+  @media (max-width:520px){.bench-hud-row{grid-template-columns:repeat(2,minmax(0,1fr))}.bench-rink-settings,.bench-action-grid{grid-template-columns:1fr}}
+
   /* ============ TEAM BRANDING SETTINGS ============ */
   .top-bar .logo img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
   .branding-grid { display: grid; gap: 12px; }
@@ -1578,6 +1590,72 @@
   .settings-note { color: var(--text-mid); font-size: 11px; line-height: 1.5; margin-top: 8px; }
   @media (max-width: 520px) { .branding-grid.cols-2 { grid-template-columns: 1fr; } .brand-preview-body { align-items: stretch; flex-direction: column; } }
 
+
+  /* Bench Mode v0.7.0 */
+  .bench-shell { display: grid; gap: 12px; margin-bottom: 14px; }
+  .bench-hero { display: grid; gap: 12px; padding: 16px; border-radius: 14px; border: 1px solid rgba(125,211,216,.28); background: linear-gradient(135deg, rgba(125,211,216,.16), rgba(244,207,87,.08)); }
+  .bench-hero h2 { margin: 4px 0 6px; font-family: 'Bebas Neue', sans-serif; font-size: 34px; line-height: .95; letter-spacing: 1.2px; }
+  .bench-hero p { color: var(--text-mid); font-size: 11px; line-height: 1.55; }
+  .bench-status-card { border: 1px solid var(--border); background: rgba(0,0,0,.32); border-radius: 12px; padding: 12px; display: grid; gap: 5px; }
+  .bench-status-card strong { color: var(--text); font-family: 'Oswald', sans-serif; font-size: 16px; }
+  .bench-status-card span, .bench-status-card small { color: var(--text-dim); font-size: 10px; line-height: 1.4; text-transform: uppercase; letter-spacing: .8px; }
+  .bench-status-card.good { border-color: rgba(74,217,168,.42); box-shadow: inset 0 0 0 1px rgba(74,217,168,.08); }
+  .bench-status-card.warn { border-color: rgba(244,207,87,.42); }
+  .bench-metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+  .bench-metrics div { border: 1px solid var(--border); background: var(--panel-hi); border-radius: 10px; padding: 10px 6px; text-align: center; }
+  .bench-metrics strong { display: block; color: var(--teal); font-family: 'Bebas Neue', sans-serif; font-size: 28px; line-height: 1; }
+  .bench-metrics span { display: block; margin-top: 4px; color: var(--text-dim); font-size: 8px; text-transform: uppercase; letter-spacing: .75px; }
+  .bench-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .bench-presets { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 7px; }
+  .bench-presets button { border: 1px solid var(--border); background: var(--panel-hi); color: var(--text); border-radius: 9px; min-height: 50px; padding: 8px 4px; font-size: 9px; text-transform: uppercase; letter-spacing: .8px; cursor: pointer; }
+  .bench-presets button span { display: block; font-family: 'Bebas Neue', sans-serif; color: var(--teal); font-size: 20px; line-height: 1; margin-bottom: 3px; }
+  .bench-presets button:active { background: var(--teal); color: var(--bg); }
+  .bench-presets button:active span { color: var(--bg); }
+  .bench-settings-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .bench-settings-row label { display: flex; gap: 8px; align-items: center; border: 1px solid var(--border); background: var(--panel); padding: 8px 10px; border-radius: 9px; color: var(--text-mid); font-size: 10px; line-height: 1.25; }
+  .bench-settings-row input { width: auto; }
+  .bench-last-recap { color: var(--text-mid); font-size: 10px; line-height: 1.45; border: 1px solid var(--border); background: var(--panel); padding: 9px 10px; border-radius: 9px; }
+  .bench-mode-overlay { background: #000; color: #fff; }
+  .bench-mode-overlay.rink-contrast { --text: #fff; --text-mid: #f7f7f7; --text-dim: #d7d7d7; --panel: #050505; --panel-hi: #111; --border: #555; --teal: #9bf6ff; }
+  .bench-mode-overlay .oi-top { min-height: 62px; background: #050505; }
+  .bench-mode-overlay .oi-progress { width: 100%; display: flex; justify-content: space-between; gap: 12px; align-items: center; font-size: 16px; }
+  .bench-online { border: 1px solid currentColor; border-radius: 999px; padding: 5px 8px; font-family: 'JetBrains Mono', monospace; font-size: 10px; }
+  .bench-online.online { color: var(--win); }
+  .bench-online.offline { color: #f4cf57; }
+  .bench-run-shell { display: grid; gap: 12px; padding-bottom: 6px; }
+  .bench-run-topline { display: flex; justify-content: space-between; gap: 12px; color: var(--teal); font-size: 11px; text-transform: uppercase; letter-spacing: 1.4px; }
+  .bench-run-title { margin: 0; font-family: 'Bebas Neue', sans-serif; color: #fff; font-size: 48px; line-height: .92; letter-spacing: 1.2px; }
+  .bench-big-text .bench-run-title { font-size: clamp(46px, 10vw, 74px); }
+  .bench-run-label { color: var(--text-dim); text-transform: uppercase; letter-spacing: 1.2px; font-size: 11px; }
+  .bench-adjust-note { border-left: 4px solid #f4cf57; color: #fde68a; background: rgba(244,207,87,.12); padding: 9px 10px; border-radius: 8px; font-size: 11px; line-height: 1.4; }
+  .bench-timer { display: grid; grid-template-columns: 64px 1fr 64px 82px; gap: 8px; align-items: stretch; background: #070707; border: 1px solid var(--border); border-left: 5px solid var(--teal); border-radius: 12px; padding: 8px; }
+  .bench-timer.done { border-left-color: var(--loss); animation: pulse-warn 1s infinite; }
+  .bench-timer div { display: grid; place-items: center; color: var(--teal); font-family: 'Bebas Neue', sans-serif; font-size: 60px; line-height: 1; }
+  .bench-timer button, .bench-live-actions button, .bench-play, .bench-sequence button { border: 1px solid var(--border); background: #141414; color: #fff; border-radius: 10px; min-height: 56px; padding: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .9px; cursor: pointer; }
+  .bench-timer button:active, .bench-live-actions button:active, .bench-play:active, .bench-sequence button:active { background: var(--teal); color: #001114; }
+  .bench-live-actions { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+  .bench-diagram-wrap { display: grid; justify-items: center; gap: 8px; }
+  .bench-diagram { width: min(100%, 360px); aspect-ratio: 3/5; background: #fff; border: 2px solid #fff; border-radius: 10px; }
+  .bench-play { width: min(100%, 360px); color: var(--teal); }
+  .bench-sequence { display: grid; gap: 7px; }
+  .bench-sequence button { display: grid; grid-template-columns: 28px 1fr; text-align: left; align-items: center; min-height: 46px; font-size: 11px; line-height: 1.35; text-transform: none; letter-spacing: 0; }
+  .bench-sequence b { color: var(--teal); font-family: 'Bebas Neue', sans-serif; font-size: 24px; line-height: 1; }
+  .bench-card-grid { display: grid; gap: 10px; }
+  .bench-card, .bench-mini-card, .bench-note-box { border: 1px solid var(--border); background: #080808; border-radius: 12px; padding: 12px; }
+  .bench-card strong, .bench-mini-card strong, .bench-note-box span { display: block; color: var(--teal); font-size: 10px; text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 7px; }
+  .bench-card p { margin: 0; color: var(--text-mid); font-size: 15px; line-height: 1.45; }
+  .bench-point-list { display: grid; gap: 7px; }
+  .bench-point-list div { color: #fff; font-size: 15px; line-height: 1.35; padding-left: 18px; position: relative; }
+  .bench-point-list div:before { content: '▸'; position: absolute; left: 0; color: var(--teal); }
+  .bench-mini-card span { display: block; color: var(--text-mid); font-size: 13px; line-height: 1.35; margin-top: 4px; }
+  .bench-note-box textarea, .bench-complete textarea { background: #050505; border: 1px solid var(--border); color: #fff; width: 100%; min-height: 96px; font-size: 16px; border-radius: 10px; padding: 12px; }
+  .bench-complete { display: grid; gap: 12px; text-align: center; padding: 20px 0 28px; }
+  .bench-complete .big-check { font-family: 'Bebas Neue', sans-serif; font-size: 82px; color: var(--teal); line-height: 1; }
+  .bench-complete h2 { font-family: 'Bebas Neue', sans-serif; font-size: 44px; letter-spacing: 1px; margin: 0; }
+  .bench-complete p { color: var(--text-mid); font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
+  .bench-complete-actions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  @media (min-width: 780px) { .bench-hero { grid-template-columns: 1fr 270px; align-items: center; } .bench-actions { grid-template-columns: repeat(4, minmax(0, 1fr)); } .bench-settings-row { grid-template-columns: repeat(5, minmax(0, 1fr)); } .bench-card-grid { grid-template-columns: 1.2fr 1fr; } }
+  @media (max-width: 560px) { .bench-presets { grid-template-columns: repeat(2, minmax(0, 1fr)); } .bench-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); } .bench-live-actions { grid-template-columns: repeat(2, minmax(0, 1fr)); } .bench-timer { grid-template-columns: 54px 1fr 54px; } .bench-timer button:last-child { grid-column: 1 / -1; } .bench-timer div { font-size: 52px; } .bench-complete-actions { grid-template-columns: 1fr; } }
 
   /* Team Hub v1 */
   .teamhub-shell { display: grid; gap: 14px; margin: 16px 0; }
@@ -1695,6 +1773,16 @@
       <div class="tile-icon">✱</div>
       <div class="tile-label">Practice</div>
       <div class="tile-sub"><span id="tilePlanCount">0</span> plans · <span id="tileDrillCount">0</span> drills</div>
+    </div>
+    <div class="tile" onclick="navTo('practice'); setTimeout(() => document.getElementById('benchModePanel')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100)">
+      <div class="tile-icon">▶</div>
+      <div class="tile-label">Bench Mode</div>
+      <div class="tile-sub">Offline rink workflow</div>
+    </div>
+    <div class="tile" onclick="navTo('whiteboard')">
+      <div class="tile-icon">✎</div>
+      <div class="tile-label">Whiteboard</div>
+      <div class="tile-sub">Tablet draw board</div>
     </div>
     <div class="tile" onclick="navTo('gameday')">
       <div class="tile-icon">◉</div>
@@ -1927,6 +2015,7 @@
     <div id="aiPracticeStatus" style="font-size: 10px; color: var(--text-dim); margin-top: 8px; line-height: 1.45">AI uses your current drill library and prefers animated drills when they fit the intent.</div>
   </div>
 
+  <div id="benchModeMount"></div>
 
   <div class="panel">
     <div class="panel-title"><span>Practice Plan</span></div>
@@ -1971,13 +2060,15 @@
       <div class="btn-row" style="margin: 0">
         <button class="btn small" onclick="clearCurrentPlan()">Clear</button>
         <button class="btn small" onclick="downloadCurrentPracticePdf()">PDF</button>
+        <button class="btn small" onclick="window.BenchBossWhiteboard?.openBlank({ source: 'practice-plan', rink: 'full' })">Board</button>
+        <button class="btn small" onclick="window.BenchBossWhiteboard?.openFromCurrentDrill(state)">Freeze + Annotate</button>
         <button class="btn small" onclick="completeCurrentPractice()">Complete</button>
         <button class="btn small primary" onclick="shareCurrentPracticePlan()">Share</button>
         <button class="btn small primary" onclick="saveNamedPlan()">Save</button>
       </div>
     </div>
     <div id="currentPlanBlocks"></div>
-    <button class="btn primary full" onclick="startOnIceMode()" style="margin-top: 10px; font-size: 13px; padding: 14px" id="runPracticeBtn">▶ RUN PRACTICE (ON-ICE MODE)</button>
+    <button class="btn primary full" onclick="startOnIceMode()" style="margin-top: 10px; font-size: 13px; padding: 14px" id="runPracticeBtn">▶ ENTER BENCH MODE</button>
   </div>
 
   <div class="panel">
@@ -2345,6 +2436,11 @@
 </div>
 
 
+<!-- ============ WHITEBOARD ============ -->
+<div class="page" id="page-whiteboard">
+  <div id="whiteboardMount"></div>
+</div>
+
 <!-- ============ SETTINGS ============ -->
 <div class="page" id="page-settings">
   <div id="teamManagerProductionMount"></div>
@@ -2412,6 +2508,8 @@
 <div class="modal-overlay" id="actionSheetOverlay" style="background: rgba(0,0,0,0.5)" onclick="if(event.target === this) closeActionSheet()">
   <div class="action-sheet" id="actionSheet">
     <div class="sheet-title">Settings & Data</div>
+    <button class="sheet-btn" onclick="window.open('./coach.html','_blank')">📱 Coach Tablet App</button>
+    <button class="sheet-btn" onclick="navTo('whiteboard'); closeActionSheet()">✎ Whiteboard / Draw Board</button>
     <button class="sheet-btn" onclick="navTo('settings'); closeActionSheet()">Team Branding & Production</button>
     <button class="sheet-btn" onclick="window.open('./parent.html','_blank')">👨‍👩‍👧 Parent Portal</button>
     <button class="sheet-btn" onclick="openCloudSettings()">☁️ Cloud Sync</button>
@@ -2462,6 +2560,10 @@
     <span class="nav-icon">◉</span>
     <span>Game</span>
   </button>
+  <button data-nav="whiteboard" onclick="navTo('whiteboard')">
+    <span class="nav-icon">✎</span>
+    <span>Board</span>
+  </button>
   <button data-nav="weekly" onclick="navTo('weekly')">
     <span class="nav-icon">✉</span>
     <span>Weekly</span>
@@ -2495,6 +2597,7 @@ try {
 <script type="module" src="./src/features/practice/drill-media-tabs.js"></script>
 <script type="module" src="./src/features/practice/animated-drill-viewer.js"></script>
 <script type="module" src="./src/features/practice/ai-practice-builder.js"></script>
+<script src="./src/features/bench/bench-mode.js"></script>
 <script type="module" src="./src/features/sharing/practice-sharing.js"></script>
 <script type="module" src="./src/features/marketplace/practice-marketplace.js"></script>
 <script type="module" src="./src/features/team-hub/team-hub.js"></script>
@@ -2506,6 +2609,7 @@ try {
 <script src="./src/features/roster/roster.js"></script>
 <script src="./src/features/practice/practice-ui.js"></script>
 <script src="./src/features/game-day/game-day.js"></script>
+<script src="./src/features/whiteboard/coach-whiteboard.js"></script>
 <script>
 // ============================================
 // CONSTANTS
@@ -2683,7 +2787,7 @@ function seedSampleData() {
 // ============================================
 const PAGE_TITLES = {
   dash: 'Dashboard', roster: 'Roster', lines: 'Lineups', stats: 'Stats',
-  games: 'Games', practice: 'Practice', gameday: 'Game Day', weekly: 'Weekly Update', settings: 'Team Branding',
+  games: 'Games', practice: 'Practice', gameday: 'Game Day', whiteboard: 'Whiteboard', weekly: 'Weekly Update', settings: 'Team Branding',
 };
 
 function navTo(page) {
@@ -2715,6 +2819,7 @@ function navTo(page) {
     renderDrillList();
     renderSavedPlans();
     renderSeasonPlanner();
+    if (window.BenchBossBench?.hydrateBenchWorkflowPanel) window.BenchBossBench.hydrateBenchWorkflowPanel(state);
     // Sync theme button state
     const theme = state.ui.genTheme || 'mixed';
     const progression = state.ui.genProgression || 'balanced';
@@ -2724,6 +2829,7 @@ function navTo(page) {
     const progressionSelect = document.getElementById('genProgression');
     if (progressionSelect) progressionSelect.value = progression;
   }
+  if (page === 'whiteboard' && window.BenchBossWhiteboard?.renderWhiteboardApp) window.BenchBossWhiteboard.renderWhiteboardApp('whiteboardMount', { standalone: false });
   if (page === 'gameday') renderGameDayPacket();
   if (page === 'weekly') {
     populateRosterDatalist();
@@ -3114,7 +3220,11 @@ async function bootApp() {
   if (window.BearDenHQ?.ensureTeamHubState) window.BearDenHQ.ensureTeamHubState(state);
   if (window.BenchBossBranding?.ensureTeamBrandingState) window.BenchBossBranding.ensureTeamBrandingState(state);
   if (window.BenchBossBranding?.applyTeamBranding) window.BenchBossBranding.applyTeamBranding(state);
+  if (window.BenchBossBench?.ensureBenchState) window.BenchBossBench.ensureBenchState(state);
+  const hashPageMap = { '#bench': 'practice', '#practice': 'practice', '#lines': 'lines', '#stats': 'stats', '#whiteboard': 'whiteboard', '#board': 'whiteboard' };
+  if (hashPageMap[window.location.hash]) state.ui.currentPage = hashPageMap[window.location.hash];
   navTo(state.ui.currentPage || 'dash');
+  if (window.location.hash === "#bench") setTimeout(() => document.getElementById('benchModePanel')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 250);
 }
 
 if ('serviceWorker' in navigator) {

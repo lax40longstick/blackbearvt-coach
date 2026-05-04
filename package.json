@@ -1,6 +1,6 @@
 {
   "name": "benchboss-coach-hq",
-  "version": "0.6.0",
+  "version": "0.11.0",
   "private": true,
   "type": "module",
   "engines": {
@@ -11,12 +11,15 @@
     "db:test": "node scripts/test-db.js",
     "dev": "npx --yes http-server -p 3000 -c-1 .",
     "build": "node scripts/generate-runtime-config.js",
-    "test": "node tests/smoke.mjs && node tests/app-state.unit.mjs && node tests/classic-scripts.load.mjs && node tests/ai-handler.behavior.mjs && node tests/marketplace-checkout.behavior.mjs",
+    "test": "node tests/smoke.mjs && node tests/bench-mode.static.mjs && node tests/whiteboard.static.mjs && node tests/marketability-lift.static.mjs && node tests/app-state.unit.mjs && node tests/classic-scripts.load.mjs && node tests/ai-handler.behavior.mjs && node tests/marketplace-checkout.behavior.mjs",
     "test:smoke": "node tests/smoke.mjs",
     "test:ai": "node tests/ai-handler.behavior.mjs",
     "test:state": "node tests/app-state.unit.mjs",
     "test:marketplace": "node tests/marketplace-checkout.behavior.mjs",
-    "test:load": "node tests/classic-scripts.load.mjs"
+    "test:load": "node tests/classic-scripts.load.mjs",
+    "test:bench": "node tests/bench-mode.static.mjs",
+    "test:marketability": "node tests/marketability-lift.static.mjs",
+    "test:whiteboard": "node tests/whiteboard.static.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.45.4",

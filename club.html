@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="BenchBoss Coach HQ Club Director Dashboard — multi-team coverage, activity, and template push for hockey associations.">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./site.css">
+<title>Director Dashboard | BenchBoss Coach HQ</title>
+<script src="./runtime-config.js"></script>
+<style>
+  /* Director-specific minimal styles, layered on top of site.css. */
+  .director-teams-table tr { transition: background-color 120ms ease; }
+  .director-teams-table tbody tr:hover { background: rgba(125, 211, 216, 0.05); }
+  .pill[data-tone="good"] { background: rgba(80, 200, 120, 0.15); border-color: rgba(80, 200, 120, 0.4); color: #62d499; }
+  .pill[data-tone="warn"] { background: rgba(245, 158, 11, 0.15); border-color: rgba(245, 158, 11, 0.4); color: #f5a83b; }
+  .pill[data-tone="bad"] { background: rgba(239, 68, 68, 0.15); border-color: rgba(239, 68, 68, 0.4); color: #ef6b6b; }
+</style>
+</head>
+<body data-page="club-director">
+  <div class="site-shell">
+    <header class="site-header">
+      <a class="brand" href="./index.html">
+        <span class="brand-mark">BB</span>
+        <span><strong>BenchBoss Coach HQ</strong><small>Director workspace</small></span>
+      </a>
+      <nav class="site-nav">
+        <a href="./app.html">Coach app</a>
+        <a href="./pricing.html">Pricing</a>
+        <a href="./account.html">Account</a>
+      </nav>
+    </header>
+
+    <main data-club-root>
+      <section class="page-hero">
+        <div>
+          <p class="eyebrow">Loading</p>
+          <h1>Loading the director dashboard…</h1>
+          <p>If this takes more than a few seconds, the Supabase connection may not be configured. Open the browser console for details.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div><strong>BenchBoss Coach HQ</strong><p>Practice planning and team operations for serious youth hockey coaches.</p></div>
+      <div class="footer-links">
+        <a href="./privacy.html">Privacy</a>
+        <a href="./terms.html">Terms</a>
+      </div>
+    </footer>
+  </div>
+  <script type="module">
+    import { initClubDirectorDashboard } from './src/features/club/director-dashboard.js';
+    initClubDirectorDashboard().catch(err => {
+      console.error('Director dashboard failed to init', err);
+      const root = document.querySelector('[data-club-root]');
+      if (root) root.innerHTML = `<section class="page-hero"><div><p class="eyebrow">Error</p><h1>Could not load director dashboard.</h1><p>${String(err?.message || err)}</p><div class="hero-actions"><a href="./app.html" class="button secondary">Back to app</a></div></div></section>`;
+    });
+  </script>
+</body>
+</html>
