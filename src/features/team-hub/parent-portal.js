@@ -4,6 +4,7 @@
 import { requireAuthenticatedPage } from '../auth/session.js';
 import { loadProductionTeamHubData, getProductionTeamContext, acceptTeamInvite } from './production-team-store.js';
 import { initMonitoring } from '../../lib/monitoring.js';
+import { initAnalytics, trackEvent } from '../../lib/analytics.js';
 
 function esc(value) { return String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
 function asArray(value) { return Array.isArray(value) ? value : []; }
@@ -55,6 +56,7 @@ function applyBrand(team) {
 
 async function init() {
   initMonitoring();
+  initAnalytics();
   await requireAuthenticatedPage();
   const inviteToken = new URLSearchParams(window.location.search).get('invite');
   if (inviteToken) {
@@ -71,6 +73,13 @@ async function init() {
     const chatUrl = sourceUrl(data, 'sportsengine', 'chat');
     const rosterUrl = sourceUrl(data, 'sportsengine', 'roster');
     const scheduleUrl = sourceUrl(data, 'sportsengine', 'schedule');
+    const publishedRecaps = asArray(data.practices).filter(p => p.status === 'published' && p.data?.recap);
+    trackEvent('parent_recap_viewed', {
+      teamId: ctx.team?.id || null,
+      recaps: publishedRecaps.length,
+      practices: asArray(data.practices).filter(p => p.status === 'published').length,
+      hasLineup: Boolean(asArray(data.lineups).find(l => l.status === 'published')),
+    });
     document.getElementById('portalTeamName').textContent = ctx.team.name || 'Team Portal';
     document.getElementById('portalOrgName').textContent = ctx.organization?.name || 'BenchBoss';
     mount.innerHTML = `

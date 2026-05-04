@@ -112,6 +112,8 @@ async function downloadCurrentPracticePdf() {
     });
   }
   renderPlanBudget();
+  renderBenchReadiness();
+  window.BenchBossBench?.hydrateBenchWorkflowPanel?.(state);
 }
 
 let planDiagramPlayer = null;
@@ -162,6 +164,8 @@ function updateBlockMinutes(idx, val) {
   state.currentPlan.blocks[idx].minutes = parseInt(val) || 0;
   save();
   renderPlanBudget();
+  window.BenchBossBenchMode?.hydrateBenchPrepPanel?.(state);
+  window.BenchBossBench?.hydrateBenchWorkflowPanel?.(state);
 }
 
 function removeBlock(idx) {
@@ -703,22 +707,46 @@ let oiTimerInterval = null;
 let oiDiagramPlayer = null;
 
 function startOnIceMode() {
+  if (window.BenchBossBench?.startBenchModeUI) {
+    window.BenchBossBench.startBenchModeUI();
+    return;
+  }
+  if ((!state.currentPlan.blocks || state.currentPlan.blocks.length === 0) && window.BenchBossBench?.hasOfflinePractice?.()) {
+    try {
+      window.BenchBossBench.loadOfflinePracticeIntoState(state);
+      save();
+      toast('Loaded preloaded offline practice');
+    } catch (error) {
+      toast(error.message || 'Offline practice could not be loaded');
+    }
+  }
   if (!state.currentPlan.blocks || state.currentPlan.blocks.length === 0) {
     toast('Add drills to the plan first');
     return;
   }
+  window.BenchBossBench?.ensureBenchState?.(state);
   state.ui.oiIndex = 0;
   state.ui.oiPlan = JSON.parse(JSON.stringify(state.currentPlan));
   state.ui.oiTimerRunning = false;
   state.ui.oiTimerRemaining = 0;
+  state.ui.oiStartedAt = new Date().toISOString();
   renderOnIceMode();
-  document.getElementById('oiOverlay').classList.add('show');
+  const overlay = document.getElementById('oiOverlay');
+  overlay.classList.add('show');
+  overlay.classList.toggle('rink-contrast', state.benchMode?.rinkContrast !== false);
+  document.body.classList.add('bench-active');
+  window.BearDenHQ?.trackEvent?.('bench_mode_started', { blocks: state.ui.oiPlan.blocks.length, offlineReady: Boolean(state.benchMode?.offlineReady) });
   // Request wake lock if supported
   requestWakeLock();
 }
 
 function closeOnIceMode() {
+  if (window.BenchBossBench?.closeBenchModeUI && document.getElementById('oiOverlay')?.classList.contains('bench-mode-overlay')) {
+    window.BenchBossBench.closeBenchModeUI();
+    return;
+  }
   document.getElementById('oiOverlay').classList.remove('show');
+  document.body.classList.remove('bench-active');
   if (oiTimerInterval) { clearInterval(oiTimerInterval); oiTimerInterval = null; }
   if (oiDiagramPlayer) { oiDiagramPlayer.stop(); oiDiagramPlayer = null; }
   state.ui.oiTimerRunning = false;
@@ -748,12 +776,27 @@ function renderOnIceMode() {
   if (idx >= total) {
     document.getElementById('oiProgress').textContent = 'PRACTICE COMPLETE';
     document.getElementById('oiProgressFill').style.width = '100%';
+    const adjustments = state.benchMode?.adjustments?.length || 0;
+    const notes = state.benchMode?.quickNotes?.length || 0;
     document.getElementById('oiBody').innerHTML = `
       <div class="oi-done">
         <div class="big-check">◆</div>
         <div class="msg">GOOD PRACTICE</div>
-        <div class="sub">Go Bears · ${plan.blocks.length} drills · ${plan.blocks.reduce((s, b) => s + b.minutes, 0)} min</div>
-        <button class="btn primary" onclick="closeOnIceMode()">Close</button>
+        <div class="sub">${escapeHtml(plan.title || 'Practice')} · ${plan.blocks.length} drills · ${plan.blocks.reduce((s, b) => s + b.minutes, 0)} min</div>
+        <div class="oi-recap-card">
+          <div class="oi-section-label">Quick Recap</div>
+          <textarea id="oiRecapNotes" class="oi-recap-textarea" placeholder="What worked? What should be repeated or changed next practice?"></textarea>
+          <div class="oi-recap-grid">
+            <label><span>Rating</span><select id="oiRecapRating"><option value="5">5 - Great</option><option value="4">4 - Good</option><option value="3">3 - Mixed</option><option value="2">2 - Rough</option><option value="1">1 - Rebuild</option></select></label>
+            <label><span>Next focus</span><input id="oiRecapFocus" placeholder="e.g. breakout support"></label>
+          </div>
+          <div class="oi-subtle">${adjustments} live adjustment${adjustments === 1 ? '' : 's'} · ${notes} bench note${notes === 1 ? '' : 's'}</div>
+        </div>
+        <div class="oi-done-actions">
+          <button class="btn primary" onclick="oiSaveRecap()">Save Recap</button>
+          <button class="btn" onclick="oiCopyLastRecap()">Copy Recap</button>
+          <button class="btn" onclick="closeOnIceMode()">Close</button>
+        </div>
       </div>
     `;
     document.getElementById('oiNav').style.display = 'none';
@@ -770,9 +813,13 @@ function renderOnIceMode() {
 
   const category = CATEGORIES.find(c => c.id === drill.category);
   const pointsList = (drill.points || '').split('\n').filter(p => p.trim());
+  const benchStatus = window.BenchBossBench?.getOfflineStatus?.(state) || { ready: false, online: navigator.onLine !== false };
+  const lastAdjustment = state.benchMode?.lastAdjustment;
 
   document.getElementById('oiProgress').textContent = `DRILL ${idx + 1} / ${total}`;
   document.getElementById('oiProgressFill').style.width = `${((idx) / total) * 100}%`;
+  const oiPlanTitle = document.getElementById('oiPlanTitle');
+  if (oiPlanTitle) oiPlanTitle.textContent = `${plan.title || 'Bench Mode'} · ${benchStatus.ready ? 'Offline ready' : 'Not preloaded'} · ${benchStatus.online ? 'Online' : 'Offline'}`;
 
   // Reset timer for new drill if not running
   if (!state.ui.oiTimerRunning) {
@@ -780,20 +827,37 @@ function renderOnIceMode() {
   }
 
   document.getElementById('oiBody').innerHTML = `
+    <div class="oi-rink-status">
+      <span class="${benchStatus.online ? 'ok' : 'warn'}">${benchStatus.online ? 'Online' : 'Offline'}</span>
+      <span class="${benchStatus.ready ? 'ok' : 'warn'}">${benchStatus.ready ? 'Preloaded' : 'Not preloaded'}</span>
+      <span>${escapeHtml(drill.iceUsage || drill.diagram?.rink || 'rink ready')}</span>
+    </div>
     <div class="oi-category">${escapeHtml(category?.label || '')} · ${block.minutes} min</div>
     <div class="oi-title">${escapeHtml(drill.name)}</div>
     ${block.label ? `<div style="font-size: 11px; color: var(--text-dim); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px">${escapeHtml(block.label)}</div>` : ''}
+    ${lastAdjustment?.changes?.length ? `<div class="oi-adjustment-note">Last adjustment: ${escapeHtml(lastAdjustment.label)} · ${lastAdjustment.changes.length} change${lastAdjustment.changes.length === 1 ? '' : 's'}</div>` : ''}
     <div class="oi-timer-display" id="oiTimerDisplay">
       <div class="oi-timer-time" id="oiTimerTime">${formatMMSS(state.ui.oiTimerRemaining)}</div>
       <div class="oi-timer-controls">
         <button class="oi-tbtn" onclick="oiResetTimer()">Reset</button>
         <button class="oi-tbtn" onclick="oiAddMinute()">+1:00</button>
+        <button class="oi-tbtn" onclick="oiAddTwoMinutes()">+2:00</button>
       </div>
+    </div>
+    <div class="oi-bench-tools">
+      <button onclick="oiSwapCurrentDrill()">Swap Drill</button>
+      <button onclick="oiApplyPreset('half_ice')">Half Ice</button>
+      <button onclick="oiApplyPreset('no_goalie')">No Goalies</button>
+      <button onclick="oiApplyPreset('low_numbers')">Low Numbers</button>
+      <button onclick="oiApplyPreset('compete_more')">Compete More</button>
+      <button onclick="oiApplyPreset('simplify')">Simplify</button>
+      <button onclick="oiApplyPreset('make_harder')">Harder</button>
+      <button onclick="oiQuickNotePrompt()">+ Note</button>
     </div>
     ${drill.diagram ? `
       <div class="oi-section-label">Diagram</div>
-      <canvas id="oiDiagramCanvas" style="width: 100%; max-width: 320px; aspect-ratio: 3 / 5; background: #fff; border-radius: 4px; border: 1px solid var(--border); margin-bottom: 12px"></canvas>
-      <div style="margin-bottom: 14px"><button class="oi-tbtn" id="oiPlayDiagramBtn">▶ Play Diagram</button></div>
+      <canvas id="oiDiagramCanvas" class="oi-diagram-canvas"></canvas>
+      <div class="oi-diagram-actions"><button class="oi-tbtn primary" id="oiPlayDiagramBtn">▶ Play Diagram</button><button class="oi-tbtn" onclick="oiToggleRinkMode()">${state.benchMode?.rinkContrast === false ? 'Rink Bright' : 'Dim Mode'}</button></div>
     ` : ''}
     ${block.objective ? `<div class="oi-section-label">Objective</div><div class="oi-desc">${escapeHtml(block.objective)}</div>` : ''}
     ${drill.description ? `
@@ -927,6 +991,139 @@ function oiAddMinute() {
   if (dispEl) dispEl.classList.remove('done');
   const timeEl = document.getElementById('oiTimerTime');
   if (timeEl) timeEl.textContent = formatMMSS(state.ui.oiTimerRemaining);
+}
+
+function oiAddTwoMinutes() {
+  oiAddMinute();
+  oiAddMinute();
+}
+
+function oiApplyPreset(preset) {
+  if (!window.BenchBossBench?.applyPresetToBenchPlan) { toast('Bench adjustments not ready'); return; }
+  const result = window.BenchBossBench.applyPresetToBenchPlan(state, preset, false);
+  save();
+  if (result.changes.length === 0) toast('Current plan already fits that adjustment');
+  else toast(`${result.changes.length} drill${result.changes.length === 1 ? '' : 's'} adjusted`);
+  renderOnIceMode();
+}
+
+function oiSwapCurrentDrill() {
+  if (!window.BenchBossBench?.applyPresetToBenchPlan) { toast('Bench adjustments not ready'); return; }
+  const result = window.BenchBossBench.applyPresetToBenchPlan(state, 'swap_current', true);
+  save();
+  if (result.changes.length === 0) toast('No strong replacement found');
+  else toast(`Swapped to ${result.changes[0].to}`);
+  renderOnIceMode();
+}
+
+function oiQuickNotePrompt() {
+  const block = state.ui.oiPlan?.blocks?.[state.ui.oiIndex];
+  const note = prompt('Bench note for this drill:', '');
+  if (!note) return;
+  window.BenchBossBench?.addQuickNote?.(state, note, block);
+  save();
+  toast('Bench note saved');
+}
+
+function oiToggleRinkMode() {
+  window.BenchBossBench?.ensureBenchState?.(state);
+  state.benchMode.rinkContrast = state.benchMode.rinkContrast === false;
+  document.getElementById('oiOverlay')?.classList.toggle('rink-contrast', state.benchMode.rinkContrast !== false);
+  save();
+  renderOnIceMode();
+}
+
+function oiSaveRecap() {
+  if (!window.BenchBossBench?.saveBenchRecap) { toast('Bench recap not ready'); return; }
+  const recap = window.BenchBossBench.saveBenchRecap(state, {
+    notes: document.getElementById('oiRecapNotes')?.value || '',
+    rating: document.getElementById('oiRecapRating')?.value || '',
+    focus: document.getElementById('oiRecapFocus')?.value || '',
+  });
+  state.currentPlan = JSON.parse(JSON.stringify(state.ui.oiPlan || state.currentPlan));
+  if (window.BearDenHQ?.completePracticePlan) {
+    try { window.BearDenHQ.completePracticePlan(state.currentPlan, state); } catch (error) { console.warn('Completion tracking failed:', error); }
+  }
+  save();
+  toast('Practice recap saved');
+  window.BearDenHQ?.trackEvent?.('bench_recap_saved', { rating: recap.rating, notes: Boolean(recap.notes) });
+}
+
+async function oiCopyLastRecap() {
+  const recap = state.benchMode?.lastRecap;
+  if (!recap) { toast('Save recap first'); return; }
+  try {
+    await navigator.clipboard.writeText(recap.shareText || window.BenchBossBench.buildRecapText(recap));
+    toast('Recap copied');
+  } catch (error) {
+    toast('Copy failed');
+  }
+}
+
+async function preloadCurrentPracticeOffline() {
+  if (!window.BenchBossBench?.preloadCurrentPracticeForOffline) { toast('Offline preload not ready'); return; }
+  const statusEl = document.getElementById('benchReadiness');
+  if (statusEl) statusEl.innerHTML = '<strong>Preloading rink pack…</strong><span>Caching current practice, drill animations, and app shell.</span>';
+  try {
+    const result = await window.BenchBossBench.preloadCurrentPracticeForOffline(state);
+    save();
+    renderBenchReadiness();
+    toast(`Offline pack ready: ${result.bundle.drills.length} drills`);
+    window.BearDenHQ?.trackEvent?.('bench_offline_preloaded', { drills: result.bundle.drills.length, cached: result.cacheResult.cached });
+  } catch (error) {
+    renderBenchReadiness(error.message || 'Offline preload failed', true);
+    toast(error.message || 'Offline preload failed');
+  }
+}
+
+function loadPreloadedOfflinePractice() {
+  if (!window.BenchBossBench?.loadOfflinePracticeIntoState) { toast('Offline load not ready'); return; }
+  try {
+    const bundle = window.BenchBossBench.loadOfflinePracticeIntoState(state);
+    save();
+    renderCurrentPlan();
+    toast(`Loaded offline practice: ${bundle.plan.title || 'Practice'}`);
+  } catch (error) {
+    toast(error.message || 'No offline practice found');
+  }
+}
+
+function clearPreloadedOfflinePractice() {
+  if (!window.BenchBossBench?.clearOfflinePractice) return;
+  if (!confirm('Clear the preloaded rink practice from this device?')) return;
+  window.BenchBossBench.clearOfflinePractice(state);
+  save();
+  renderBenchReadiness();
+  toast('Offline rink pack cleared');
+}
+
+function applyBenchPresetToCurrentPlan(preset) {
+  if (!window.BenchBossBench?.applyBenchPreset) { toast('Bench adjustments not ready'); return; }
+  const result = window.BenchBossBench.applyBenchPreset(state.currentPlan, state, preset, {});
+  state.currentPlan = result.plan;
+  if (window.BenchBossBench.ensureBenchState) window.BenchBossBench.ensureBenchState(state);
+  state.benchMode.lastAdjustment = { at: new Date().toISOString(), preset, label: window.BenchBossBench.PRESET_LABELS[preset] || preset, changes: result.changes };
+  state.benchMode.adjustments.unshift(state.benchMode.lastAdjustment);
+  save();
+  renderCurrentPlan();
+  toast(result.changes.length ? `${result.changes.length} drills adjusted` : 'Plan already fits that preset');
+}
+
+function renderBenchReadiness(message = null, isError = false) {
+  const el = document.getElementById('benchReadiness');
+  if (!el) return;
+  const status = window.BenchBossBench?.getOfflineStatus?.(state) || { ready: false, online: navigator.onLine !== false };
+  const saved = status.preloadedAt ? new Date(status.preloadedAt).toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) : 'Not preloaded';
+  const title = status.planTitle || 'No rink pack on this device';
+  const cls = isError ? 'danger' : status.ready ? 'ready' : 'warn';
+  el.className = `bench-readiness ${cls}`;
+  el.innerHTML = `
+    <div>
+      <strong>${escapeHtml(message || (status.ready ? 'Rink pack ready' : 'Rink pack not ready'))}</strong>
+      <span>${escapeHtml(title)} · ${status.blockCount || 0} blocks · ${status.drillCount || 0} drills · ${saved}</span>
+    </div>
+    <div class="bench-status-pill ${status.online ? 'online' : 'offline'}">${status.online ? 'Online' : 'Offline'}</div>
+  `;
 }
 
 function updateTimerButton() {

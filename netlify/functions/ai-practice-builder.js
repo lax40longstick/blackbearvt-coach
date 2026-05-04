@@ -10,10 +10,10 @@
 import { createClient } from "@supabase/supabase-js";
 
 const OPENAI_CHAT_URL = "https://api.openai.com/v1/chat/completions";
-const MAX_DRILLS_SENT_TO_MODEL = 120;
+const MAX_DRILLS_SENT_TO_MODEL = 180;
 const RATE_WINDOW_MS = 60 * 1000;
 const RATE_LIMIT_PER_WINDOW = Number(process.env.AI_RATE_LIMIT_PER_MINUTE || 8);
-const PLAN_LIMITS = { starter: 5, team: 25, club: 120 };
+const PLAN_LIMITS = { free: 0, starter: 5, team: 25, club: 120 };
 const rateBuckets = new Map();
 
 function json(body, status = 200) {
@@ -270,7 +270,7 @@ export default async (req) => {
 
   // 7. Plan-based monthly quota
   const userPlan = await getOrgPlanForUser(userId);
-  const allowed = PLAN_LIMITS[userPlan] || PLAN_LIMITS.starter;
+  const allowed = Object.prototype.hasOwnProperty.call(PLAN_LIMITS, userPlan) ? PLAN_LIMITS[userPlan] : PLAN_LIMITS.starter;
   const used = userId ? await countAiGenerations(userId) : 0;
   if (userId && used >= allowed) {
     await logAiGeneration({ userId, payload, status: "blocked", error: "quota_exceeded" });

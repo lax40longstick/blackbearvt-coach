@@ -56,6 +56,24 @@ function createDefaultState() {
       reminders: '',
     },
     seasons: [],
+    benchMode: {
+      enabled: true,
+      highContrast: true,
+      largeControls: true,
+      keepAwake: true,
+      iceConstraint: 'normal',
+      goalieConstraint: 'normal',
+      playerConstraint: 'normal',
+      preloadedAt: '',
+      preloadedPlanId: '',
+      preloadedTitle: '',
+      preloadedBlocks: 0,
+      preloadedMinutes: 0,
+      notes: [],
+      completedBlocks: [],
+      recap: null,
+      recentSwaps: [],
+    },
     ui: {
       currentPage: 'dash',
       statSort: { key: 'pts', asc: false },
@@ -128,6 +146,10 @@ function loadState(opts) {
   if (!state.currentPlan.progression) state.currentPlan.progression = 'Balanced';
   if (!state.weekly.weekOf) state.weekly.weekOf = new Date().toISOString().slice(0, 10);
   if (!state.gameDay.date) state.gameDay.date = new Date().toISOString().slice(0, 10);
+  if (!state.benchMode) state.benchMode = createDefaultState().benchMode;
+  if (!Array.isArray(state.benchMode.notes)) state.benchMode.notes = [];
+  if (!Array.isArray(state.benchMode.completedBlocks)) state.benchMode.completedBlocks = [];
+  if (!Array.isArray(state.benchMode.recentSwaps)) state.benchMode.recentSwaps = [];
 
   if (typeof ensureDevelopment === 'function') ensureDevelopment(state);
 
